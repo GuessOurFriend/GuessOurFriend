@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">GuessOurFriend</string>
 
-    <string name="message_from_steve">This is the repo. You've imported the project correctly :) Now, add your name to the end of this String, and then push this to the repository on the master branch: Steve</string>
+    <string name="message_from_steve">This is the repo. You've checked out the project correctly :) Now, add your name to the end of this String, and then push this to the repository on the master branch: Steve</string>
     <string name="action_settings">Settings</string>
 </resources>
