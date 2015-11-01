@@ -3,7 +3,7 @@
     <string name="app_id">523218837834969</string>
     <string name="access_token"></string>
 
-    <string name="message_from_steve">This is the repo. You\'ve checked out the project correctly :) Now, add your name to the end of this String, commit your changes, and then push to the repository on the master branch. Team members who have completed this assignment: Steve. Brian. Eric.</string>
+    <string name="message_from_steve">This is the repo. You\'ve checked out the project correctly :) Now, add your name to the end of this String, commit your changes, and then push to the repository on the master branch. Team members who have completed this assignment: Steve. Brian. Eric. Manav. Laura</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
 
