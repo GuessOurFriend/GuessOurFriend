@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by sellmaurer on 10/19/15.
  */
@@ -38,6 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    //TODO: Remove groups?
     public static long insertOrUpdateFriend(Context context, long facebookID, String fullName,
                                             String profilePicture, String groups){
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
@@ -60,11 +64,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }*/
 
-    public static void getFriendTableRows(Context context)
+    public static List<Friend> getFriendTableRows(Context context)
     {
+        //Get the database and select from friends
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         Cursor cur = db.rawQuery("SELECT * FROM " + FRIEND_TABLE, new String[]{});
+
+        //Create a list of friends to fill ip
+        List<Friend> friends = new ArrayList<>();
+
+        //Fill up the list of friends
         while(cur.moveToNext()) {
             long facebookID = cur.getLong(cur.getColumnIndex("facebookID"));
             String fullName = cur.getString(cur.getColumnIndex("fullName"));
@@ -74,8 +84,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.v("fullName: ", fullName);
             Log.v("profilePicture: ", profilePicture);
             Log.v("groups: ", groups);
+
+            Friend newFriend = new Friend(facebookID, fullName, profilePicture);
+            friends.add(newFriend);
         }
+
+        //Close the database
         db.close();
+
+        //Return the list of friends
+        return friends;
     }
 
     public static long insertOrUpdateFBProfile(Context context, long facebookID, String fullName, String profilePicture){
@@ -99,20 +117,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }*/
 
-    public static void getFBProfileTableRows(Context context)
+    public static FBProfileModel getFBProfileTableRow(Context context)
     {
+        //Get the database and select from the FBProfile table
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        Cursor cur = db.rawQuery("SELECT * FROM " + FBPROFILE_TABLE, new String [] {});
-        while(cur.moveToNext()) {
+        Cursor cur = db.rawQuery("SELECT * FROM " + FBPROFILE_TABLE, new String[]{});
+
+        //Declare a profile to return
+        FBProfileModel profile = null;
+
+        //If we have a profile in the table, get it
+        if (cur.moveToNext()) {
             long facebookID = cur.getLong(cur.getColumnIndex("facebookID"));
             String fullName = cur.getString(cur.getColumnIndex("fullName"));
             String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
             Log.v("facebookID: ", "" + facebookID);
             Log.v("fullName: ", fullName);
             Log.v("profilePicture: ", profilePicture);
+
+            //TODO: Make sure these friends are for this facebook user and not a different facebook user
+            List<Friend> friends = getFriendTableRows(context);
+
+            profile = new FBProfileModel(facebookID, fullName, profilePicture, friends);
         }
+
+        //There should only be one profile model, throw an exception
+        //TODO: Support multiple accounts on a device
+        if (cur.moveToNext()) {
+            long facebookID = cur.getLong(cur.getColumnIndex("facebookID"));
+            String fullName = cur.getString(cur.getColumnIndex("fullName"));
+            String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
+            Log.v("facebookID: ", "" + facebookID);
+            Log.v("fullName: ", fullName);
+            Log.v("profilePicture: ", profilePicture);
+
+            throw new IllegalStateException();
+        }
+
+        //Close the database
         db.close();
+
+        //Return the profile if we found one
+        return profile;
     }
 }
 

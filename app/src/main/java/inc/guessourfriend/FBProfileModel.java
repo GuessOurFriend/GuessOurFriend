@@ -1,5 +1,8 @@
 package inc.guessourfriend;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by sellmaurer on 10/20/15.
  */
@@ -7,13 +10,11 @@ public class FBProfileModel {
     private long facebookID;
     private String fullName;
     private String profilePicture;
-    private int[] friendList;
+    private List<Friend> friendList;
 
-    public FBProfileModel(long facebookID, String fullName, String profilePicture, int[] friendList){
-        this.facebookID = facebookID;
-        this.fullName = fullName;
-        this.profilePicture = profilePicture;
-        this.friendList = friendList;
+    public FBProfileModel(long facebookID, String fullName, String profilePicture, List<Friend> friendList){
+        super();
+        updateFBProfileInfo(facebookID, fullName, profilePicture, friendList);
     }
 
     public long getFacebookID(){
@@ -25,12 +26,11 @@ public class FBProfileModel {
     public String getFullName(){
         return this.fullName;
     }
-    public int[] getFriendList(){
+    public List<Friend> getFriendList(){
         return this.friendList;
     }
-    // TODO: make add and remove friend methods for the friendlist
 
-    public void updateFBProfileInfo(long facebookID, String fullName, String profilePicture, int[] friendList){
+    public void updateFBProfileInfo(long facebookID, String fullName, String profilePicture, List<Friend> friendList){
         this.facebookID = facebookID;
         this.fullName = fullName;
         this.profilePicture = profilePicture;

@@ -30,6 +30,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -71,14 +72,35 @@ public class LoginActivity extends FragmentActivity {
                                             System.out.println("Success");
                                             JSONObject json = response.getJSONObject();
                                             try {
+                                                //TODO: Remove debugging info
                                                 String jsonresult = String.valueOf(json);
                                                 System.out.println("JSON Result" + jsonresult);
 
+                                                //Get the basic info for this user
                                                 long facebookID = Long.parseLong(json.getString("id"));
                                                 String fullName = json.getString("name");
                                                 String profilePicture = json.getJSONObject("picture").getJSONObject("data").getString("url");
+
+                                                //Insert the FBProfile into the database
                                                 DatabaseHelper.insertOrUpdateFBProfile(LoginActivity.this, facebookID, fullName, profilePicture);
-                                                DatabaseHelper.getFBProfileTableRows(LoginActivity.this);
+
+                                                //Get the friends that were returned
+                                                //TODO: Take paging into account
+                                                JSONArray friends = json.getJSONObject("friends").getJSONArray("data");
+
+                                                //Loop through the list of friends
+                                                for (int i = 0; i < friends.length(); i++) {
+                                                    JSONObject friend = friends.getJSONObject(i);
+                                                    facebookID = Long.parseLong(friend.getString("id"));
+                                                    fullName = friend.getString("name");
+                                                    profilePicture = friend.getJSONObject("picture").getJSONObject("data").getString("url");
+
+                                                    //Insert this friend into the database
+                                                    DatabaseHelper.insertOrUpdateFriend(LoginActivity.this, facebookID, fullName, profilePicture, "");
+                                                }
+
+                                                //TODO: Use or delete this line
+                                                FBProfileModel test = DatabaseHelper.getFBProfileTableRow(LoginActivity.this);
 
                                                 // TODO: give app to teammates (build on their devices), plus add them as devleopers in order to retrieve friends from json correctly
                                                 // TODO: test the database with some Friend queries

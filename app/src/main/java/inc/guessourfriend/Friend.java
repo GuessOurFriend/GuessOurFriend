@@ -9,7 +9,7 @@ public class Friend {
     private String fullName;
     private String profilePicture;
 
-    public Friend(long facebookID, String profilePicture, String fullName, String groups){
+    public Friend(long facebookID, String fullName, String profilePicture){
         this.facebookID = facebookID;
         this.fullName = fullName;
         this.profilePicture = profilePicture;
