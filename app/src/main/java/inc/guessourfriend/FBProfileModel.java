@@ -28,6 +28,7 @@ public class FBProfileModel {
     public int[] getFriendList(){
         return this.friendList;
     }
+    // TODO: make add and remove friend methods for the friendlist
 
     public void updateFBProfileInfo(long facebookID, String fullName, String profilePicture, int[] friendList){
         this.facebookID = facebookID;

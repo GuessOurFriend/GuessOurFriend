@@ -80,7 +80,7 @@ public class LoginActivity extends FragmentActivity {
                                                 DatabaseHelper.insertOrUpdateFBProfile(LoginActivity.this, facebookID, fullName, profilePicture);
                                                 DatabaseHelper.getFBProfileTableRows(LoginActivity.this);
 
-                                                // TODO: ask zak to download the app, plus add him as a devleoper in order to retrieve friends from json correctly
+                                                // TODO: give app to teammates (build on their devices), plus add them as devleopers in order to retrieve friends from json correctly
                                                 // TODO: test the database with some Friend queries
 
                                                 // programmatically switch to another activity (the first activity we want to show)

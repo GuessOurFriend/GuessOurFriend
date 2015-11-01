@@ -8,13 +8,11 @@ public class Friend {
     private long facebookID;
     private String fullName;
     private String profilePicture;
-    private String groups;
 
     public Friend(long facebookID, String profilePicture, String fullName, String groups){
         this.facebookID = facebookID;
         this.fullName = fullName;
         this.profilePicture = profilePicture;
-        this.groups = groups;
     }
 
     public long getFacebookID(){
@@ -25,17 +23,6 @@ public class Friend {
     }
     public String getProfilePicture(){
         return this.profilePicture;
-    }
-    public String getGroups(){
-        return this.groups;
-    }
-    public void addToGroup(String groupName){
-        // TODO: Complete this function (use regular expressions)
-        // think about taking care of database queries in this function
-    }
-    public void removeFromGroup(String groupName){
-        // TODO: Complete this function (use regular expressions)
-        // think about taking care of database queries in this function
     }
 
     @Override
