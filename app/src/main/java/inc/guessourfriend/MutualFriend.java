@@ -7,16 +7,27 @@ import android.net.Uri;
  */
 public class MutualFriend {
     private int poolID;
-    private String facebookID;
+    private long facebookID;
+    private String fullName;
+    private String profilePicture;
     private boolean isMysteryFriend;
     private boolean hasBeenGuessed;
     public boolean isGrayedOut;
+
+    public MutualFriend(long facebookID, String fullName, String profilePicture, boolean isMysteryFriend) {
+        this.facebookID = facebookID;
+        this.fullName = fullName; //TODO: Maybe remove these since they exist inside of a Friend
+        this.profilePicture = profilePicture;
+        this.isMysteryFriend = isMysteryFriend;
+        this.hasBeenGuessed = false;
+        this.isGrayedOut = false;
+    }
 
     public int getPoolID() {
         return poolID;
     }
 
-    public String getFacebookID() {
+    public long getFacebookID() {
         return facebookID;
     }
 
