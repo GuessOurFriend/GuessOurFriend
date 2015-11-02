@@ -60,7 +60,7 @@ public class MutualFriendList {
                                     String profilePicture = friend.getJSONObject("picture").getJSONObject("data").getString("url");
 
                                     //Insert this friend into the list
-                                    MutualFriend newFriend = new MutualFriend();//facebookID, fullName, profilePicture, false);
+                                    MutualFriend newFriend = new MutualFriend(facebookID, fullName, profilePicture, false);
                                     mutualFriendList.add(newFriend);
                                 }
                             } catch (JSONException e) {
