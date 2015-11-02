@@ -10,6 +10,7 @@ public class OutgoingChallenge {
     private boolean wasDeclined;
 
     public OutgoingChallenge(long challengeeID) {
+
         this.challengeeID = challengeeID;
     }
 

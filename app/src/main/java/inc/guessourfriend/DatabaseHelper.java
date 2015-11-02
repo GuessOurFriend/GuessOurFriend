@@ -167,44 +167,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return profile;
     }
 
-    public static long insertOrUpdateChallenges(Context context, long challengerID, int challengeeID,
-                                            String message, int wasDeclined){
-        DatabaseHelper databaseHelper = new DatabaseHelper(context);
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        ContentValues row = new ContentValues();
-        row.put("challengerID", challengerID);
-        row.put("challengeeID", challengeeID);
-        row.put("message", message);
-        row.put("wasDeclined", wasDeclined);
-        long id = db.insertWithOnConflict(CHALLENGES_TABLE, null, row, SQLiteDatabase.CONFLICT_REPLACE);
-        db.close();
-        return id;
-    }
-
-    public static List<OutgoingChallenge> getOutgoingChallengeTableRows(Context context)
-    {
-        //Get the database and select from friends
-        DatabaseHelper databaseHelper = new DatabaseHelper(context);
-        SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        Cursor cur = db.rawQuery("SELECT * FROM " + CHALLENGES_TABLE, new String[]{});
-
-        //Create a list of friends to fill ip
-        List<OutgoingChallenge> outgoingChallenges = new ArrayList<>();
-
-        //Fill up the list of friends
-        while(cur.moveToNext()) {
-            long challengerID = cur.getLong(cur.getColumnIndex("challengerID"));
-            Log.v("facebookID: ", "" + challengerID);
-
-            OutgoingChallenge newOutgoingChallenge = new OutgoingChallenge(challengerID);
-            outgoingChallenges.add(newOutgoingChallenge);
-        }
-
-        //Close the database
-        db.close();
-
-        //Return the list of friends
-        return outgoingChallenges;
-    }
 }
 

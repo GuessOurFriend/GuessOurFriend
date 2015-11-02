@@ -31,23 +31,6 @@ public class ChallengeAFriendController extends Activity {
     private List<Friend> friendList = fbProfileModel.getFriendList();
     private List<OutgoingChallenge> outgoingChallengesList;
 
-    //For Controller
-    private int numberOfSectionsInTableView() {
-        return 0;
-    }
-
-    private int numberOfRowsInEachSection() {
-        return 0;
-    }
-
-    private int cellForRowAtIndexPath() {
-        return 0;
-    }
-
-    private void clickCellAtIndexPath() {
-
-    }
-
     //For View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
