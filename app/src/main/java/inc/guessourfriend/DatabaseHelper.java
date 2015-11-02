@@ -18,11 +18,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "User Info";
     private static final String FBPROFILE_TABLE = "FBProfileTable";
     private static final String FRIEND_TABLE = "FriendTable";
+    private static final String CHALLENGES_TABLE = "ChallengesTable";
     private static final String CREATE_FBPROFILE_TABLE_QUERY = "CREATE TABLE " + FBPROFILE_TABLE +
             " (facebookID INTEGER PRIMARY KEY, " + "fullName TEXT, " + "profilePicture TEXT);";
     private static final String CREATE_FRIEND_TABLE_QUERY = "CREATE TABLE " + FRIEND_TABLE +
             " (facebookID INTEGER PRIMARY KEY, " + "fullName TEXT, " + "profilePicture TEXT, " +
             "groups TEXT);";
+    private static final String CREATE_CHALLENGES_TABLE_QUERY = "CREATE TABLE " + CHALLENGES_TABLE +
+            " (challengerID INTEGER, " + "challengeeID INTEGER, " + "message TEXT, " + "wasDeclined INTEGER);";
 
     DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,12 +35,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_FBPROFILE_TABLE_QUERY);
         db.execSQL(CREATE_FRIEND_TABLE_QUERY);
+        db.execSQL(CREATE_CHALLENGES_TABLE_QUERY);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         db.execSQL("DROP TABLE IF EXISTS "+FBPROFILE_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+FRIEND_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + CHALLENGES_TABLE);
         onCreate(db);
     }
 
@@ -160,6 +165,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //Return the profile if we found one
         return profile;
+    }
+
+    public static long insertOrUpdateChallenges(Context context, long challengerID, int challengeeID,
+                                            String message, int wasDeclined){
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        ContentValues row = new ContentValues();
+        row.put("challengerID", challengerID);
+        row.put("challengeeID", challengeeID);
+        row.put("message", message);
+        row.put("wasDeclined", wasDeclined);
+        long id = db.insertWithOnConflict(CHALLENGES_TABLE, null, row, SQLiteDatabase.CONFLICT_REPLACE);
+        db.close();
+        return id;
+    }
+
+    public static List<OutgoingChallenge> getOutgoingChallengeTableRows(Context context)
+    {
+        //Get the database and select from friends
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cur = db.rawQuery("SELECT * FROM " + CHALLENGES_TABLE, new String[]{});
+
+        //Create a list of friends to fill ip
+        List<OutgoingChallenge> outgoingChallenges = new ArrayList<>();
+
+        //Fill up the list of friends
+        while(cur.moveToNext()) {
+            long challengerID = cur.getLong(cur.getColumnIndex("challengerID"));
+            Log.v("facebookID: ", "" + challengerID);
+
+            OutgoingChallenge newOutgoingChallenge = new OutgoingChallenge(challengerID);
+            outgoingChallenges.add(newOutgoingChallenge);
+        }
+
+        //Close the database
+        db.close();
+
+        //Return the list of friends
+        return outgoingChallenges;
     }
 }
 
