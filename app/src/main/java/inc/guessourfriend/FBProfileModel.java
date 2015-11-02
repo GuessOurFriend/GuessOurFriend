@@ -36,4 +36,13 @@ public class FBProfileModel {
         this.profilePicture = profilePicture;
         this.friendList = friendList;
     }
+
+    public Friend getFriendById(long friendID) {
+        for (int i = 0; i < friendList.size(); i++) {
+            if (friendList.get(i).getFacebookID() == friendID) {
+                return friendList.get(i);
+            }
+        }
+        return null;
+    }
 }

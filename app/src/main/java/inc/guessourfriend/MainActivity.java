@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -36,6 +37,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
+
+    }
+
+    public void pressed(View view){
+        MutualFriendList testing = new MutualFriendList();
+        testing.populateMutualFriendList(this);
     }
 
     @Override

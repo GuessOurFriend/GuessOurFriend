@@ -7,7 +7,7 @@ import android.net.Uri;
  */
 public class MutualFriend {
     private int poolID;
-    private String facebookID;
+    private long facebookID;
     private boolean isMysteryFriend;
     private boolean hasBeenGuessed;
     public boolean isGrayedOut;
@@ -16,7 +16,7 @@ public class MutualFriend {
         return poolID;
     }
 
-    public String getFacebookID() {
+    public long getFacebookID() {
         return facebookID;
     }
 
@@ -33,14 +33,15 @@ public class MutualFriend {
     }
 
     public String getName() {
-        return "";
+
+        Friend friend = DatabaseHelper.getFBProfileTableRow(GuessOurFriend.getAppContext())
+                .getFriendById(facebookID);
+        return friend.getFullName();
     }
 
     public String getProfilePic() {
-        return null;
-    }
-
-    private void populateFacebookInfo() {
-
+        Friend friend = DatabaseHelper.getFBProfileTableRow(GuessOurFriend.getAppContext())
+                .getFriendById(facebookID);
+        return friend.getProfilePicture();
     }
 }
