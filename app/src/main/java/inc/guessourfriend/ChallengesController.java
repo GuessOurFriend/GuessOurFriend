@@ -24,7 +24,7 @@ public class ChallengesController extends Activity {
     ListView listView;
 
     //For Controller
-    private list<IncomingChallengeList> incomingChallengeList;
+    //private list<IncomingChallengeList> incomingChallengeList;
 
     //For View
     @Override
@@ -41,9 +41,9 @@ public class ChallengesController extends Activity {
        //     incomingChallengeNames[i] = IncomingChallengeList.getIncomingChallengeList();
        // }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-               // android.R.layout.simple_list_item_1, android.R.id.text1, friendNames);
-        listView.setAdapter(adapter);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+//               // android.R.layout.simple_list_item_1, android.R.id.text1, friendNames);
+//        listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
