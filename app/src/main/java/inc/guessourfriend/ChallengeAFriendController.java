@@ -1,6 +1,7 @@
 package inc.guessourfriend;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -20,16 +21,14 @@ import java.util.List;
 public class ChallengeAFriendController extends Activity {
 
     //For Model
-    Profile profile = Profile.getCurrentProfile();
-    FBProfileModel fbProfileModel = new FBProfileModel(0, "", "", new ArrayList<Friend>());
-    OutgoingChallengeListModel outgoingChallengeListModel = new OutgoingChallengeListModel();
+    FBProfileModel fbProfileModel = DatabaseHelper.getFBProfileTableRow(GuessOurFriend.getAppContext());
+//    OutgoingChallengeListModel outgoingChallengeListModel = new OutgoingChallengeListModel();
 
     //For View
     ListView listView;
 
     //For Controller
     private List<Friend> friendList = fbProfileModel.getFriendList();
-    private List<OutgoingChallenge> outgoingChallengesList;
 
     //For View
     @Override
@@ -53,24 +52,26 @@ public class ChallengeAFriendController extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final int itemPosition = position;
-                String itemValue = (String) listView.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(),
-                        "Position:" + itemPosition + " ListItem: " + itemValue, Toast.LENGTH_LONG).show();
+                final String itemValue = (String) listView.getItemAtPosition(position);
 
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        switch(i) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                outgoingChallengeListModel.addOutgoingChallenge(
-                                        new OutgoingChallenge(friendList.get(itemPosition).getFacebookID()));
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                break;
-                        }
-                    }
-                };
-
+                AlertDialog.Builder adb = new AlertDialog.Builder(ChallengeAFriendController.this);
+                adb.setTitle("Send Challenge Request");
+                adb.setMessage("Send " + itemValue + " a challenge request?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+//                                outgoingChallengeListModel.addOutgoingChallenge(
+//                                        new OutgoingChallenge(friendList.get(itemPosition).getFacebookID()));
+                                Toast.makeText(getApplicationContext(),
+                                        "Position:" + itemPosition + " ListItem: " + itemValue, Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alertDialog = adb.create();
+                alertDialog.show();
             }
         });
     }

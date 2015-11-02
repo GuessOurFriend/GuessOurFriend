@@ -10,8 +10,17 @@ public class MutualFriend {
     private long facebookID;
     private boolean isMysteryFriend;
     private boolean hasBeenGuessed;
+    private String fullName;
+    private String profilePicture;
     public boolean isGrayedOut;
 
+    public MutualFriend(long facebookID, String fullName, String profilePicture, boolean isMysteryFriend) {
+
+        this.facebookID = facebookID;
+        this.fullName = fullName;
+        this.profilePicture = profilePicture;
+        this.isMysteryFriend = isMysteryFriend;
+    }
     public int getPoolID() {
         return poolID;
     }

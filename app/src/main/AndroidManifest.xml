@@ -33,6 +33,10 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
+
+        <activity
+            android:name=".ChallengeAFriendController"
+            android:label="ChallengeAFriendController"/>
     </application>
 
 </manifest>
