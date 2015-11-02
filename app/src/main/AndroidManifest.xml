@@ -5,13 +5,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".GuessOurFriend"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name="GuessOurFriend">
+        android:theme="@style/AppTheme" >
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginController"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,16 +30,36 @@
             android:value="@string/app_id" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".TestController"
             android:label="@string/title_activity_main" >
         </activity>
-
         <activity
             android:name=".ChallengeAFriendController"
-            android:label="ChallengeAFriendController"/>
+            android:label="ChallengeAFriendController" />
+        <activity
+            android:name=".CurrentGamesController"
+            android:label="@string/title_activity_current_games_controller" >
+        </activity>
+        <activity
+            android:name=".LeaderboardController"
+            android:label="@string/title_activity_leaderboard_controller" >
+        </activity>
+        <activity
+            android:name=".MatchmakingController"
+            android:label="@string/title_activity_matchmaking_controller" >
+        </activity>
         <activity
             android:name=".ChallengesController"
-            android:label="ChallengesController"/>
+            android:label="@string/title_activity_challenges_controller" >
+        </activity>
+        <activity
+            android:name=".OptionsController"
+            android:label="@string/title_activity_options_controller" >
+        </activity>
+        <activity
+            android:name=".SlideNavigationController"
+            android:label="@string/title_activity_slide_navigation_controller" >
+        </activity>
     </application>
 
 </manifest>

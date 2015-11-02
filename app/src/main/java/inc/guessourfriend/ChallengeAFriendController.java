@@ -1,6 +1,5 @@
 package inc.guessourfriend;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -10,15 +9,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.facebook.Profile;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Laura on 10/31/2015.
  */
-public class ChallengeAFriendController extends Activity {
+public class ChallengeAFriendController extends SlideNavigationController {
 
     //For Model
     FBProfileModel fbProfileModel = DatabaseHelper.getFBProfileTableRow(GuessOurFriend.getAppContext());
@@ -35,7 +31,9 @@ public class ChallengeAFriendController extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_challenge_a_friend);
+        getLayoutInflater().inflate(R.layout.activity_challenge_a_friend_controller, frameLayout);
+        mDrawerList.setItemChecked(position, true);
+        setTitle(listArray[position]);
 
         listView = (ListView) findViewById(R.id.list);
 

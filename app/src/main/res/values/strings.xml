@@ -3,9 +3,29 @@
     <string name="app_id">523218837834969</string>
     <string name="access_token"></string>
 
-    <string name="message_from_steve">This is the repo. You\'ve checked out the project correctly :) Now, add your name to the end of this String, commit your changes, and then push to the repository on the master branch. Team members who have completed this assignment: Steve. Brian. Eric. Manav. Laura. Ash</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_current_games_controller">CurrentGames</string>
+    <string name="title_activity_leaderboard_controller">Leaderboard</string>
+    <string name="title_activity_matchmaking_controller">Matchmaking</string>
+    <string name="title_activity_challenges_controller">Challenges</string>
+    <string name="title_activity_options_controller">Options</string>
+    <string name="title_activity_slide_navigation_controller">SlideNavigation</string>
+
+    <string name="title_section1">Challenge a Friend</string>
+    <string name="title_section2">Matchmaking</string>
+    <string name="title_section3">Challenges</string>
+    <string name="title_section4">Current Games</string>
+    <string name="title_section5">Leader Board</string>
+    <string name="title_section6">Options</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="open_drawer">Drawer Open</string>
+    <string name="close_drawer">Drawer Close</string>
 </resources>

@@ -11,7 +11,7 @@ import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.FacebookSdk;
 
-public class MainActivity extends AppCompatActivity {
+public class TestController extends SlideNavigationController {
 
     private AccessTokenTracker accessTokenTracker;
     private boolean isResumed;
@@ -20,18 +20,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
-        setContentView(R.layout.activity_main);
+        // setting up slide menu
+        getLayoutInflater().inflate(R.layout.activity_main, frameLayout);
+        mDrawerList.setItemChecked(position, true);
+        setTitle(listArray[position]);
+
         accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
                                                        AccessToken currentAccessToken) {
                 if (isResumed) {
                     if (currentAccessToken == null) {
-                        // programmatically switch to the LoginActivity to let the user log back in
-                        Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
+                        // programmatically switch to the LoginController to let the user log back in
+                        Intent myIntent = new Intent(TestController.this, LoginController.class);
                         startActivity(myIntent);
-                        //DatabaseHelper.deleteFBProfile(LoginActivity.this);
-                        //DatabaseHelper.getFBProfileTableRows(LoginActivity.this);
+                        //DatabaseHelper.deleteFBProfile(LoginController.this);
+                        //DatabaseHelper.getFBProfileTableRows(LoginController.this);
                         //Log.v("Database Operation: ", "Deleted all rows in FBProfile table.");
                     }
                 }
@@ -49,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
+        getMenuInflater().inflate(R.menu.menu_login_controller, menu);
         return true;
     }
 

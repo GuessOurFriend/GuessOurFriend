@@ -1,15 +1,8 @@
 package inc.guessourfriend;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -25,7 +18,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
-import com.facebook.LoggingBehavior;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -36,7 +28,7 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-public class LoginActivity extends FragmentActivity {
+public class LoginController extends FragmentActivity {
 
     private static final String TAG_CANCEL = "Cancel";
     private static final String TAG_ERROR = "Error";
@@ -49,7 +41,7 @@ public class LoginActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login_controller);
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) this.findViewById(R.id.login_button);
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
@@ -82,7 +74,7 @@ public class LoginActivity extends FragmentActivity {
                                                 String profilePicture = json.getJSONObject("picture").getJSONObject("data").getString("url");
 
                                                 //Insert the FBProfile into the database
-                                                DatabaseHelper.insertOrUpdateFBProfile(LoginActivity.this, facebookID, fullName, profilePicture);
+                                                DatabaseHelper.insertOrUpdateFBProfile(LoginController.this, facebookID, fullName, profilePicture);
 
                                                 //Get the friends that were returned
                                                 //TODO: Take paging into account
@@ -96,17 +88,17 @@ public class LoginActivity extends FragmentActivity {
                                                     profilePicture = friend.getJSONObject("picture").getJSONObject("data").getString("url");
 
                                                     //Insert this friend into the database
-                                                    DatabaseHelper.insertOrUpdateFriend(LoginActivity.this, facebookID, fullName, profilePicture, "");
+                                                    DatabaseHelper.insertOrUpdateFriend(LoginController.this, facebookID, fullName, profilePicture, "");
                                                 }
 
                                                 //TODO: Use or delete this line
-                                                FBProfileModel test = DatabaseHelper.getFBProfileTableRow(LoginActivity.this);
+                                                FBProfileModel test = DatabaseHelper.getFBProfileTableRow(LoginController.this);
 
                                                 // TODO: give app to teammates (build on their devices), plus add them as devleopers in order to retrieve friends from json correctly
                                                 // TODO: test the database with some Friend queries
 
                                                 // programmatically switch to another activity (the first activity we want to show)
-                                                Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                                Intent myIntent = new Intent(LoginController.this, ChallengeAFriendController.class);
                                                 startActivity(myIntent);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -136,8 +128,8 @@ public class LoginActivity extends FragmentActivity {
                                                        AccessToken currentAccessToken) {
                 if (isResumed) {
                     if (currentAccessToken == null) {
-                        //DatabaseHelper.deleteFBProfile(LoginActivity.this);
-                        //DatabaseHelper.getFBProfileTableRows(LoginActivity.this);
+                        //DatabaseHelper.deleteFBProfile(LoginController.this);
+                        //DatabaseHelper.getFBProfileTableRows(LoginController.this);
                         //Log.v("Database Operation: ", "Deleted all rows in FBProfile table.");
                     }
                 }
@@ -155,7 +147,7 @@ public class LoginActivity extends FragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
+        getMenuInflater().inflate(R.menu.menu_login_controller, menu);
         return true;
     }
 

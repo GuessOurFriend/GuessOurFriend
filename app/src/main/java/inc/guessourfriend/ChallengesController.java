@@ -1,6 +1,5 @@
 package inc.guessourfriend;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -9,12 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.facebook.Profile;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class ChallengesController extends Activity {
+public class ChallengesController extends SlideNavigationController {
 
     IncomingChallengeListModel incomingChallengeListModel = new IncomingChallengeListModel();
     private List<IncomingChallenge> incomingChallengeList = incomingChallengeListModel.getIncomingChallengeList();
@@ -28,7 +24,9 @@ public class ChallengesController extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.challenges);
+        getLayoutInflater().inflate(R.layout.activity_challenges_controller, frameLayout);
+        mDrawerList.setItemChecked(position, true);
+        setTitle(listArray[position]);
 
         listView = (ListView) findViewById(R.id.incominglist);
         Long [] incomingchallengerID = new Long[incomingChallengeList.size()];
