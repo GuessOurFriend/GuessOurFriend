@@ -1,5 +1,6 @@
 package inc.guessourfriend;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -7,7 +8,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChallengesController extends SlideNavigationController {
@@ -22,19 +25,26 @@ public class ChallengesController extends SlideNavigationController {
     //For View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        //debug statements: to be removed later
+        String Hello = "Hello";
+        Log.v("Test: challenges:manav","" + Hello);
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_challenges_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
 
         listView = (ListView) findViewById(R.id.incominglist);
+        IncomingChallenge test = new IncomingChallenge(77778);
+        incomingChallengeList.add(test);
         Long [] incomingchallengerID = new Long[incomingChallengeList.size()];
+        //Long [] incomingchallengerID = new Long[1];
 
         for (int i = 0; i < incomingChallengeList.size(); i++) {
             incomingchallengerID[i] = incomingChallengeList.get(i).getChallengerID();
         }
-
+        //Long temp1 = 8888L;
+        //incomingchallengerID[0]= temp1;
+        //Log.v("incomingChallengerID:","" + incomingchallengerID[0]);
         ArrayAdapter<Long> incomingchallengelistAdapter =
                 new ArrayAdapter<Long>(this, android.R.layout.simple_list_item_1, incomingchallengerID);
 
@@ -44,25 +54,28 @@ public class ChallengesController extends SlideNavigationController {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final int itemPosition = position;
-                Long itemValue = (Long) listView.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(),
-                        "Position:" + itemPosition + " ListItem: " + itemValue, Toast.LENGTH_LONG).show();
+                final Long itemValue = (Long) listView.getItemAtPosition(position);
 
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        switch (i) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                 //TODO: Add Logic to start a Game
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                break;
-                        }
-                    }
-                };
-
+                AlertDialog.Builder adb = new AlertDialog.Builder(ChallengesController.this);
+                adb.setTitle("Accept Challenge Request");
+                adb.setMessage("Accept " + itemValue + " a challenge request?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // TODO: Go to Start of Game Controller on clicking the accept button
+                                Toast.makeText(getApplicationContext(),
+                                        "Position:" + itemPosition + " ListItem: " + itemValue, Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alertDialog = adb.create();
+                alertDialog.show();
             }
         });
+
 
     }
 }
