@@ -37,10 +37,34 @@ public class ChallengesController extends Activity {
             incomingchallengerID[i] = incomingChallengeList.get(i).getChallengerID();
         }
 
-        ArrayAdapter<Long> incomigchallengelistAdapter =
+        ArrayAdapter<Long> incomingchallengelistAdapter =
                 new ArrayAdapter<Long>(this, android.R.layout.simple_list_item_1, incomingchallengerID);
 
-        listView.setAdapter(incomigchallengelistAdapter);
+        listView.setAdapter(incomingchallengelistAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final int itemPosition = position;
+                Long itemValue = (Long) listView.getItemAtPosition(position);
+                Toast.makeText(getApplicationContext(),
+                        "Position:" + itemPosition + " ListItem: " + itemValue, Toast.LENGTH_LONG).show();
+
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        switch (i) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                 //TODO: Add Logic to start a Game
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                break;
+                        }
+                    }
+                };
+
+            }
+        });
 
     }
 }
