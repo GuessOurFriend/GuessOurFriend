@@ -37,6 +37,9 @@
         <activity
             android:name=".ChallengeAFriendController"
             android:label="ChallengeAFriendController"/>
+        <activity
+            android:name=".ChallengesController"
+            android:label="ChallengesController"/>
     </application>
 
 </manifest>
