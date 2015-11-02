@@ -36,7 +36,7 @@ public class MutualFriend {
         return "";
     }
 
-    public Uri getProfilePic() {
+    public String getProfilePic() {
         return null;
     }
 
