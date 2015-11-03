@@ -3,6 +3,7 @@ package inc.guessourfriend;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,7 +19,7 @@ public class ChallengeAFriendController extends SlideNavigationController {
 
     //For Model
     FBProfileModel fbProfileModel = DatabaseHelper.getFBProfileTableRow(GuessOurFriend.getAppContext());
-//    OutgoingChallengeListModel outgoingChallengeListModel = new OutgoingChallengeListModel();
+    OutgoingChallengeListModel outgoingChallengeListModel = new OutgoingChallengeListModel();
 
     //For View
     ListView listView;
@@ -57,8 +58,10 @@ public class ChallengeAFriendController extends SlideNavigationController {
                 adb.setMessage("Send " + itemValue + " a challenge request?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                outgoingChallengeListModel.addOutgoingChallenge(
-//                                        new OutgoingChallenge(friendList.get(itemPosition).getFacebookID()));
+                                outgoingChallengeListModel.addOutgoingChallenge(
+                                        new OutgoingChallenge(friendList.get(itemPosition).getFacebookID()));
+                                Log.v("first challengee id", "" + outgoingChallengeListModel
+                                        .getOutgoingChallengeList().get(0).getChallengeeID());
                                 Toast.makeText(getApplicationContext(),
                                         "Position:" + itemPosition + " ListItem: " + itemValue, Toast.LENGTH_SHORT).show();
                             }

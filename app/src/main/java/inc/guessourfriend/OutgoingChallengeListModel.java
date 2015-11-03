@@ -1,5 +1,6 @@
 package inc.guessourfriend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  */
 public class OutgoingChallengeListModel {
 
-    private List<OutgoingChallenge> outgoingChallengeList;
+    private List<OutgoingChallenge> outgoingChallengeList = new ArrayList<>();
 
     public OutgoingChallengeListModel() {
         populateOutgoingChallengeList();
