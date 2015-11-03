@@ -14,7 +14,7 @@ import java.util.List;
  * Created by sellmaurer on 10/19/15.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "User Info";
     private static final String FBPROFILE_TABLE = "FBProfileTable";
     private static final String FRIEND_TABLE = "FriendTable";
@@ -55,7 +55,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         row.put("facebookID", facebookID);
         row.put("fullName", fullName);
         row.put("profilePicture", profilePicture);
-        row.put("groups", groups);
         long id = db.insertWithOnConflict(FRIEND_TABLE, null, row, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
         return id;
@@ -84,11 +83,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             long facebookID = cur.getLong(cur.getColumnIndex("facebookID"));
             String fullName = cur.getString(cur.getColumnIndex("fullName"));
             String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
-            String groups = cur.getString(cur.getColumnIndex("groups"));
             Log.v("facebookID: ", "" + facebookID);
             Log.v("fullName: ", fullName);
             Log.v("profilePicture: ", profilePicture);
-            Log.v("groups: ", groups);
 
             Friend newFriend = new Friend(facebookID, fullName, profilePicture);
             friends.add(newFriend);
@@ -113,14 +110,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    /*
     public static long deleteFBProfile(Context context){
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         long id = db.delete(FBPROFILE_TABLE, null, new String[]{});
         db.close();
         return id;
-    }*/
+    }
 
     public static FBProfileModel getFBProfileTableRow(Context context)
     {

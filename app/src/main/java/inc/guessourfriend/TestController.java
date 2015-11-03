@@ -34,7 +34,7 @@ public class TestController extends SlideNavigationController {
                         // programmatically switch to the LoginController to let the user log back in
                         Intent myIntent = new Intent(TestController.this, LoginController.class);
                         startActivity(myIntent);
-                        //DatabaseHelper.deleteFBProfile(LoginController.this);
+                        DatabaseHelper.deleteFBProfile(TestController.this);
                         //DatabaseHelper.getFBProfileTableRows(LoginController.this);
                         //Log.v("Database Operation: ", "Deleted all rows in FBProfile table.");
                     }

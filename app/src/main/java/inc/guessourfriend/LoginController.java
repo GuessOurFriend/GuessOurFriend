@@ -75,7 +75,6 @@ public class LoginController extends FragmentActivity {
 
                                                 //Insert the FBProfile into the database
                                                 DatabaseHelper.insertOrUpdateFBProfile(LoginController.this, facebookID, fullName, profilePicture);
-
                                                 //Get the friends that were returned
                                                 //TODO: Take paging into account
                                                 JSONArray friends = json.getJSONObject("friends").getJSONArray("data");
@@ -128,7 +127,7 @@ public class LoginController extends FragmentActivity {
                                                        AccessToken currentAccessToken) {
                 if (isResumed) {
                     if (currentAccessToken == null) {
-                        //DatabaseHelper.deleteFBProfile(LoginController.this);
+                        DatabaseHelper.deleteFBProfile(LoginController.this);
                         //DatabaseHelper.getFBProfileTableRows(LoginController.this);
                         //Log.v("Database Operation: ", "Deleted all rows in FBProfile table.");
                     }
