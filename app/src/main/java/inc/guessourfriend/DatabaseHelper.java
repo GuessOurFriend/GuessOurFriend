@@ -98,6 +98,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return friends;
     }
 
+    public static long deleteFriendTableRows(Context context){
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        long id = db.delete(FRIEND_TABLE, null, new String[]{});
+        db.close();
+        return id;
+    }
+
     public static long insertOrUpdateFBProfile(Context context, long facebookID, String fullName, String profilePicture){
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
