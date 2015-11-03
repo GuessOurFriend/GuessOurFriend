@@ -128,6 +128,7 @@ public class LoginController extends FragmentActivity {
                 if (isResumed) {
                     if (currentAccessToken == null) {
                         DatabaseHelper.deleteFBProfile(LoginController.this);
+                        //TODO: Also delete the friends from the friends table
                         //DatabaseHelper.getFBProfileTableRows(LoginController.this);
                         //Log.v("Database Operation: ", "Deleted all rows in FBProfile table.");
                     }
