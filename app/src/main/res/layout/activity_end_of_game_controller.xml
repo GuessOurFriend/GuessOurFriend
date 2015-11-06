@@ -99,7 +99,8 @@
         android:text="Done"
         android:id="@+id/confirm_button"
         android:layout_below="@+id/ratingbar_opponent"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2" />
 
     <TextView
         android:layout_width="wrap_content"
