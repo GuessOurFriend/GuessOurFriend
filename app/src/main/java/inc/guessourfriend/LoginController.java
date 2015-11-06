@@ -91,7 +91,7 @@ public class LoginController extends FragmentActivity {
                                                 }
 
                                                 //TODO: Use or delete this line
-                                                FBProfileModel test = DatabaseHelper.getFBProfileTableRow(LoginController.this);
+                                                FBProfileModel test = DatabaseHelper.getFBProfile(LoginController.this);
 
                                                 // TODO: give app to teammates (build on their devices), plus add them as devleopers in order to retrieve friends from json correctly
                                                 // TODO: test the database with some Friend queries

@@ -50,6 +50,11 @@ public class TestController extends SlideNavigationController {
         testing.populateMutualFriendList(this);
     }
 
+    public void pressedEndOfGameButton(View view){
+        Intent myIntent = new Intent(this, EndOfGameController.class);
+        startActivity(myIntent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

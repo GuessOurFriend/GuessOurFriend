@@ -126,7 +126,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public static FBProfileModel getFBProfileTableRow(Context context)
+    public static FBProfileModel getFBProfile(Context context)
     {
         //Get the database and select from the FBProfile table
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
