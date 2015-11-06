@@ -40,9 +40,8 @@ public class EndOfGameController extends AppCompatActivity {
         List<Friend> myFriendList = fbProfile.getFriendList();
         Friend friend = myFriendList.get(0);
         String profilePic = friend.getProfilePicture();
-        ProfilePictureView profilePictureView;
-        //profilePictureView = (ProfilePictureView) ProfilePictureView.findViewById();
-       // profilePictureView.setProfileId(Long.toString(friend.getFacebookID()));
+        ProfilePictureView profilePictureView = (ProfilePictureView) findViewById(R.id.Chosen_profilepic);
+       profilePictureView.setProfileId(Long.toString(friend.getFacebookID()));
 
     }
 
