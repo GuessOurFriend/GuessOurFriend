@@ -1,5 +1,7 @@
 package inc.guessourfriend;
 
+import com.facebook.login.widget.ProfilePictureView;
+
 /**
  * Created by sellmaurer on 10/31/15.
  */

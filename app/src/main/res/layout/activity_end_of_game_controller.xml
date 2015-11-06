@@ -1,6 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -35,14 +38,13 @@
         android:layout_alignRight="@+id/win_lose_text"
         android:layout_alignEnd="@+id/win_lose_text" />
 
-    <ImageView
+    <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/my_mysteryfriend_profilepic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:adjustViewBounds="false"
-        android:layout_below="@+id/textView2"
-        android:layout_alignLeft="@+id/confirm_button"
-        android:layout_alignStart="@+id/confirm_button" />
+        facebook:preset_size="small"
+        android:layout_below="@+id/mystery_text"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -51,7 +53,7 @@
         android:ems="10"
         android:id="@+id/chosen_name"
         android:text="FirstName LastName"
-        android:layout_below="@+id/imageView2"
+        android:layout_below="@+id/Chosen_profilepic"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -60,16 +62,17 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Your mystery friend:"
         android:id="@+id/mystery_text"
-        android:layout_below="@+id/mystery_friend_name"
+        android:layout_below="@+id/chosen_name"
         android:layout_centerHorizontal="true" />
 
-    <ImageView
+    <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/Chosen_profilepic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView2"
-        android:layout_below="@+id/mystery_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp" />
+        facebook:preset_size="small"
+        android:layout_below="@+id/textView2"
+        android:layout_alignLeft="@+id/my_mysteryfriend_profilepic"
+        android:layout_alignStart="@+id/my_mysteryfriend_profilepic" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -78,10 +81,9 @@
         android:text="FirstName LastName"
         android:ems="10"
         android:id="@+id/mystery_friend_name"
-        android:layout_marginTop="43dp"
-        android:layout_below="@+id/imageView"
-        android:layout_alignLeft="@+id/chosen_name"
-        android:layout_alignStart="@+id/chosen_name" />
+        android:layout_below="@+id/my_mysteryfriend_profilepic"
+        android:layout_alignRight="@+id/ratingbar_opponent"
+        android:layout_alignEnd="@+id/ratingbar_opponent" />
 
     <RatingBar
         android:layout_width="wrap_content"
@@ -89,8 +91,11 @@
         android:id="@+id/ratingbar_opponent"
         android:numStars="5"
         android:rating="5"
-        android:layout_below="@+id/textView4"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignLeft="@+id/chosen_name"
+        android:layout_alignStart="@+id/chosen_name"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/textView3"
+        android:layout_alignEnd="@+id/textView3" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -108,9 +113,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Rate how fun it was to play with:"
         android:id="@+id/textView3"
-        android:layout_below="@+id/chosen_name"
-        android:layout_alignRight="@+id/ratingbar_opponent"
-        android:layout_alignEnd="@+id/ratingbar_opponent" />
+        android:layout_above="@+id/ratingbar_opponent"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.login.widget.ProfilePictureView;
+
 import java.util.List;
 
 public class EndOfGameController extends AppCompatActivity {
@@ -38,6 +40,10 @@ public class EndOfGameController extends AppCompatActivity {
         List<Friend> myFriendList = FBProfile.getFriendList();
         Friend friend = myFriendList.get(0);
         String profilePic = friend.getProfilePicture();
+        ProfilePictureView profilePictureView;
+        //profilePictureView = (ProfilePictureView) ProfilePictureView.findViewById();
+       // profilePictureView.setProfileId(Long.toString(friend.getFacebookID()));
+
     }
 
     private void displayForLoser(View view){
