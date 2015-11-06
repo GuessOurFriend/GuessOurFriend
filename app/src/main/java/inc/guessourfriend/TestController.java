@@ -1,7 +1,6 @@
 package inc.guessourfriend;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +20,7 @@ public class TestController extends SlideNavigationController {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         // setting up slide menu
-        getLayoutInflater().inflate(R.layout.activity_main, frameLayout);
+        getLayoutInflater().inflate(R.layout.activity_test_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
 

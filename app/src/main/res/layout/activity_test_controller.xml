@@ -28,4 +28,13 @@
         android:layout_alignEnd="@+id/login_button"
         android:onClick="pressed"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End of Game View"
+        android:id="@+id/endOfGameButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="pressedEndOfGameButton"/>
+
 </RelativeLayout>

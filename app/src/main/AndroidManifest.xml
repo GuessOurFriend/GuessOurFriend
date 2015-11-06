@@ -60,6 +60,10 @@
             android:name=".SlideNavigationController"
             android:label="@string/title_activity_slide_navigation_controller" >
         </activity>
+        <activity
+            android:name=".EndOfGameController"
+            android:label="@string/title_activity_end_of_game_controller" >
+        </activity>
     </application>
 
 </manifest>
