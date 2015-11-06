@@ -21,7 +21,7 @@ import java.util.List;
 public class ChallengeAFriendController extends SlideNavigationController {
 
     //For Model
-    FBProfileModel fbProfileModel = DatabaseHelper.getFBProfileTableRow(GuessOurFriend.getAppContext());
+    FBProfileModel fbProfileModel = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext());
     OutgoingChallengeListModel outgoingChallengeListModel = new OutgoingChallengeListModel();
 
     //For View

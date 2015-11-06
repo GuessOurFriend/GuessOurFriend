@@ -43,13 +43,13 @@ public class MutualFriend {
 
     public String getName() {
 
-        Friend friend = DatabaseHelper.getFBProfileTableRow(GuessOurFriend.getAppContext())
+        Friend friend = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext())
                 .getFriendById(facebookID);
         return friend.getFullName();
     }
 
     public String getProfilePic() {
-        Friend friend = DatabaseHelper.getFBProfileTableRow(GuessOurFriend.getAppContext())
+        Friend friend = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext())
                 .getFriendById(facebookID);
         return friend.getProfilePicture();
     }

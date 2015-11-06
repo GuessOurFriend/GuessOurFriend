@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="inc.guessourfriend.EndOfGameController"
-    android:id="@+id/chosen_fbprofilepic">
+>
 
     <Button
         android:layout_width="wrap_content"
@@ -22,11 +22,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="YOU WIN!!"
+        android:text="YOU WIN!"
         android:id="@+id/win_lose_text"
-        android:layout_below="@+id/rematch_button"
-        android:layout_alignRight="@+id/rematch_button"
-        android:layout_alignEnd="@+id/rematch_button" />
+        android:layout_alignBottom="@+id/rematch_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,16 +34,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="You chose:"
         android:id="@+id/textView2"
-        android:layout_below="@+id/win_lose_text"
-        android:layout_alignRight="@+id/win_lose_text"
-        android:layout_alignEnd="@+id/win_lose_text" />
-
-    <com.facebook.login.widget.ProfilePictureView
-        android:id="@+id/my_mysteryfriend_profilepic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        facebook:preset_size="small"
-        android:layout_below="@+id/mystery_text"
+        android:layout_below="@+id/rematch_button"
         android:layout_centerHorizontal="true" />
 
     <EditText
@@ -53,8 +44,8 @@
         android:ems="10"
         android:id="@+id/chosen_name"
         android:text="FirstName LastName"
-        android:layout_below="@+id/Chosen_profilepic"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textView2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -62,17 +53,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Your mystery friend:"
         android:id="@+id/mystery_text"
-        android:layout_below="@+id/chosen_name"
+        android:layout_above="@+id/mystery_friend_name"
         android:layout_centerHorizontal="true" />
-
-    <com.facebook.login.widget.ProfilePictureView
-        android:id="@+id/Chosen_profilepic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        facebook:preset_size="small"
-        android:layout_below="@+id/textView2"
-        android:layout_alignLeft="@+id/my_mysteryfriend_profilepic"
-        android:layout_alignStart="@+id/my_mysteryfriend_profilepic" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -81,9 +63,9 @@
         android:text="FirstName LastName"
         android:ems="10"
         android:id="@+id/mystery_friend_name"
-        android:layout_below="@+id/my_mysteryfriend_profilepic"
-        android:layout_alignRight="@+id/ratingbar_opponent"
-        android:layout_alignEnd="@+id/ratingbar_opponent" />
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/chosen_name"
+        android:layout_alignStart="@+id/chosen_name" />
 
     <RatingBar
         android:layout_width="wrap_content"
@@ -91,11 +73,8 @@
         android:id="@+id/ratingbar_opponent"
         android:numStars="5"
         android:rating="5"
-        android:layout_alignLeft="@+id/chosen_name"
-        android:layout_alignStart="@+id/chosen_name"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/textView3"
-        android:layout_alignEnd="@+id/textView3" />
+        android:layout_above="@+id/confirm_button"
+        android:layout_centerHorizontal="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -103,9 +82,8 @@
         android:layout_height="wrap_content"
         android:text="Done"
         android:id="@+id/confirm_button"
-        android:layout_below="@+id/ratingbar_opponent"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -113,7 +91,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Rate how fun it was to play with:"
         android:id="@+id/textView3"
-        android:layout_above="@+id/ratingbar_opponent"
+        android:layout_above="@+id/textView4"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -122,10 +100,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Name_of_opponent"
         android:id="@+id/textView4"
-        android:layout_below="@+id/textView3"
+        android:layout_above="@+id/ratingbar_opponent"
         android:layout_alignLeft="@+id/mystery_text"
-        android:layout_alignStart="@+id/mystery_text"
-        android:layout_alignRight="@+id/mystery_text"
-        android:layout_alignEnd="@+id/mystery_text" />
+        android:layout_alignStart="@+id/mystery_text" />
 
 </RelativeLayout>
