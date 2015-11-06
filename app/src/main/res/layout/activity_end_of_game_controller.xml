@@ -39,10 +39,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
+        android:adjustViewBounds="false"
         android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp"
-        android:adjustViewBounds="false" />
+        android:layout_alignLeft="@+id/confirm_button"
+        android:layout_alignStart="@+id/confirm_button" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
         android:ems="10"
         android:id="@+id/chosen_name"
         android:text="FirstName LastName"
-        android:layout_alignBottom="@+id/imageView"
+        android:layout_below="@+id/imageView2"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -60,7 +60,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Your mystery friend:"
         android:id="@+id/mystery_text"
-        android:layout_below="@+id/imageView"
+        android:layout_below="@+id/mystery_friend_name"
         android:layout_centerHorizontal="true" />
 
     <ImageView
@@ -78,30 +78,19 @@
         android:text="FirstName LastName"
         android:ems="10"
         android:id="@+id/mystery_friend_name"
-        android:layout_below="@+id/imageView2"
-        android:layout_alignLeft="@+id/Opponent_name"
-        android:layout_alignStart="@+id/Opponent_name" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:ems="10"
-        android:id="@+id/Opponent_name"
-        android:layout_below="@+id/mystery_friend_name"
+        android:layout_marginTop="43dp"
+        android:layout_below="@+id/imageView"
         android:layout_alignLeft="@+id/chosen_name"
-        android:layout_alignStart="@+id/chosen_name"
-        android:layout_marginTop="49dp" />
+        android:layout_alignStart="@+id/chosen_name" />
 
     <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ratingbar_opponent"
-        android:layout_below="@+id/Opponent_name"
-        android:layout_centerHorizontal="true"
         android:numStars="5"
-        android:rating="5" />
+        android:rating="5"
+        android:layout_below="@+id/textView4"
+        android:layout_centerHorizontal="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -118,7 +107,20 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Rate how fun it was to play with:"
         android:id="@+id/textView3"
-        android:layout_below="@+id/mystery_friend_name"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/chosen_name"
+        android:layout_alignRight="@+id/ratingbar_opponent"
+        android:layout_alignEnd="@+id/ratingbar_opponent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Name_of_opponent"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/textView3"
+        android:layout_alignLeft="@+id/mystery_text"
+        android:layout_alignStart="@+id/mystery_text"
+        android:layout_alignRight="@+id/mystery_text"
+        android:layout_alignEnd="@+id/mystery_text" />
 
 </RelativeLayout>
