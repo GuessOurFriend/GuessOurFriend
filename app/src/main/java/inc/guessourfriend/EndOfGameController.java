@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.FacebookSdk;
 import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.List;
@@ -52,6 +53,7 @@ public class EndOfGameController extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_end_of_game_controller);
         fbProfile = DatabaseHelper.getFBProfile(this);
         // Simulating a loss
