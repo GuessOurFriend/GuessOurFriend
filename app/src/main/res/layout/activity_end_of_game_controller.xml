@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:id="@+id/the_winning_guessed_name"
+        android:id="@+id/guessed_name"
         android:text="FirstName LastName"
         android:gravity="center_vertical|center_horizontal"
         android:layout_below="@+id/the_winning_guess"
@@ -68,7 +68,7 @@
         android:id="@+id/ratingbar_opponent"
         android:numStars="5"
         android:rating="5"
-        android:layout_above="@+id/confirm_button"
+        android:layout_above="@+id/done_button"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -76,9 +76,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Done"
-        android:id="@+id/confirm_button"
+        android:id="@+id/done_button"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="onDone"/>
 
     <com.facebook.login.widget.ProfilePictureView
         android:id="@+id/their_mystery_friend"
@@ -101,7 +102,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/win_mystery_text2"
         android:id="@+id/mystery_text2"
-        android:layout_below="@+id/the_winning_guessed_name"
+        android:layout_below="@+id/guessed_name"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp" />
 

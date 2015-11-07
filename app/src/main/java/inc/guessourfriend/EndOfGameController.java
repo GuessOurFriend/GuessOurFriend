@@ -7,13 +7,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.List;
 
-public class EndOfGameController extends AppCompatActivity {
+public class EndOfGameController extends SlideNavigationController {
 
     private Game game;
     private User opponentUser;
@@ -29,8 +30,10 @@ public class EndOfGameController extends AppCompatActivity {
     private FBProfileModel fbProfile;
 
     public void onDone(View view){
-        Intent myIntent = new Intent(this, CurrentGamesController.class);
-        startActivity(myIntent);
+        // start the current games activity by using "openActivity(int position) - do it this way
+        //      because it doesn't work as expected if you just make an intent and start an
+        //      activity (this is the consequence of using the slide navigation controller)
+        openActivity(3);
     }
 
     public void onRematch(View view){
@@ -43,7 +46,8 @@ public class EndOfGameController extends AppCompatActivity {
         String profilePic = friend.getProfilePicture();
         ProfilePictureView profilePictureView = (ProfilePictureView) findViewById(R.id.the_winning_guess);
         profilePictureView.setProfileId(Long.toString(friend.getFacebookID()));
-
+        TextView guessedNameTextView = (TextView) findViewById(R.id.guessed_name);
+        guessedNameTextView.setText(friend.getFullName());
     }
 
     private void displayForLoser(){
@@ -53,8 +57,10 @@ public class EndOfGameController extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //FacebookSdk.sdkInitialize(this.getApplicationContext());
-        setContentView(R.layout.activity_end_of_game_controller);
+        getLayoutInflater().inflate(R.layout.activity_end_of_game_controller, frameLayout);
+        //mDrawerList.setItemChecked(position, true);
+        //setTitle(listArray[position]);
+
         fbProfile = DatabaseHelper.getFBProfile(this);
         // Simulating a loss
         //winner = fbProfile.getFriendList().get(1).getFacebookID();
