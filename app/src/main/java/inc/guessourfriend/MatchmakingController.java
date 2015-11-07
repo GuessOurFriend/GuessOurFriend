@@ -5,8 +5,12 @@ import android.os.Bundle;
 import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MatchmakingController extends SlideNavigationController {
+
+    //For Model
+    FBProfileModel fbProfileModel = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,5 +40,19 @@ public class MatchmakingController extends SlideNavigationController {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onBeginMatchmaking(View view) {
+        //TODO: Make a call to the server to see if any friends are in the queue
+        Long facebookId = null;
+
+        //Check if there was a friend in the queue
+        if (facebookId != null) {
+            //Create a game with this friend
+
+        } else {
+            //Add this user to the queue
+
+        }
     }
 }
