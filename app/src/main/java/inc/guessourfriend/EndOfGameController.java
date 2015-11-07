@@ -1,15 +1,11 @@
 package inc.guessourfriend;
 
-import android.content.Intent;
-import android.media.Image;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.facebook.FacebookSdk;
 import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.List;
@@ -41,13 +37,21 @@ public class EndOfGameController extends SlideNavigationController {
     }
 
     private void displayForWinner(){
-        List<Friend> myFriendList = fbProfile.getFriendList();
-        Friend friend = myFriendList.get(0);
-        String profilePic = friend.getProfilePicture();
-        ProfilePictureView profilePictureView = (ProfilePictureView) findViewById(R.id.the_winning_guess);
-        profilePictureView.setProfileId(Long.toString(friend.getFacebookID()));
+        Friend guessedFriend = fbProfile.getFriendList().get(0);
+        ProfilePictureView guessedView = (ProfilePictureView) findViewById(R.id.guessed_profile_picture);
+        guessedView.setProfileId(Long.toString(guessedFriend.getFacebookID()));
         TextView guessedNameTextView = (TextView) findViewById(R.id.guessed_name);
-        guessedNameTextView.setText(friend.getFullName());
+        guessedNameTextView.setText(guessedFriend.getFullName());
+
+        Friend unguessedFriend = fbProfile.getFriendList().get(1);
+        ProfilePictureView unguessedView = (ProfilePictureView) findViewById(R.id.unguessed_profile_picture);
+        unguessedView.setProfileId(Long.toString(unguessedFriend.getFacebookID()));
+        TextView unguessedNameTextView = (TextView) findViewById(R.id.unguessed_name);
+        unguessedNameTextView.setText(unguessedFriend.getFullName());
+
+        Friend opponent = fbProfile.getFriendList().get(2);
+        TextView opponentNameTextView = (TextView) findViewById(R.id.opponent_name);
+        opponentNameTextView.setText(opponent.getFullName());
     }
 
     private void displayForLoser(){
