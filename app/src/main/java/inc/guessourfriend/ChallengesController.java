@@ -26,8 +26,8 @@ public class ChallengesController extends SlideNavigationController {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //debug statements: to be removed later
-        String Hello = "Hello";
-        Log.v("Test: challenges:manav","" + Hello);
+        //String Hello = "Hello";
+        //Log.v("Test: challenges:manav","" + Hello);
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_challenges_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
@@ -37,14 +37,11 @@ public class ChallengesController extends SlideNavigationController {
         IncomingChallenge test = new IncomingChallenge(77778);
         incomingChallengeList.add(test);
         Long [] incomingchallengerID = new Long[incomingChallengeList.size()];
-        //Long [] incomingchallengerID = new Long[1];
 
         for (int i = 0; i < incomingChallengeList.size(); i++) {
             incomingchallengerID[i] = incomingChallengeList.get(i).getChallengerID();
         }
-        //Long temp1 = 8888L;
-        //incomingchallengerID[0]= temp1;
-        //Log.v("incomingChallengerID:","" + incomingchallengerID[0]);
+
         ArrayAdapter<Long> incomingchallengelistAdapter =
                 new ArrayAdapter<Long>(this, android.R.layout.simple_list_item_1, incomingchallengerID);
 
@@ -61,7 +58,7 @@ public class ChallengesController extends SlideNavigationController {
                 adb.setMessage("Accept " + itemValue + " a challenge request?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                // TODO: Go to Start of Game Controller on clicking the accept button
+                            // TODO: Go to Start of Game Controller on clicking the accept button, and start the new activity
                                 Toast.makeText(getApplicationContext(),
                                         "Position:" + itemPosition + " ListItem: " + itemValue, Toast.LENGTH_SHORT).show();
                             }
