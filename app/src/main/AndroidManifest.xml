@@ -57,6 +57,10 @@
             android:label="@string/title_activity_options_controller" >
         </activity>
         <activity
+            android:name=".BlacklistController"
+            android:label="@string/title_activity_blacklist_controller" >
+        </activity>
+        <activity
             android:name=".SlideNavigationController"
             android:label="@string/title_activity_slide_navigation_controller" >
         </activity>

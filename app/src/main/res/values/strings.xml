@@ -11,6 +11,7 @@
     <string name="title_activity_leaderboard_controller">Leaderboard</string>
     <string name="title_activity_matchmaking_controller">Matchmaking</string>
     <string name="title_activity_challenges_controller">Challenges</string>
+    <string name="title_activity_blacklist_controller">Blacklist</string>
     <string name="title_activity_options_controller">Options</string>
     <string name="title_activity_slide_navigation_controller">SlideNavigation</string>
 
