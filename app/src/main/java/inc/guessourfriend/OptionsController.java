@@ -1,6 +1,9 @@
 package inc.guessourfriend;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 public class OptionsController extends SlideNavigationController {
 
@@ -8,7 +11,22 @@ public class OptionsController extends SlideNavigationController {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_options_controller, frameLayout);
-        mDrawerList.setItemChecked(position, true);
-        setTitle(listArray[position]);
+        //mDrawerList.setItemChecked(position, true);
+        //setTitle(listArray[position]);
+        Button blacklistb=(Button)findViewById(R.id.blacklistbutton);
+        Button inviteb=(Button)findViewById(R.id.inviteafriendbutton);
+        Button reportbugb=(Button)findViewById(R.id.reportabugbutton);
+
+
+        blacklistb.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(OptionsController.this, BlacklistController.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
+
+
 }

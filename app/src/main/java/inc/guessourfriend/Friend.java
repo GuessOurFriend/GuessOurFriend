@@ -10,6 +10,7 @@ public class Friend {
     private long facebookID;
     private String fullName;
     private String profilePicture;
+    private boolean checked = false ;
 
     public Friend(long facebookID, String fullName, String profilePicture){
         this.facebookID = facebookID;
@@ -39,6 +40,17 @@ public class Friend {
             return false;
         }
     }
+    public boolean isChecked() {
+        return checked;
+    }
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+    public void toggleChecked() {
+        checked = !checked ;
+    }
+
+
 
     @Override
     public int hashCode() {

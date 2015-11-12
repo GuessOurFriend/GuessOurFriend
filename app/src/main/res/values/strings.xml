@@ -11,6 +11,7 @@
     <string name="title_activity_leaderboard_controller">Leaderboard</string>
     <string name="title_activity_matchmaking_controller">Matchmaking</string>
     <string name="title_activity_challenges_controller">Challenges</string>
+    <string name="title_activity_blacklist_controller">Blacklist</string>
     <string name="title_activity_options_controller">Options</string>
     <string name="title_activity_slide_navigation_controller">SlideNavigation</string>
 
@@ -29,4 +30,12 @@
     <string name="open_drawer">Drawer Open</string>
     <string name="close_drawer">Drawer Close</string>
     <string name="title_activity_end_of_game_controller">EndOfGameController</string>
+
+    <string name="win_mystery_text0">You Won!</string>
+    <string name="loss_mystery_text0">You Lost :(</string>
+    <string name="win_mystery_text1">You guessed</string>
+    <string name="loss_mystery_text1">They guessed</string>
+    <string name="win_mystery_text2">Your mystery friend</string>
+    <string name="loss_mystery_text2">Their mystery friend</string>
+    <string name="rating_text">Rate how fun it was to play with</string>
 </resources>
