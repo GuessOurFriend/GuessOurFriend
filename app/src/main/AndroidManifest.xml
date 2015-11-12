@@ -81,6 +81,29 @@
             android:name=".EndOfGameController"
             android:label="@string/title_activity_end_of_game_controller" >
         </activity>
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="inc.guessourfriend.gcm" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".GuessOurFriendGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".GuessOurFriendInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
