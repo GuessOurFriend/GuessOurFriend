@@ -2,7 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="inc.guessourfriend" >
 
+    <!--We need the internet and so does our Google Cloud Messaging API-->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--The Google Cloud Messaging API requires WAKE_LOCK permissions-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!--Allow the Google Cloud Messaging API to SEND and REVIEVE messages-->
+    <uses-permission android:name="com.google.android.c2dm.permission.SEND" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <!--This prevents other applications from receiving messages meant for our application-->
+    <permission android:name="inc.guessourfriend.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="inc.guessourfriend.permission.C2D_MESSAGE" />
 
     <application
         android:name=".GuessOurFriend"
@@ -68,6 +81,29 @@
             android:name=".EndOfGameController"
             android:label="@string/title_activity_end_of_game_controller" >
         </activity>
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="inc.guessourfriend.gcm" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".GuessOurFriendGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".GuessOurFriendInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
