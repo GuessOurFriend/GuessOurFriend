@@ -48,11 +48,10 @@ public class BlacklistController extends Activity {
         });
 
 
-        // Create and populate planets.
         //friends = (Friend[]) getLastNonConfigurationInstance() ;
         if ( friends == null ) {
             friends = new Friend[] {
-                    new Friend(7778,"Mercury","someurl"), new Friend(7779,"Venus","someurl"), new Friend(7779,"Earth","someurl")
+                    new Friend(7775,"Eric","someurl"), new Friend(7774,"Brian","someurl"), new Friend(7778,"Laura","someurl"), new Friend(7777,"Steve","someurl"),new Friend(7779,"Ash","someurl"),new Friend(7776,"Manav","someurl")
             };
         }
         ArrayList<Friend> friendList = new ArrayList<Friend>();
@@ -97,7 +96,7 @@ public class BlacklistController extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            // Planet to display
+
             Friend friend = (Friend) this.getItem( position );
 
             // The child views in each row.
@@ -106,14 +105,13 @@ public class BlacklistController extends Activity {
 
             // Create a new row view
             if ( convertView == null ) {
-                convertView = inflater.inflate(R.layout.activity_blacklist_controller, null);
+                convertView = inflater.inflate(R.layout.customlayout_blacklist_controller, null);
 
                 // Find the child views.
                 textView = (TextView) convertView.findViewById( R.id.friendblacklist );
                 checkBox = (CheckBox) convertView.findViewById( R.id.blacklist_checkbox );
 
-                // Optimization: Tag the row with it's child views, so we don't have to
-                // call findViewById() later when we reuse the row.
+
                 convertView.setTag( new FriendViewHolder(textView,checkBox) );
 
                 // If CheckBox is toggled, update the planet it is tagged with.
@@ -133,11 +131,8 @@ public class BlacklistController extends Activity {
                 textView = viewHolder.getTextView() ;
             }
 
-            // Tag the CheckBox with the Planet it is displaying, so that we can
-            // access the planet in onClick() when the CheckBox is toggled.
-            checkBox.setTag( friend );
 
-            // Display planet data
+            checkBox.setTag( friend );
             checkBox.setChecked( friend.isChecked());
             textView.setText( friend.getFullName() );
 
