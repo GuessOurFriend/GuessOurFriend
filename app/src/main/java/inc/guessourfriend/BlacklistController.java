@@ -114,7 +114,6 @@ public class BlacklistController extends Activity {
 
                 convertView.setTag( new FriendViewHolder(textView,checkBox) );
 
-                // If CheckBox is toggled, update the planet it is tagged with.
                 checkBox.setOnClickListener( new View.OnClickListener() {
                     public void onClick(View v) {
                         CheckBox cb = (CheckBox) v ;

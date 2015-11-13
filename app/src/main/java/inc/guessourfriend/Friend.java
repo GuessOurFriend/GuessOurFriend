@@ -10,7 +10,7 @@ public class Friend {
     private long facebookID;
     private String fullName;
     private String profilePicture;
-    private boolean checked = false ;
+    private boolean checked = false ; //Manav: I added this field along with some methods to keep track if the friend is backlisted.
 
     public Friend(long facebookID, String fullName, String profilePicture){
         this.facebookID = facebookID;
