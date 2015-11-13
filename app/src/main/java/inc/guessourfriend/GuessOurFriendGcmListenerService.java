@@ -14,6 +14,10 @@ import com.google.android.gms.gcm.GcmListenerService;
  * API Documentation: https://developers.google.com/cloud-messaging/android/client
  */
 public class GuessOurFriendGcmListenerService extends GcmListenerService {
+
+    private String intentReceivedKey = "messageReceived";
+    private String intentSentMessageSuccessKey = "sentMessageSuccess";
+
     public GuessOurFriendGcmListenerService() {
         super();
     }
@@ -25,16 +29,18 @@ public class GuessOurFriendGcmListenerService extends GcmListenerService {
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        Intent intent = new Intent(Intent.ACTION_SEND, null, this, MiddleOfGameController.class);
+        // TODO: add the game ID to intentReceivedKey in order to differentiate each game's messages
+        Intent intent = new Intent(intentReceivedKey, null, this, MiddleOfGameController.class);
         intent.setType("text/plain");
-        intent.putExtra("theReceivedMessage", data.getString("msg"));
-        startActivity(intent);
+        intent.putExtra(intentReceivedKey, data.getString("msg"));
+        sendBroadcast(intent);
     }
 
     @Override
     public void onMessageSent(String msgId) {
-        //TODO: Implement
-
+        // TODO: add the game ID to "messageReceived" in order to differentiate each game's messages
+        Intent intent = new Intent(intentSentMessageSuccessKey, null, this, MiddleOfGameController.class);
+        sendBroadcast(intent);
     }
 
     @Override

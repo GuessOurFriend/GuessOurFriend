@@ -1,37 +1,70 @@
 package inc.guessourfriend;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class MiddleOfGameController extends AppCompatActivity {
+
+    private String intentReceivedKey = "messageReceived";
+    private String intentSentMessageSuccessKey = "sentMessageSuccess";
+    private GoogleCloudMessaging gcm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_middle_of_game_controller);
+        gcm = GoogleCloudMessaging.getInstance(this);
+        setUpIntentListeners();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_middle_of_game_controller, menu);
-        return true;
+    private void setUpEnterAndSendTheMessage(){
+        EditText theMessage = (EditText) findViewById(R.id.theMessage);
+        theMessage.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    //gcm.send
+                    // TODO: gcm.send needs the other person's ID in order to send messages
+                    //      We're assuming that our ID is the instanceID from the
+                    //      GuessOurFriendInstanceIDListenerService class. We need to send each of
+                    //      the players IDs to our database in order to get each others IDs and
+                    //      send messages to each other.
+                }
+                return false;
+            }
+        });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    private void setUpIntentListeners(){
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                EditText conversation = (EditText) findViewById(R.id.conversation);
+                conversation.append(intent.getStringExtra(intentReceivedKey) + "\n");
+            }
+        }, new IntentFilter(intentReceivedKey));
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                EditText theMessage = (EditText) findViewById(R.id.theMessage);
+                EditText conversation = (EditText) findViewById(R.id.conversation);
+                conversation.append(theMessage.getText() + "\n");
+                theMessage.setText("");
+            }
+        }, new IntentFilter(intentSentMessageSuccessKey));
     }
 }
