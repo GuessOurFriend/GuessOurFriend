@@ -1,8 +1,13 @@
 package inc.guessourfriend;
 
 import android.content.Intent;
+import android.util.Log;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.iid.InstanceIDListenerService;
+
+import java.io.IOException;
 
 /**
  * Created by Eric on 11/11/15.
@@ -11,13 +16,22 @@ import com.google.android.gms.iid.InstanceIDListenerService;
  * API Documentation: https://developers.google.com/cloud-messaging/android/client
  */
 public class GuessOurFriendInstanceIDListenerService extends InstanceIDListenerService {
+
+    private String token = "";
+
     public GuessOurFriendInstanceIDListenerService() {
         super();
     }
 
     @Override
     public void onCreate() {
-        //TODO: Implement?
+        InstanceID instanceID = InstanceID.getInstance(this);
+        try {
+            token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+        }catch(IOException e){
+            Log.v("ExceptionFromGCM", e.getMessage());
+        }
     }
 
     @Override
@@ -33,11 +47,8 @@ public class GuessOurFriendInstanceIDListenerService extends InstanceIDListenerS
 
     @Override
     public void onTokenRefresh() {
-        //TODO: Implemented: Per the API, this must be impemeneted
-
-        //Sample code
         //// Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
-        //Intent intent = new Intent(this, RegistrationIntentService.class);
-        //startService(intent);
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
     }
 }
