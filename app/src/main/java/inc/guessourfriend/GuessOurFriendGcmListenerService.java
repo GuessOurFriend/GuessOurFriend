@@ -1,6 +1,9 @@
 package inc.guessourfriend;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
@@ -22,12 +25,16 @@ public class GuessOurFriendGcmListenerService extends GcmListenerService {
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        //TODO: Implement
+        Intent intent = new Intent(Intent.ACTION_SEND, null, this, MiddleOfGameController.class);
+        intent.setType("text/plain");
+        intent.putExtra("theReceivedMessage", data.getString("msg"));
+        startActivity(intent);
     }
 
     @Override
     public void onMessageSent(String msgId) {
         //TODO: Implement
+
     }
 
     @Override

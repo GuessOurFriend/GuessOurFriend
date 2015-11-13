@@ -21,7 +21,8 @@
         android:layout_alignParentEnd="true"
         android:hint="Type your message here"
         android:layout_alignParentBottom="true"
-        android:minLines="2" />
+        android:minLines="2"
+        android:enabled="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,6 +47,7 @@
         android:layout_alignEnd="@+id/theMessage"
         android:layout_above="@+id/theMessage"
         android:minLines="5"
-        android:maxLines="100" />
+        android:maxLines="100"
+        android:enabled="false" />
 
 </RelativeLayout>
