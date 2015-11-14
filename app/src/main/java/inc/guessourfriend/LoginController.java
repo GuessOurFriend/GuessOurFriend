@@ -3,6 +3,7 @@ package inc.guessourfriend;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -36,6 +37,38 @@ public class LoginController extends FragmentActivity {
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private boolean isResumed;
+
+    public void createUserOnServer(final long facebookID, final String firstName, final String lastName, final String profilePicture) {
+
+        JSONObject dataToPost = new JSONObject();
+        JSONObject user = new JSONObject();
+        try {
+            user.put("fb_id", facebookID);
+            user.put("gcm_id", "");
+            user.put("first_name", firstName);
+            user.put("last_name", lastName);
+            dataToPost.put("user", user);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //Request a member from the queue asynchronously
+        new NetworkRequestPostJSONRunner("https://guess-our-friend.herokuapp.com/users") {
+            @Override
+            protected void onPostExecute(JSONObject result) {
+                //Parse the auth token in the response so we can update this user in the future
+                String authToken = null;
+                try {
+                    authToken = result.getString("token");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                //Insert the FBProfile into the local database
+                DatabaseHelper.insertOrUpdateFBProfile(LoginController.this, facebookID, authToken, firstName, profilePicture);
+            }
+        }.execute(dataToPost);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +106,13 @@ public class LoginController extends FragmentActivity {
                                                 String fullName = json.getString("name");
                                                 String profilePicture = json.getJSONObject("picture").getJSONObject("data").getString("url");
 
-                                                //Insert the FBProfile into the database
-                                                DatabaseHelper.insertOrUpdateFBProfile(LoginController.this, facebookID, fullName, profilePicture);
+                                                //Send the user to our server
+                                                //TODO: Parse name or change how server stores it
+                                                if (DatabaseHelper.getFBProfile(LoginController.this) == null)
+                                                {
+                                                    createUserOnServer(facebookID, fullName, fullName, profilePicture);
+                                                }
+
                                                 //Get the friends that were returned
                                                 //TODO: Take paging into account
                                                 JSONArray friends = json.getJSONObject("friends").getJSONArray("data");
