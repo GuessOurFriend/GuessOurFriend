@@ -10,7 +10,12 @@ public class Friend {
     private long facebookID;
     private String fullName;
     private String profilePicture;
-    private boolean checked = false ; //Manav: I added this field along with some methods to keep track if the friend is backlisted.
+    private boolean isBlacklisted = false ; //Manav: I added this field along with some methods to keep track if the friend is backlisted.
+    private long matchesWon;
+    private long matchesLost;
+    private long points;
+    private long ratings;
+
 
     public Friend(long facebookID, String fullName, String profilePicture){
         this.facebookID = facebookID;
@@ -40,14 +45,38 @@ public class Friend {
             return false;
         }
     }
-    public boolean isChecked() {
-        return checked;
+    public boolean isBlacklisted() {
+        return isBlacklisted;
     }
-    public void setChecked(boolean checked) {
-        this.checked = checked;
+    public void setBlacklisted(boolean isBlacklisted) {
+        this.isBlacklisted = isBlacklisted;
     }
-    public void toggleChecked() {
-        checked = !checked ;
+    public void toggleBlacklisted() {
+        isBlacklisted = !isBlacklisted ;
+    }
+    public long getPoints() {
+        return points;
+    }
+    public long getRatings() {
+        return ratings;
+    }
+    public long getMatchesWon() {
+        return matchesWon;
+    }
+    public long getMatchesLost() {
+        return matchesLost;
+    }
+    public void incrementMatchesWon(){
+        matchesWon++;
+    }
+    public void incrementMatchesLost(){
+        matchesLost++;
+    }
+    public void updatePoints (long points) {
+        points = points + 1;  // TODO: discuss the final logic
+    }
+    public void updateRatings (long ratings) {
+        // TODO: discuss the final logic
     }
 
 

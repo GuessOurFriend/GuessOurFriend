@@ -41,9 +41,9 @@ public class BlacklistController extends Activity {
             public void onItemClick( AdapterView<?> parent, View item,
                                      int position, long id) {
                 Friend friend = listAdapter.getItem( position );
-                friend.toggleChecked();
+                friend.toggleBlacklisted();
                 FriendViewHolder viewHolder = (FriendViewHolder) item.getTag();
-                viewHolder.getCheckBox().setChecked(friend.isChecked());
+                viewHolder.getCheckBox().setChecked(friend.isBlacklisted());
             }
         });
 
@@ -118,7 +118,7 @@ public class BlacklistController extends Activity {
                     public void onClick(View v) {
                         CheckBox cb = (CheckBox) v ;
                         Friend friend = (Friend) cb.getTag();
-                        friend.setChecked( cb.isChecked() );
+                        friend.setBlacklisted( cb.isChecked() );
                     }
                 });
             }
@@ -132,7 +132,7 @@ public class BlacklistController extends Activity {
 
 
             checkBox.setTag( friend );
-            checkBox.setChecked( friend.isChecked());
+            checkBox.setChecked( friend.isBlacklisted());
             textView.setText( friend.getFullName() );
 
             return convertView;

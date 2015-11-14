@@ -31,6 +31,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    // TODO: add blacklisted field to friend table
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_FBPROFILE_TABLE_QUERY);
