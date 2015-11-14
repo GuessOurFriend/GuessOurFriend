@@ -20,7 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String FRIEND_TABLE = "FriendTable";
     private static final String CHALLENGES_TABLE = "ChallengesTable";
     private static final String CREATE_FBPROFILE_TABLE_QUERY = "CREATE TABLE " + FBPROFILE_TABLE +
-            " (facebookID INTEGER PRIMARY KEY, " + "fullName TEXT, " + "profilePicture TEXT);";
+            " (facebookID INTEGER PRIMARY KEY, " + "authToken TEXT, " + "fullName TEXT, " + "profilePicture TEXT);";
     private static final String CREATE_FRIEND_TABLE_QUERY = "CREATE TABLE " + FRIEND_TABLE +
             " (facebookID INTEGER PRIMARY KEY, " + "fullName TEXT, " + "profilePicture TEXT, " +
             "groups TEXT);";
@@ -108,11 +108,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public static long insertOrUpdateFBProfile(Context context, long facebookID, String fullName, String profilePicture){
+    public static long insertOrUpdateFBProfile(Context context, long facebookID, String authToken, String fullName, String profilePicture){
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         ContentValues row = new ContentValues();
         row.put("facebookID", facebookID);
+        row.put("authToken", authToken);
         row.put("fullName", fullName);
         row.put("profilePicture", profilePicture);
         long id = db.insertWithOnConflict(FBPROFILE_TABLE, null, row, SQLiteDatabase.CONFLICT_REPLACE);
@@ -141,25 +142,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //If we have a profile in the table, get it
         if (cur.moveToNext()) {
             long facebookID = cur.getLong(cur.getColumnIndex("facebookID"));
+            String authToken = cur.getString(cur.getColumnIndex("authToken"));
             String fullName = cur.getString(cur.getColumnIndex("fullName"));
             String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
             Log.v("facebookID: ", "" + facebookID);
+            Log.v("authToken: ", authToken);
             Log.v("fullName: ", fullName);
             Log.v("profilePicture: ", profilePicture);
 
             //TODO: Make sure these friends are for this facebook user and not a different facebook user
             List<Friend> friends = getFriendTableRows(context);
 
-            profile = new FBProfileModel(facebookID, fullName, profilePicture, friends);
+            profile = new FBProfileModel(facebookID, authToken, fullName, profilePicture, friends);
         }
 
         //There should only be one profile model, throw an exception
         //TODO: Support multiple accounts on a device
         if (cur.moveToNext()) {
             long facebookID = cur.getLong(cur.getColumnIndex("facebookID"));
+            String authToken = cur.getString(cur.getColumnIndex("authToken"));
             String fullName = cur.getString(cur.getColumnIndex("fullName"));
             String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
             Log.v("facebookID: ", "" + facebookID);
+            Log.v("authToken: ", authToken);
             Log.v("fullName: ", fullName);
             Log.v("profilePicture: ", profilePicture);
 

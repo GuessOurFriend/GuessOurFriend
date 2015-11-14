@@ -8,23 +8,28 @@ import java.util.List;
  */
 public class FBProfileModel {
     private long facebookID;
+    private String authToken;
     private String fullName;
     private String profilePicture;
     private List<Friend> friendList;
 
-    public FBProfileModel(long facebookID, String fullName, String profilePicture, List<Friend> friendList){
+    public FBProfileModel(long facebookID, String authToken, String fullName, String profilePicture, List<Friend> friendList){
         super();
         updateFBProfileInfo(facebookID, fullName, profilePicture, friendList);
+        this.authToken = authToken;
     }
 
     public long getFacebookID(){
         return this.facebookID;
     }
-    public String getProfilePicture(){
-        return this.profilePicture;
+    public String getAuthToken() {
+        return authToken;
     }
     public String getFullName(){
         return this.fullName;
+    }
+    public String getProfilePicture(){
+        return this.profilePicture;
     }
     public List<Friend> getFriendList(){
         return this.friendList;

@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,12 +16,12 @@ import java.net.URL;
 /**
  * A class so the network stuff can easily be run on a separate thread
  */
-public abstract class NetworkRequestGetJSONRunner extends AsyncTask<String, String, JSONObject> {
+public abstract class NetworkRequestPostJSONRunner extends AsyncTask<JSONObject, String, JSONObject> {
 
     //Store the URL for the request this runner will make
     private URL url = null;
 
-    public NetworkRequestGetJSONRunner(String url) {
+    public NetworkRequestPostJSONRunner(String url) {
         //Create a URL object pointing to the location of our method
         try {
             this.url = new URL(url);
@@ -31,16 +32,30 @@ public abstract class NetworkRequestGetJSONRunner extends AsyncTask<String, Stri
     }
 
     @Override
-    protected JSONObject doInBackground(String... params) {
+    protected JSONObject doInBackground(JSONObject... params) {
         //Set up a variable to return as our result
         String stringResult = null;
 
         //Make the request
         HttpURLConnection urlConnection = null;
         try {
-            //Open the connection and convert the result to a string
+            //Open the connection to be POSTed to
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setRequestProperty("Accept", "apptlication/json");
+            urlConnection.connect();
+
+            //Set up a writer to write out our data
+            OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream());
+            if (params.length > 0) {
+                writer.write(params[0].toString());
+            }
+            writer.flush();
+
+            //TODO: Handle .getResponseCode() not being 200?
+
             BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             StringBuilder builder = new StringBuilder();
             String line;
