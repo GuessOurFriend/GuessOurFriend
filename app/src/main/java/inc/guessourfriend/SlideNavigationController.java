@@ -80,10 +80,13 @@ public class SlideNavigationController extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer_base_layout);
 
-
         fbProfileModel = DatabaseHelper.getFBProfile(this);
         fbProfileModel.friendList = DatabaseHelper.getFriendList(this);
 
+        // This onCreate method gets call whenever a subclass is instantiated.
+        //      This means that we have to re-initialize all Models every time
+        //      a controller is created (might be a performance hit, but
+        //      we won't worry about that now).
         currentGameListModel = new CurrentGameListModel();
         incomingChallengeListModel = new IncomingChallengeListModel();
         leaderboardListModel = new LeaderboardListModel();
