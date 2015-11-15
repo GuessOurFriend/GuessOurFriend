@@ -53,7 +53,7 @@ public class StartOfGameController extends SlideNavigationController {
 //        }
         String[] imageURLs = new String[fbProfileModel.friendList.size()];
         for (int i = 0; i < fbProfileModel.friendList.size(); i++) {
-            imageURLs[i] = fbProfileModel.friendList.get(i).getProfilePic();
+            imageURLs[i] = fbProfileModel.friendList.get(i).profilePicture;
         }
         return imageURLs;
     }
