@@ -10,6 +10,9 @@ import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.FacebookSdk;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class TestController extends SlideNavigationController {
 
     private AccessTokenTracker accessTokenTracker;
@@ -47,6 +50,32 @@ public class TestController extends SlideNavigationController {
     public void pressed(View view){
         MutualFriendList testing = new MutualFriendList();
         testing.populateMutualFriendList(this);
+    }
+
+    public void dbload(View view) {
+        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).getAuthToken();
+        new NetworkRequestRunner("GET", "https://guess-our-friend.herokuapp.com/user", authToken) {
+            @Override
+            protected void onPostExecute(JSONObject result) {
+                System.out.println(result.toString());
+            }
+        }.execute();
+    }
+
+    public void sendTestMessage(View view) {
+        //Set up the data to send a message to the currently logged in user (yourself for testing)
+        JSONObject data = new JSONObject();
+        try {
+            data.put("fb_id", DatabaseHelper.getFBProfile(TestController.this).getFacebookID());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //Get the auth token
+        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).getAuthToken();
+
+        //Make the test message request
+        new NetworkRequestRunner("POST", "https://guess-our-friend.herokuapp.com/test_gcm", authToken).execute(data);
     }
 
     public void pressedEndOfGameButton(View view){

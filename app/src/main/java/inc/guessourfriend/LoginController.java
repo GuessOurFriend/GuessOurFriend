@@ -1,6 +1,7 @@
 package inc.guessourfriend;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,7 +55,7 @@ public class LoginController extends FragmentActivity {
         }
 
         //Request a member from the queue asynchronously
-        new NetworkRequestPostJSONRunner("https://guess-our-friend.herokuapp.com/users") {
+        new NetworkRequestRunner("POST", "https://guess-our-friend.herokuapp.com/users") {
             @Override
             protected void onPostExecute(JSONObject result) {
                 //Parse the auth token in the response so we can update this user in the future
@@ -116,6 +117,38 @@ public class LoginController extends FragmentActivity {
                                                     //createUserOnServer(facebookID, fullName, fullName, profilePicture);
                                                 }
 
+                                                //TODO: Delete this. It's here incase someone else needs the gcm_id manually added
+                                                /*new AsyncTask<String, String, String>() {
+
+                                                    @Override
+                                                    protected String doInBackground(String... params) {
+                                                        try {
+                                                            return InstanceID.getInstance(LoginController.this).getToken(getString(R.string.gcm_defaultSenderId),
+                                                                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                                                        } catch (IOException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                        return "";
+                                                    }
+                                                    @Override
+                                                    protected void onPostExecute(String token) {
+                                                        System.out.println("Hello: " + token);
+                                                        JSONObject data = new JSONObject();
+                                                        try {
+                                                            data.put("gcm_id", token);
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+
+                                                        //Get the auth token
+                                                        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).getAuthToken();
+
+                                                        // Add custom implementation, as needed.
+                                                        //Request a member from the queue asynchronously
+                                                        new NetworkRequestRunner("PUT", "https://guess-our-friend.herokuapp.com/user/gcm_id", authToken).execute(data);
+                                                    }
+                                                }.execute();*/
+
                                                 //Get the friends that were returned
                                                 //TODO: Take paging into account
                                                 JSONArray friends = json.getJSONObject("friends").getJSONArray("data");
@@ -140,8 +173,6 @@ public class LoginController extends FragmentActivity {
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
-
-
                                         }
                                     }
                                 }
