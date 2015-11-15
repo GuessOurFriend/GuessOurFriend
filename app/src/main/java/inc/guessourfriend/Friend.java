@@ -96,7 +96,11 @@ public class Friend implements Serializable{
     public void updateRatings (long ratings) {
         // TODO: discuss the final logic
     }
-
+    public String getProfilePic() {
+        Friend friend = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext())
+                .getFriendById(facebookID);
+        return friend.getProfilePicture();
+    }
 
 
     @Override

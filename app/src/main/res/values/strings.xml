@@ -16,6 +16,7 @@
     <string name="title_activity_blacklist_controller">Blacklist</string>
     <string name="title_activity_options_controller">Options</string>
     <string name="title_activity_slide_navigation_controller">SlideNavigation</string>
+    <string name="title_activity_start_of_game_controller">StartOfGameController</string>
 
     <string name="title_section1">Challenge a Friend</string>
     <string name="title_section2">Matchmaking</string>

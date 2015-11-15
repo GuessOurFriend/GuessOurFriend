@@ -83,6 +83,10 @@
             android:name=".EndOfGameController"
             android:label="@string/title_activity_end_of_game_controller" >
         </activity>
+        <activity
+            android:name=".StartOfGameController"
+            android:label="@string/title_activity_start_of_game_controller" >
+        </activity>
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
