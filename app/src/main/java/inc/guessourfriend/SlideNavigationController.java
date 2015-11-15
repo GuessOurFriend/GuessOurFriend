@@ -15,6 +15,8 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * @author dipenp
  *     @modified by Stephen Ellmaurer
@@ -74,17 +76,20 @@ public class SlideNavigationController extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.navigation_drawer_base_layout);
+
+
+        fbProfileModel = DatabaseHelper.getFBProfile(this);
+        //ArrayList<Friend> friends = (ArrayList<Friend>) getIntent().getExtras().get("friendList");
+        //fbProfileModel.friendList = friends;
+
         currentGameListModel = new CurrentGameListModel();
         incomingChallengeListModel = new IncomingChallengeListModel();
         leaderboardListModel = new LeaderboardListModel();
         mutualFriendList = new MutualFriendList();
         outgoingChallengeListModel = new OutgoingChallengeListModel();
-
-
-
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.navigation_drawer_base_layout);
 
         frameLayout = (FrameLayout)findViewById(R.id.content_frame);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

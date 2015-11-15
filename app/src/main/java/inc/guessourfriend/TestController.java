@@ -53,7 +53,7 @@ public class TestController extends SlideNavigationController {
     }
 
     public void dbload(View view) {
-        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).getAuthToken();
+        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).authToken;
         new NetworkRequestRunner("GET", "https://guess-our-friend.herokuapp.com/user", authToken) {
             @Override
             protected void onPostExecute(JSONObject result) {
@@ -66,13 +66,13 @@ public class TestController extends SlideNavigationController {
         //Set up the data to send a message to the currently logged in user (yourself for testing)
         JSONObject data = new JSONObject();
         try {
-            data.put("fb_id", DatabaseHelper.getFBProfile(TestController.this).getFacebookID());
+            data.put("fb_id", DatabaseHelper.getFBProfile(TestController.this).authToken);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         //Get the auth token
-        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).getAuthToken();
+        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).authToken;
 
         //Make the test message request
         new NetworkRequestRunner("POST", "https://guess-our-friend.herokuapp.com/test_gcm", authToken).execute(data);

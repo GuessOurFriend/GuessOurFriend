@@ -104,7 +104,7 @@ public class RegistrationIntentService extends IntentService {
         }
 
         //Get the auth token
-        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).getAuthToken();
+        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).authToken;
 
         // Add custom implementation, as needed.
         //Request a member from the queue asynchronously

@@ -43,11 +43,7 @@ public class ChallengeAFriendController extends SlideNavigationController {
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
 
-        fbProfileModel = DatabaseHelper.getFBProfile(this);
-        ArrayList<Friend> friends = (ArrayList<Friend>) getIntent().getExtras().get("friendList");
-        fbProfileModel.friendList = friends;
-        friendList = fbProfileModel.friendList;
-        //friendList = friends;
+        /* friendList = fbProfileModel.friendList;
 
         listView = (ListView) findViewById(R.id.list);
 
@@ -87,6 +83,6 @@ public class ChallengeAFriendController extends SlideNavigationController {
                 AlertDialog alertDialog = adb.create();
                 alertDialog.show();
             }
-        });
+        });*/
     }
 }

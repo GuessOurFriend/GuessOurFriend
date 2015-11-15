@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -167,7 +168,7 @@ public class LoginController extends FragmentActivity {
                                                 }
 
                                                 // programmatically switch to another activity (the first activity we want to show)
-                                                Intent myIntent = new Intent(LoginController.this, ChallengeAFriendController.class);
+                                                Intent myIntent = new Intent(LoginController.this, SlideNavigationController.class);
                                                 myIntent.putExtra("friendList", friendList);
                                                 startActivity(myIntent);
                                             } catch (JSONException e) {

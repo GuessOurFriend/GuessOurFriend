@@ -20,7 +20,7 @@ import java.util.List;
  * Created by mgarg on 11/11/15.
  */
 
-public class BlacklistController extends Activity {
+public class BlacklistController extends SlideNavigationController {
 
     private ListView mainListView ;
     private Friend[] friends ;
@@ -30,7 +30,10 @@ public class BlacklistController extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blacklist_controller);
+
+        getLayoutInflater().inflate(R.layout.activity_blacklist_controller, frameLayout);
+        mDrawerList.setItemChecked(position, true);
+        setTitle("Blacklist");
 
         // Find the ListView resource.
         mainListView = (ListView) findViewById( R.id.blacklistlist );
