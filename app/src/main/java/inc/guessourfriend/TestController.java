@@ -66,7 +66,7 @@ public class TestController extends SlideNavigationController {
         //Set up the data to send a message to the currently logged in user (yourself for testing)
         JSONObject data = new JSONObject();
         try {
-            data.put("fb_id", DatabaseHelper.getFBProfile(TestController.this).authToken);
+            data.put("fb_id", DatabaseHelper.getFBProfile(TestController.this).facebookID);
         } catch (JSONException e) {
             e.printStackTrace();
         }

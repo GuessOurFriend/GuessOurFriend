@@ -110,13 +110,11 @@ public class LoginController extends FragmentActivity {
                                                 String firstName = json.getString("first_name");
                                                 String lastName = json.getString("last_name");
                                                 String profilePicture = json.getJSONObject("picture").getJSONObject("data").getString("url");
-                                                // TODO: put Ruby on Rails auth token in fb profile model
-                                                DatabaseHelper.insertOrUpdateFBProfile(LoginController.this, facebookID, "token goes here", firstName, lastName, profilePicture);
 
                                                 //Send the user to our server
                                                 if (DatabaseHelper.getFBProfile(LoginController.this) == null)
                                                 {
-                                                    //createUserOnServer(facebookID, firstName, lastName, profilePicture);
+                                                    createUserOnServer(facebookID, firstName, lastName, profilePicture);
                                                 }
 
                                                 //TODO: Delete this. It's here incase someone else needs the gcm_id manually added

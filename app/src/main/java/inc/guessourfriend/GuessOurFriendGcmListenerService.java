@@ -32,7 +32,7 @@ public class GuessOurFriendGcmListenerService extends GcmListenerService {
         // TODO: add the game ID to intentReceivedKey in order to differentiate each game's messages
         Intent intent = new Intent(intentReceivedKey, null, this, MiddleOfGameController.class);
         intent.setType("text/plain");
-        intent.putExtra(intentReceivedKey, data.getString("msg"));
+        intent.putExtra(intentReceivedKey, data.getString("body"));
         sendBroadcast(intent);
     }
 
