@@ -25,13 +25,9 @@ public class GuessOurFriendInstanceIDListenerService extends InstanceIDListenerS
 
     @Override
     public void onCreate() {
-        InstanceID instanceID = InstanceID.getInstance(this);
-        try {
-            token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
-                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-        }catch(IOException e){
-            Log.v("ExceptionFromGCM", e.getMessage());
-        }
+        // Fetch the new Instance ID token and notify our app's server of it
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
     }
 
     @Override
@@ -47,7 +43,7 @@ public class GuessOurFriendInstanceIDListenerService extends InstanceIDListenerS
 
     @Override
     public void onTokenRefresh() {
-        //// Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
+        // Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
         Intent intent = new Intent(this, RegistrationIntentService.class);
         startService(intent);
     }
