@@ -82,8 +82,7 @@ public class SlideNavigationController extends AppCompatActivity {
 
 
         fbProfileModel = DatabaseHelper.getFBProfile(this);
-        //ArrayList<Friend> friends = (ArrayList<Friend>) getIntent().getExtras().get("friendList");
-        //fbProfileModel.friendList = friends;
+        fbProfileModel.friendList = DatabaseHelper.getFriendList(this);
 
         currentGameListModel = new CurrentGameListModel();
         incomingChallengeListModel = new IncomingChallengeListModel();

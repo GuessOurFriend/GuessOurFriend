@@ -33,9 +33,6 @@ public class ChallengeAFriendController extends SlideNavigationController {
     //For View
     ListView listView;
 
-    //For Controller
-    private List<Friend> friendList;
-
     //For View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +41,12 @@ public class ChallengeAFriendController extends SlideNavigationController {
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
 
-        fbProfileModel.friendList = DatabaseHelper.getFriendList(this);
-        friendList = fbProfileModel.friendList;
-
         listView = (ListView) findViewById(R.id.list);
 
-        String[] friendNames = new String[friendList.size()];
+        String[] friendNames = new String[fbProfileModel.friendList.size()];
 
-        for (int i = 0; i < friendList.size(); i++) {
-            friendNames[i] = friendList.get(i).getFirstName();
+        for (int i = 0; i < fbProfileModel.friendList.size(); i++) {
+            friendNames[i] = fbProfileModel.friendList.get(i).getFirstName();
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -70,7 +64,7 @@ public class ChallengeAFriendController extends SlideNavigationController {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 outgoingChallengeListModel.addOutgoingChallenge(
-                                        new OutgoingChallenge(friendList.get(itemPosition).getFacebookID()));
+                                        new OutgoingChallenge(fbProfileModel.friendList.get(itemPosition).getFacebookID()));
                                 Log.v("first challengee id", "" + outgoingChallengeListModel
                                         .getOutgoingChallengeList().get(0).getChallengeeID());
                                 Toast.makeText(getApplicationContext(),

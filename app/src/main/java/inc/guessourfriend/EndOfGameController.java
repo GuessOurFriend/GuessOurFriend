@@ -63,8 +63,8 @@ public class EndOfGameController extends SlideNavigationController {
         //mDrawerList.setItemChecked(position, true);
         //setTitle(listArray[position]);
 
-        fbProfileModel = DatabaseHelper.getFBProfile(this);
-        fbProfileModel.friendList = DatabaseHelper.getFriendList(this);
+        //fbProfileModel = DatabaseHelper.getFBProfile(this);
+        //fbProfileModel.friendList = DatabaseHelper.getFriendList(this);
         // Simulating a loss
         //winner = fbProfile.getFriendList().get(1).getFacebookID();
         //loser = fbProfile.getFacebookID();
