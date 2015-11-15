@@ -8,19 +8,19 @@ import java.util.List;
  */
 public class OutgoingChallengeListModel {
 
-    private List<OutgoingChallenge> outgoingChallengeList = new ArrayList<>();
+    public ArrayList<OutgoingChallenge> outgoingChallengeList;
 
     public OutgoingChallengeListModel() {
         populateOutgoingChallengeList();
     }
 
-    private void populateOutgoingChallengeList() {
+    public void populateOutgoingChallengeList() {
 
-        this.outgoingChallengeList = null;
+        this.outgoingChallengeList = new ArrayList<>();
         //TODO: get challenges from database
     }
 
-    public List<OutgoingChallenge> getOutgoingChallengeList() {
+    public ArrayList<OutgoingChallenge> getOutgoingChallengeList() {
 
         return outgoingChallengeList;
     }
