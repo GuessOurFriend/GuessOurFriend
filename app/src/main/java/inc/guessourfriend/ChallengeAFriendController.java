@@ -27,9 +27,6 @@ import java.util.List;
  */
 public class ChallengeAFriendController extends SlideNavigationController {
 
-    //For Model
-    OutgoingChallengeListModel outgoingChallengeListModel = new OutgoingChallengeListModel();
-
     //For View
     ListView listView;
 
