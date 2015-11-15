@@ -63,7 +63,8 @@ public class ChallengeAFriendController extends SlideNavigationController {
                                 outgoingChallengeListModel.addOutgoingChallenge(
                                         new OutgoingChallenge(fbProfileModel.friendList.get(itemPosition).getFacebookID()));
                                 Log.v("first challengee id", "" + outgoingChallengeListModel
-                                        .getOutgoingChallengeList().get(0).getChallengeeID());
+                                        .getOutgoingChallengeList().get(itemPosition).getChallengeeID());
+                                Log.v("item position", "" + itemPosition);
                                 Toast.makeText(getApplicationContext(),
                                         "Position:" + itemPosition + " ListItem: " + itemValue, Toast.LENGTH_SHORT).show();
                             }
