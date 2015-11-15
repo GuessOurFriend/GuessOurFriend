@@ -124,15 +124,9 @@ public class LoginController extends FragmentActivity {
                                                     fullName = friend.getString("name");
                                                     profilePicture = friend.getJSONObject("picture").getJSONObject("data").getString("url");
 
-                                                    //Insert this friend into the database
-                                                    DatabaseHelper.insertOrUpdateFriend(LoginController.this, facebookID, fullName, profilePicture, "");
+                                                    // TODO: Create a Friend object and add it to the FriendList in FBProfileModel
+
                                                 }
-
-                                                //TODO: Use or delete this line
-                                                FBProfileModel test = DatabaseHelper.getFBProfile(LoginController.this);
-
-                                                // TODO: give app to teammates (build on their devices), plus add them as devleopers in order to retrieve friends from json correctly
-                                                // TODO: test the database with some Friend queries
 
                                                 // programmatically switch to another activity (the first activity we want to show)
                                                 Intent myIntent = new Intent(LoginController.this, ChallengeAFriendController.class);
@@ -167,7 +161,6 @@ public class LoginController extends FragmentActivity {
                     if (currentAccessToken == null) {
                         //Delete the FBProfile and Friend rows from the local database
                         DatabaseHelper.deleteFBProfile(LoginController.this);
-                        DatabaseHelper.deleteFriendTableRows(LoginController.this);
                     }
                 }
             }

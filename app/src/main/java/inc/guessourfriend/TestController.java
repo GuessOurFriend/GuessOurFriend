@@ -36,7 +36,6 @@ public class TestController extends SlideNavigationController {
 
                         //Delete the FBProfile and Friend rows from the local database
                         DatabaseHelper.deleteFBProfile(TestController.this);
-                        DatabaseHelper.deleteFriendTableRows(TestController.this);
                     }
                 }
             }
