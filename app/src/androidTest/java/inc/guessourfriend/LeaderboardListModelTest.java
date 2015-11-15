@@ -17,10 +17,7 @@ public class LeaderboardListModelTest extends AndroidTestCase {
 
     LeaderboardListModel leaderboardListModel;
     public void setUp() throws Exception {
-        //super.setUp();
        leaderboardListModel = new LeaderboardListModel();
-
-
     }
 
     @Test
