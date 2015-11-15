@@ -64,9 +64,24 @@ public class SlideNavigationController extends AppCompatActivity {
      */
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
+    FBProfileModel fbProfileModel;
+    CurrentGameListModel currentGameListModel;
+    IncomingChallengeListModel incomingChallengeListModel;
+    LeaderboardListModel leaderboardListModel;
+    MutualFriendList mutualFriendList;
+    OutgoingChallengeListModel outgoingChallengeListModel;
+    Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        currentGameListModel = new CurrentGameListModel();
+        incomingChallengeListModel = new IncomingChallengeListModel();
+        leaderboardListModel = new LeaderboardListModel();
+        mutualFriendList = new MutualFriendList();
+        outgoingChallengeListModel = new OutgoingChallengeListModel();
+
+
+
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer_base_layout);

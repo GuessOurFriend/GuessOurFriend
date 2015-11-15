@@ -19,8 +19,11 @@ import java.util.List;
  * Created by Laura on 11/1/2015.
  */
 public class MutualFriendList {
-    private List<MutualFriend> mutualFriendList = null;
+    public List<MutualFriend> mutualFriendList = null;
 
+    public MutualFriendList(){
+        mutualFriendList = null;
+    }
     public List<MutualFriend> getMutualFriendList() {
         return mutualFriendList;
     }

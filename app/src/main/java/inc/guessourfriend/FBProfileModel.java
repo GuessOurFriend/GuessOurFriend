@@ -7,37 +7,28 @@ import java.util.List;
  * Created by sellmaurer on 10/20/15.
  */
 public class FBProfileModel {
-    private long facebookID;
-    private String authToken;
-    private String fullName;
-    private String profilePicture;
-    private List<Friend> friendList;
+    public long facebookID;
+    public String authToken;
+    public String firstName;
+    public String lastName;
+    public String profilePicture;
+    public ArrayList<Friend> friendList;
 
-    public FBProfileModel(long facebookID, String authToken, String fullName, String profilePicture, List<Friend> friendList){
+    public FBProfileModel(){
         super();
-        updateFBProfileInfo(facebookID, fullName, profilePicture, friendList);
+        updateFBProfileInfo(-1, "", "", "", null);
+    }
+
+    public FBProfileModel(long facebookID, String authToken, String fullName, String profilePicture, ArrayList<Friend> friendList){
+        super();
+        updateFBProfileInfo(facebookID, firstName, lastName, profilePicture, friendList);
         this.authToken = authToken;
     }
 
-    public long getFacebookID(){
-        return this.facebookID;
-    }
-    public String getAuthToken() {
-        return authToken;
-    }
-    public String getFullName(){
-        return this.fullName;
-    }
-    public String getProfilePicture(){
-        return this.profilePicture;
-    }
-    public List<Friend> getFriendList(){
-        return this.friendList;
-    }
-
-    public void updateFBProfileInfo(long facebookID, String fullName, String profilePicture, List<Friend> friendList){
+    public void updateFBProfileInfo(long facebookID, String firstName, String lastName, String profilePicture, ArrayList<Friend> friendList){
         this.facebookID = facebookID;
-        this.fullName = fullName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.profilePicture = profilePicture;
         this.friendList = friendList;
     }

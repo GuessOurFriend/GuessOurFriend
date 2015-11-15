@@ -18,13 +18,13 @@ import java.util.LinkedList;
 public class LeaderboardListModel {
 
 
-    private Map <Long,Long> leaderboardMap = new HashMap();
+    public Map <Long,Long> leaderboardMap = new HashMap();
     // HashMap which stores the list of FacebookID's of all users as key and the values is the total points
     // The above map is unsorted by values(points)
-    private Map <Long,Long> sortedleaderboardMap = new LinkedHashMap<Long,Long>();
+    public Map <Long,Long> sortedleaderboardMap = new LinkedHashMap<Long,Long>();
     //sortedleaderboardList contain the entries sorted by points. Can just be used to populate the view by simple iteration.
 
-    private List <String> sortedleaderboardList = new ArrayList<>();
+    public List <String> sortedleaderboardList = new ArrayList<>();
     public LeaderboardListModel(){
         populateLeaderboardList();
     }

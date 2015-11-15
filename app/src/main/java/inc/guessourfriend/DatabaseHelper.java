@@ -137,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cur = db.rawQuery("SELECT * FROM " + FBPROFILE_TABLE, new String[]{});
 
         //Declare a profile to return
-        FBProfileModel profile = null;
+        FBProfileModel profile = new FBProfileModel();
 
         //If we have a profile in the table, get it
         if (cur.moveToNext()) {
@@ -146,6 +146,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String firstName = cur.getString(cur.getColumnIndex("firstName"));
             String lastName = cur.getString(cur.getColumnIndex("lastName"));
             String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
+            profile.facebookID = facebookID;
+            profile.authToken = authToken;
+            profile.firstName = firstName;
+            profile.lastName = lastName;
+            profile.profilePicture = profilePicture;
             Log.v("facebookID: ", "" + facebookID);
             Log.v("authToken: ", authToken);
             Log.v("firstName: ", firstName);
@@ -161,7 +166,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String firstName = cur.getString(cur.getColumnIndex("firstName"));
             String lastName = cur.getString(cur.getColumnIndex("lastName"));
             String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
-            Log.v("facebookID: ", "" + facebookID);
+            Log.v("second facebookID ", "" + facebookID);
             Log.v("authToken: ", authToken);
             Log.v("firstName: ", firstName);
             Log.v("lastName: ", lastName);

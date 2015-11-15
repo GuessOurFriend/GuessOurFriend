@@ -6,7 +6,7 @@ import java.util.List;
 
 public class IncomingChallengeListModel {
 
-    private List<IncomingChallenge> IncomingChallengeList = new ArrayList<>();
+    public List<IncomingChallenge> IncomingChallengeList = new ArrayList<>();
 
     public IncomingChallengeListModel() {
         super();

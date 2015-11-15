@@ -6,13 +6,21 @@ import android.net.Uri;
  * Created by Laura on 11/1/2015.
  */
 public class MutualFriend {
-    private int poolID;
-    private long facebookID;
-    private boolean isMysteryFriend;
-    private boolean hasBeenGuessed;
-    private String fullName;
-    private String profilePicture;
+    public int poolID;
+    public long facebookID;
+    public boolean isMysteryFriend;
+    public boolean hasBeenGuessed;
+    public String fullName;
+    public String profilePicture;
     public boolean isGrayedOut;
+
+    public MutualFriend() {
+
+        this.facebookID = -1;
+        this.fullName = "";
+        this.profilePicture = "";
+        this.isMysteryFriend = false;
+    }
 
     public MutualFriend(long facebookID, String fullName, String profilePicture, boolean isMysteryFriend) {
 
@@ -45,7 +53,7 @@ public class MutualFriend {
 
         Friend friend = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext())
                 .getFriendById(facebookID);
-        return friend.getFullName();
+        return friend.getFirstName();
     }
 
     public String getProfilePic() {

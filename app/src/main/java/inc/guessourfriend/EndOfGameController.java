@@ -37,21 +37,21 @@ public class EndOfGameController extends SlideNavigationController {
     }
 
     private void displayForWinner(){
-        Friend guessedFriend = fbProfile.getFriendList().get(0);
+        Friend guessedFriend = fbProfile.friendList.get(0);
         ProfilePictureView guessedView = (ProfilePictureView) findViewById(R.id.guessed_profile_picture);
         guessedView.setProfileId(Long.toString(guessedFriend.getFacebookID()));
         TextView guessedNameTextView = (TextView) findViewById(R.id.guessed_name);
-        guessedNameTextView.setText(guessedFriend.getFullName());
+        guessedNameTextView.setText(guessedFriend.getFirstName());
 
-        Friend unguessedFriend = fbProfile.getFriendList().get(1);
+        Friend unguessedFriend = fbProfile.friendList.get(1);
         ProfilePictureView unguessedView = (ProfilePictureView) findViewById(R.id.unguessed_profile_picture);
         unguessedView.setProfileId(Long.toString(unguessedFriend.getFacebookID()));
         TextView unguessedNameTextView = (TextView) findViewById(R.id.unguessed_name);
-        unguessedNameTextView.setText(unguessedFriend.getFullName());
+        unguessedNameTextView.setText(unguessedFriend.getFirstName());
 
-        Friend opponent = fbProfile.getFriendList().get(2);
+        Friend opponent = fbProfile.friendList.get(2);
         TextView opponentNameTextView = (TextView) findViewById(R.id.opponent_name);
-        opponentNameTextView.setText(opponent.getFullName());
+        opponentNameTextView.setText(opponent.getFirstName());
     }
 
     private void displayForLoser(){
@@ -70,9 +70,9 @@ public class EndOfGameController extends SlideNavigationController {
         //winner = fbProfile.getFriendList().get(1).getFacebookID();
         //loser = fbProfile.getFacebookID();
         // Simulating a win
-        winner = fbProfile.getFacebookID();
-        loser = fbProfile.getFriendList().get(1).getFacebookID();
-        if(winner == fbProfile.getFacebookID()){
+        winner = fbProfile.facebookID;
+        loser = fbProfile.friendList.get(1).getFacebookID();
+        if(winner == fbProfile.facebookID){
             // this user is the winner
             displayForWinner();
         }else{

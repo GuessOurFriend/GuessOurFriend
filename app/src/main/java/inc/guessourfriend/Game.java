@@ -4,14 +4,25 @@ package inc.guessourfriend;
  * Created by Laura on 11/1/2015.
  */
 public class Game {
-    private long myID;
-    private long opponentID;
-    private MutualFriendList myPool;
-    private MutualFriendList opponentPool;
-    private boolean isMyTurn;
-    private int stateOfGame;
-    private int numberOfQuestions;
+    public long myID;
+    public long opponentID;
+    public MutualFriendList myPool;
+    public MutualFriendList opponentPool;
+    public boolean isMyTurn;
+    public int stateOfGame;
+    public int numberOfQuestions;
 
+    public Game(){
+        super();
+        this.myID =-1;
+        this.opponentID =-1;
+        this.myPool =null;
+        this.opponentPool =null;
+        this.isMyTurn = false;
+        this.stateOfGame = -1;
+        this.numberOfQuestions =-1;
+    }
+    
     public void setIsMyTurn(boolean isMyTurn) {
         this.isMyTurn = isMyTurn;
     }

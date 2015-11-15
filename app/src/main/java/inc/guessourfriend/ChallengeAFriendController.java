@@ -1,18 +1,24 @@
 package inc.guessourfriend;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,30 +27,34 @@ import java.util.List;
 public class ChallengeAFriendController extends SlideNavigationController {
 
     //For Model
-    FBProfileModel fbProfileModel = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext());
     OutgoingChallengeListModel outgoingChallengeListModel = new OutgoingChallengeListModel();
 
     //For View
     ListView listView;
 
     //For Controller
-    private List<Friend> friendList = fbProfileModel.getFriendList();
+    private List<Friend> friendList;
 
     //For View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_challenge_a_friend_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
+
+        fbProfileModel = DatabaseHelper.getFBProfile(this);
+        ArrayList<Friend> friends = (ArrayList<Friend>) getIntent().getExtras().get("friendList");
+        fbProfileModel.friendList = friends;
+        friendList = fbProfileModel.friendList;
+        //friendList = friends;
 
         listView = (ListView) findViewById(R.id.list);
 
         String[] friendNames = new String[friendList.size()];
 
         for (int i = 0; i < friendList.size(); i++) {
-            friendNames[i] = friendList.get(i).getFullName();
+            friendNames[i] = friendList.get(i).getFirstName();
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,

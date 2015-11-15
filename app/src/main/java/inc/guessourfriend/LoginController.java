@@ -27,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class LoginController extends FragmentActivity {
@@ -106,30 +107,35 @@ public class LoginController extends FragmentActivity {
                                                 String fullName = json.getString("name");
                                                 String profilePicture = json.getJSONObject("picture").getJSONObject("data").getString("url");
 
+                                                DatabaseHelper.insertOrUpdateFBProfile(LoginController.this, facebookID, fullName, fullName, profilePicture);
+
                                                 //Send the user to our server
                                                 //TODO: Parse name or change how server stores it
                                                 if (DatabaseHelper.getFBProfile(LoginController.this) == null)
                                                 {
-                                                    createUserOnServer(facebookID, fullName, fullName, profilePicture);
+                                                    //createUserOnServer(facebookID, fullName, fullName, profilePicture);
                                                 }
 
                                                 //Get the friends that were returned
                                                 //TODO: Take paging into account
                                                 JSONArray friends = json.getJSONObject("friends").getJSONArray("data");
 
+                                                ArrayList<Friend> friendList = new ArrayList<Friend>();
                                                 //Loop through the list of friends
                                                 for (int i = 0; i < friends.length(); i++) {
-                                                    JSONObject friend = friends.getJSONObject(i);
-                                                    facebookID = Long.parseLong(friend.getString("id"));
-                                                    fullName = friend.getString("name");
-                                                    profilePicture = friend.getJSONObject("picture").getJSONObject("data").getString("url");
+                                                    JSONObject friendJSONObject = friends.getJSONObject(i);
+                                                    facebookID = Long.parseLong(friendJSONObject.getString("id"));
+                                                    fullName = friendJSONObject.getString("name");
+                                                    profilePicture = friendJSONObject.getJSONObject("picture").getJSONObject("data").getString("url");
 
-                                                    // TODO: Create a Friend object and add it to the FriendList in FBProfileModel
-
+                                                    // TODO: Retrieve firstName and lastName from facebook instead of fullName
+                                                    Friend friend = new Friend(facebookID, fullName, fullName, profilePicture);
+                                                    friendList.add(friend);
                                                 }
 
                                                 // programmatically switch to another activity (the first activity we want to show)
                                                 Intent myIntent = new Intent(LoginController.this, ChallengeAFriendController.class);
+                                                myIntent.putExtra("friendList", friendList);
                                                 startActivity(myIntent);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();

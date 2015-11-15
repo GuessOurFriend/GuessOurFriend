@@ -16,6 +16,7 @@ public class OutgoingChallengeListModel {
 
     private void populateOutgoingChallengeList() {
 
+        this.outgoingChallengeList = null;
         //TODO: get challenges from database
     }
 

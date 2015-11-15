@@ -47,11 +47,9 @@ public class BlacklistController extends Activity {
             }
         });
 
-
-        //friends = (Friend[]) getLastNonConfigurationInstance() ;
         if ( friends == null ) {
             friends = new Friend[] {
-                    new Friend(7775,"Eric","someurl"), new Friend(7774,"Brian","someurl"), new Friend(7778,"Laura","someurl"), new Friend(7777,"Steve","someurl"),new Friend(7779,"Ash","someurl"),new Friend(7776,"Manav","someurl")
+                    new Friend(7775,"Eric","Eric","someurl"), new Friend(7774,"Brian","Brian","someurl"), new Friend(7778,"Laura","Laura","someurl"), new Friend(7777,"Steve","Steve","someurl"),new Friend(7779,"Ash","Ash","someurl"),new Friend(7776,"Manav","Manav","someurl")
             };
         }
         ArrayList<Friend> friendList = new ArrayList<Friend>();
@@ -133,14 +131,11 @@ public class BlacklistController extends Activity {
 
             checkBox.setTag( friend );
             checkBox.setChecked( friend.isBlacklisted());
-            textView.setText( friend.getFullName() );
+            textView.setText( friend.getFirstName() );
 
             return convertView;
         }
 
     }
 
-    /*public Object onRetainNonConfigurationInstance() {
-        return friends ;
-    }*/
 }

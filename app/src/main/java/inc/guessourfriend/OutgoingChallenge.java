@@ -5,9 +5,14 @@ package inc.guessourfriend;
  */
 public class OutgoingChallenge {
 
-    private long challengeeID;
-    private String sentMessage;
-    private boolean wasDeclined;
+    public long challengeeID;
+    public String sentMessage;
+    public boolean wasDeclined;
+
+    public OutgoingChallenge() {
+
+        this.challengeeID = -1;
+    }
 
     public OutgoingChallenge(long challengeeID) {
 

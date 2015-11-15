@@ -2,32 +2,50 @@ package inc.guessourfriend;
 
 import com.facebook.login.widget.ProfilePictureView;
 
+import java.io.Serializable;
+
 /**
  * Created by sellmaurer on 10/31/15.
  */
 
-public class Friend {
-    private long facebookID;
-    private String fullName;
-    private String profilePicture;
-    private boolean isBlacklisted = false ; //Manav: I added this field along with some methods to keep track if the friend is backlisted.
-    private long matchesWon;
-    private long matchesLost;
-    private long points;
-    private long ratings;
+public class Friend implements Serializable{
+    public long facebookID;
+    public String firstName;
+    public String lastName;
+    public String profilePicture;
+    public boolean isBlacklisted = false ; //Manav: I added this field along with some methods to keep track if the friend is backlisted.
+    public long matchesWon;
+    public long matchesLost;
+    public long points;
+    public long ratings;
 
+    public Friend(){
+        this.facebookID = -1;
+        this.firstName = "";
+        this.lastName = "";
+        this.profilePicture = "";
+        this.matchesLost = -1;
+        this.matchesWon =-1;
+        this.points =-1;
+        this.ratings =-1;
 
-    public Friend(long facebookID, String fullName, String profilePicture){
+    }
+
+    public Friend(long facebookID, String firstName, String lastName, String profilePicture){
         this.facebookID = facebookID;
-        this.fullName = fullName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.profilePicture = profilePicture;
     }
 
     public long getFacebookID(){
         return this.facebookID;
     }
-    public String getFullName(){
-        return this.fullName;
+    public String getFirstName(){
+        return this.firstName;
+    }
+    public String getLastName(){
+        return this.lastName;
     }
     public String getProfilePicture(){
         return this.profilePicture;
