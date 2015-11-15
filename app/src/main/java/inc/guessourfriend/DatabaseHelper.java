@@ -14,7 +14,7 @@ import java.util.List;
  * Created by sellmaurer on 10/19/15.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_NAME = "User Info";
     private static final String FBPROFILE_TABLE = "FBProfileTable";
     private static final String FACEBOOKIDBLACKLISTPAIR_TABLE = "FacebookIDBlacklistPairTable";
@@ -24,8 +24,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_FBPROFILE_TABLE_QUERY = "CREATE TABLE " + FBPROFILE_TABLE +
             " (facebookID INTEGER PRIMARY KEY, " + "authToken TEXT, " + "firstName TEXT, " +
             "lastName TEXT, " + "profilePicture TEXT);";
-    private static final String CREATE_FACEBOOKIDBLACKLISTPAIR_TABLE_QUERY = "CREATE TABLE " + FRIEND_TABLE +
+    private static final String CREATE_FACEBOOKIDBLACKLISTPAIR_TABLE_QUERY = "CREATE TABLE " + FACEBOOKIDBLACKLISTPAIR_TABLE +
             " (facebookID INTEGER PRIMARY KEY, " + "isBlacklisted INTEGER);";
+    private static final String CREATE_FRIEND_TABLE_QUERY = "CREATE TABLE " + FRIEND_TABLE +
+            " (facebookID INTEGER PRIMARY KEY, " + "firstName TEXT, " + "lastName TEXT, " + "profilePicture TEXT);";
 
     DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,6 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_FBPROFILE_TABLE_QUERY);
         db.execSQL(CREATE_FACEBOOKIDBLACKLISTPAIR_TABLE_QUERY);
+        db.execSQL(CREATE_FRIEND_TABLE_QUERY);
     }
 
     @Override
@@ -44,6 +47,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + FRIEND_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + CHALLENGES_TABLE);
         onCreate(db);
+    }
+
+    public static long insertOrUpdateFriend(Context context, long facebookID, String firstName,
+                                            String lastName, String profilePicture){
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        ContentValues row = new ContentValues();
+        row.put("facebookID", facebookID);
+        row.put("firstName", firstName);
+        row.put("lastName", lastName);
+        row.put("profilePicture", profilePicture);
+        long id = db.insertWithOnConflict(FRIEND_TABLE, null, row, SQLiteDatabase.CONFLICT_REPLACE);
+        db.close();
+        return id;
+    }
+
+    public static long deleteFriendWithID(Context context, long facebookID){
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        long id = db.delete(FRIEND_TABLE, "facebookID=?", new String[]{String.valueOf(facebookID)});
+        db.close();
+        return id;
+    }
+
+    public static Friend getFriendWithID(Context context, long facebookID){
+        Friend friend = null;
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cur = db.rawQuery("SELECT * FROM " + FRIEND_TABLE +
+                " WHERE facebookID = ?", new String[]{Long.toString(facebookID)});
+        if(cur.moveToNext()){
+            String firstName = cur.getString(cur.getColumnIndex("firstName"));
+            String lastName = cur.getString(cur.getColumnIndex("lastName"));
+            String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
+            friend = new Friend(facebookID, firstName, lastName, profilePicture);
+        }
+        return friend;
+    }
+
+    public static ArrayList<Friend> getFriendList(Context context)
+    {
+        ArrayList<Friend> friendList = new ArrayList<Friend>();
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cur = db.rawQuery("SELECT * FROM " + FRIEND_TABLE, new String[]{});
+        while(cur.moveToNext()) {
+            long facebookID = cur.getLong(cur.getColumnIndex("facebookID"));
+            String firstName = cur.getString(cur.getColumnIndex("firstName"));
+            String lastName = cur.getString(cur.getColumnIndex("lastName"));
+            String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
+            Friend friend = new Friend(facebookID, firstName, lastName, profilePicture);
+            friendList.add(friend);
+        }
+        db.close();
+        return friendList;
     }
 
     public static boolean isThisFacebookIDBlacklisted(Context context, long facebookID)
@@ -108,14 +166,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public static long insertOrUpdateFBProfile(Context context, long facebookID, String authToken, String fullName, String profilePicture){
+    public static long insertOrUpdateFBProfile(Context context, long facebookID, String authToken,
+                                               String firstName, String lastName, String profilePicture){
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         ContentValues row = new ContentValues();
         row.put("facebookID", facebookID);
         row.put("authToken", authToken);
-        row.put("firstName", fullName);
-        row.put("lastName", fullName);
+        row.put("firstName", firstName);
+        row.put("lastName", lastName);
         row.put("profilePicture", profilePicture);
         long id = db.insertWithOnConflict(FBPROFILE_TABLE, null, row, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();

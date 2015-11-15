@@ -23,8 +23,6 @@ public class EndOfGameController extends SlideNavigationController {
     private Friend myMysteryFriend;
     private Friend theirMysteryFriend;
 
-    private FBProfileModel fbProfile;
-
     public void onDone(View view){
         // start the current games activity by using "openActivity(int position) - do it this way
         //      because it doesn't work as expected if you just make an intent and start an
@@ -37,19 +35,19 @@ public class EndOfGameController extends SlideNavigationController {
     }
 
     private void displayForWinner(){
-        Friend guessedFriend = fbProfile.friendList.get(0);
+        Friend guessedFriend = fbProfileModel.friendList.get(0);
         ProfilePictureView guessedView = (ProfilePictureView) findViewById(R.id.guessed_profile_picture);
         guessedView.setProfileId(Long.toString(guessedFriend.getFacebookID()));
         TextView guessedNameTextView = (TextView) findViewById(R.id.guessed_name);
         guessedNameTextView.setText(guessedFriend.getFirstName());
 
-        Friend unguessedFriend = fbProfile.friendList.get(1);
+        Friend unguessedFriend = fbProfileModel.friendList.get(1);
         ProfilePictureView unguessedView = (ProfilePictureView) findViewById(R.id.unguessed_profile_picture);
         unguessedView.setProfileId(Long.toString(unguessedFriend.getFacebookID()));
         TextView unguessedNameTextView = (TextView) findViewById(R.id.unguessed_name);
         unguessedNameTextView.setText(unguessedFriend.getFirstName());
 
-        Friend opponent = fbProfile.friendList.get(2);
+        Friend opponent = fbProfileModel.friendList.get(2);
         TextView opponentNameTextView = (TextView) findViewById(R.id.opponent_name);
         opponentNameTextView.setText(opponent.getFirstName());
     }
@@ -65,14 +63,15 @@ public class EndOfGameController extends SlideNavigationController {
         //mDrawerList.setItemChecked(position, true);
         //setTitle(listArray[position]);
 
-        fbProfile = DatabaseHelper.getFBProfile(this);
+        fbProfileModel = DatabaseHelper.getFBProfile(this);
+        fbProfileModel.friendList = DatabaseHelper.getFriendList(this);
         // Simulating a loss
         //winner = fbProfile.getFriendList().get(1).getFacebookID();
         //loser = fbProfile.getFacebookID();
         // Simulating a win
-        winner = fbProfile.facebookID;
-        loser = fbProfile.friendList.get(1).getFacebookID();
-        if(winner == fbProfile.facebookID){
+        winner = fbProfileModel.facebookID;
+        loser = fbProfileModel.friendList.get(1).getFacebookID();
+        if(winner == fbProfileModel.facebookID){
             // this user is the winner
             displayForWinner();
         }else{

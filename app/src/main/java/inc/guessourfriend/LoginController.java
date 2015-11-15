@@ -68,7 +68,8 @@ public class LoginController extends FragmentActivity {
                 }
 
                 //Insert the FBProfile into the local database
-                DatabaseHelper.insertOrUpdateFBProfile(LoginController.this, facebookID, authToken, firstName, profilePicture);
+                DatabaseHelper.insertOrUpdateFBProfile(LoginController.this, facebookID, authToken,
+                        firstName, lastName, profilePicture);
             }
         }.execute(dataToPost);
     }
@@ -86,7 +87,7 @@ public class LoginController extends FragmentActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         Bundle myBundle = new Bundle();
-                        myBundle.putString("fields", "id,name,picture,friends{id,name,picture}");
+                        myBundle.putString("fields", "id,first_name,last_name,picture,friends{id,first_name,last_name,picture}");
                         new GraphRequest(
                                 loginResult.getAccessToken(),
                                 "/me",
@@ -106,16 +107,16 @@ public class LoginController extends FragmentActivity {
 
                                                 //Get the basic info for this user
                                                 long facebookID = Long.parseLong(json.getString("id"));
-                                                String fullName = json.getString("name");
+                                                String firstName = json.getString("first_name");
+                                                String lastName = json.getString("last_name");
                                                 String profilePicture = json.getJSONObject("picture").getJSONObject("data").getString("url");
-
-                                                DatabaseHelper.insertOrUpdateFBProfile(LoginController.this, facebookID, fullName, fullName, profilePicture);
+                                                // TODO: put Ruby on Rails auth token in fb profile model
+                                                DatabaseHelper.insertOrUpdateFBProfile(LoginController.this, facebookID, "token goes here", firstName, lastName, profilePicture);
 
                                                 //Send the user to our server
-                                                //TODO: Parse name or change how server stores it
                                                 if (DatabaseHelper.getFBProfile(LoginController.this) == null)
                                                 {
-                                                    //createUserOnServer(facebookID, fullName, fullName, profilePicture);
+                                                    //createUserOnServer(facebookID, firstName, lastName, profilePicture);
                                                 }
 
                                                 //TODO: Delete this. It's here incase someone else needs the gcm_id manually added
@@ -154,22 +155,18 @@ public class LoginController extends FragmentActivity {
                                                 //TODO: Take paging into account
                                                 JSONArray friends = json.getJSONObject("friends").getJSONArray("data");
 
-                                                ArrayList<Friend> friendList = new ArrayList<Friend>();
                                                 //Loop through the list of friends
                                                 for (int i = 0; i < friends.length(); i++) {
                                                     JSONObject friendJSONObject = friends.getJSONObject(i);
                                                     facebookID = Long.parseLong(friendJSONObject.getString("id"));
-                                                    fullName = friendJSONObject.getString("name");
+                                                    firstName = friendJSONObject.getString("first_name");
+                                                    lastName = friendJSONObject.getString("last_name");
                                                     profilePicture = friendJSONObject.getJSONObject("picture").getJSONObject("data").getString("url");
-
-                                                    // TODO: Retrieve firstName and lastName from facebook instead of fullName
-                                                    Friend friend = new Friend(facebookID, fullName, fullName, profilePicture);
-                                                    friendList.add(friend);
+                                                    DatabaseHelper.insertOrUpdateFriend(LoginController.this, facebookID, firstName, lastName, profilePicture);
                                                 }
 
                                                 // programmatically switch to another activity (the first activity we want to show)
                                                 Intent myIntent = new Intent(LoginController.this, SlideNavigationController.class);
-                                                myIntent.putExtra("friendList", friendList);
                                                 startActivity(myIntent);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -190,20 +187,6 @@ public class LoginController extends FragmentActivity {
                         // App code
                     }
                 });
-
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
-                                                       AccessToken currentAccessToken) {
-                if (isResumed) {
-                    if (currentAccessToken == null) {
-                        //Delete the FBProfile and Friend rows from the local database
-                        DatabaseHelper.deleteFBProfile(LoginController.this);
-                    }
-                }
-            }
-        };
-
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,7 +44,8 @@ public class ChallengeAFriendController extends SlideNavigationController {
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
 
-        /* friendList = fbProfileModel.friendList;
+        fbProfileModel.friendList = DatabaseHelper.getFriendList(this);
+        friendList = fbProfileModel.friendList;
 
         listView = (ListView) findViewById(R.id.list);
 
@@ -83,6 +85,6 @@ public class ChallengeAFriendController extends SlideNavigationController {
                 AlertDialog alertDialog = adb.create();
                 alertDialog.show();
             }
-        });*/
+        });
     }
 }
