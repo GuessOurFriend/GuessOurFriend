@@ -34,10 +34,11 @@ public class FBProfileModel {
     }
 
     public Friend getFriendById(long friendID) {
-        friendList = DatabaseHelper.getFriendList(GuessOurFriend.getAppContext());
-        for (int i = 0; i < friendList.size(); i++) {
-            if (friendList.get(i).getFacebookID() == friendID) {
-                return friendList.get(i);
+        if(friendList != null) {
+            for (int i = 0; i < friendList.size(); i++) {
+                if (friendList.get(i).getFacebookID() == friendID) {
+                    return friendList.get(i);
+                }
             }
         }
         return null;
