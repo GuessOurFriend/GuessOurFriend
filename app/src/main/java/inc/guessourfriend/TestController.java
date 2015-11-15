@@ -10,6 +10,7 @@ import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.FacebookSdk;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TestController extends SlideNavigationController {
@@ -59,6 +60,22 @@ public class TestController extends SlideNavigationController {
                 System.out.println(result.toString());
             }
         }.execute();
+    }
+
+    public void sendTestMessage(View view) {
+        //Set up the data to send a message to Guess Our Friend
+        JSONObject data = new JSONObject();
+        try {
+            data.put("fb_id", 137623913261324l);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //Get the auth token
+        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).getAuthToken();
+
+        //Make the test message request
+        new NetworkRequestRunner("POST", "https://guess-our-friend.herokuapp.com/test_gcm", authToken).execute(data);
     }
 
     public void pressedEndOfGameButton(View view){
