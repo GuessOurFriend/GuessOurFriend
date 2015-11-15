@@ -63,10 +63,10 @@ public class TestController extends SlideNavigationController {
     }
 
     public void sendTestMessage(View view) {
-        //Set up the data to send a message to Guess Our Friend
+        //Set up the data to send a message to the currently logged in user (yourself for testing)
         JSONObject data = new JSONObject();
         try {
-            data.put("fb_id", 137623913261324l);
+            data.put("fb_id", DatabaseHelper.getFBProfile(TestController.this).getFacebookID());
         } catch (JSONException e) {
             e.printStackTrace();
         }
