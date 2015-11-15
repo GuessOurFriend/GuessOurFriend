@@ -57,9 +57,12 @@ public class MatchmakingController extends SlideNavigationController {
         Button button = (Button) findViewById(R.id.find_a_game_button);
         button.setEnabled(false);
 
+        //Get the auth token
+        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).authToken;
+
         //Request a member from the queue asynchronously
         //TODO: Point this at our server when it's running
-        new NetworkRequestGetJSONRunner("http://jsonplaceholder.typicode.com/posts/1") {
+        new NetworkRequestRunner("GET", "http://jsonplaceholder.typicode.com/posts/1", authToken) {
             @Override
             protected void onPostExecute(JSONObject result) {
                 //TODO: Change to parse whatever our model returns
