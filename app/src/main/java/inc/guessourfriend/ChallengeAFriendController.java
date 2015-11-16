@@ -67,8 +67,8 @@ public class ChallengeAFriendController extends SlideNavigationController {
                                 Log.v("item position", "" + itemPosition);
                                 Toast.makeText(getApplicationContext(),
                                         "Position:" + itemPosition + " ListItem: " + itemValue, Toast.LENGTH_SHORT).show();
-                                Intent myIntent = new Intent(ChallengeAFriendController.this, StartOfGameController.class);
-                                startActivity(myIntent);
+//                                Intent myIntent = new Intent(ChallengeAFriendController.this, StartOfGameController.class);
+//                                startActivity(myIntent);
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
