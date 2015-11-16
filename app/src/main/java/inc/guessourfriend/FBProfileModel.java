@@ -19,7 +19,7 @@ public class FBProfileModel {
         updateFBProfileInfo(-1, "", "", "", null);
     }
 
-    public FBProfileModel(long facebookID, String authToken, String fullName, String profilePicture, ArrayList<Friend> friendList){
+    public FBProfileModel(long facebookID, String authToken, String firstName, String lastName, String profilePicture, ArrayList<Friend> friendList){
         super();
         updateFBProfileInfo(facebookID, firstName, lastName, profilePicture, friendList);
         this.authToken = authToken;
