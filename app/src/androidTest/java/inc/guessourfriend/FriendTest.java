@@ -8,10 +8,9 @@ import android.test.AndroidTestCase;
 public class FriendTest extends AndroidTestCase {
 
 
-    public void testgetFacebookID()
-    {
-        Friend friend= new Friend(101,"Ashwini","Balasubramanian","pp");
-        assertEquals(friend.getFacebookID(),101);
+    public void testgetFacebookID() {
+        Friend friend = new Friend(101, "Ashwini", "Balasubramanian", "pp");
+        assertEquals(friend.getFacebookID(), 101);
 
     }
     public void testgetFirstName()
