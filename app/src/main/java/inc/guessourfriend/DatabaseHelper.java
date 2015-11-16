@@ -49,6 +49,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /* This method creates an FBProfileModel in the SQLite database for the user */
+    public static long insertOrUpdateFBProfile(Context context, long facebookID, String authToken,
+                                               String firstName, String lastName, String profilePicture){
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        ContentValues row = new ContentValues();
+        row.put("facebookID", facebookID);
+        row.put("authToken", authToken);
+        row.put("firstName", firstName);
+        row.put("lastName", lastName);
+        row.put("profilePicture", profilePicture);
+        long id = db.insertWithOnConflict(FBPROFILE_TABLE, null, row, SQLiteDatabase.CONFLICT_REPLACE);
+        db.close();
+
+        // Delete the pre-existing FBProfileModel contained in the SQLite database if
+        //      two profiles exist now
+        ArrayList<FBProfileModel> fbProfileModels = DatabaseHelper.getAllFBProfileModels(context);
+        if(fbProfileModels.size() >= 2){
+            FBProfileModel fbProfileModel = fbProfileModels.get(0);
+            if(fbProfileModel.facebookID != facebookID){
+                deleteFBProfileWithID(context, facebookID);
+            }
+            fbProfileModel = fbProfileModels.get(1);
+            if(fbProfileModel.facebookID != facebookID){
+                deleteFBProfileWithID(context, facebookID);
+            }
+            // Delete the pre-existing user's friends and groups
+            DatabaseHelper.deleteAllFriends(context);
+        }
+        return id;
+    }
+
+    public static long deleteFBProfileWithID(Context context, long facebookID){
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        long id = db.delete(FBPROFILE_TABLE, "facebookID=?", new String[]{String.valueOf(facebookID)});
+        db.close();
+        return id;
+    }
+
+    public static ArrayList<FBProfileModel> getAllFBProfileModels(Context context){
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cur = db.rawQuery("SELECT * FROM " + FBPROFILE_TABLE, new String[]{});
+        ArrayList<FBProfileModel> fbProfileModels = new ArrayList<FBProfileModel>();
+        while(cur.moveToNext()) {
+            long facebookID = cur.getLong(cur.getColumnIndex("facebookID"));
+            String firstName = cur.getString(cur.getColumnIndex("firstName"));
+            String lastName = cur.getString(cur.getColumnIndex("lastName"));
+            String authToken = cur.getString(cur.getColumnIndex("lastName"));
+            String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
+            FBProfileModel fbProfileModel = new FBProfileModel(facebookID, authToken, firstName, lastName, profilePicture, null);
+            fbProfileModels.add(fbProfileModel);
+        }
+        db.close();
+        return fbProfileModels;
+    }
+
     public static long insertOrUpdateFriend(Context context, long facebookID, String firstName,
                                             String lastName, String profilePicture){
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
@@ -67,6 +125,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         long id = db.delete(FRIEND_TABLE, "facebookID=?", new String[]{String.valueOf(facebookID)});
+        db.close();
+        return id;
+    }
+
+    public static long deleteAllFriends(Context context){
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        long id = db.delete(FRIEND_TABLE, null, new String[]{});
         db.close();
         return id;
     }
@@ -162,21 +228,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         long id = db.delete(FACEBOOKIDBLACKLISTPAIR_TABLE, null, new String[]{});
-        db.close();
-        return id;
-    }
-
-    public static long insertOrUpdateFBProfile(Context context, long facebookID, String authToken,
-                                               String firstName, String lastName, String profilePicture){
-        DatabaseHelper databaseHelper = new DatabaseHelper(context);
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        ContentValues row = new ContentValues();
-        row.put("facebookID", facebookID);
-        row.put("authToken", authToken);
-        row.put("firstName", firstName);
-        row.put("lastName", lastName);
-        row.put("profilePicture", profilePicture);
-        long id = db.insertWithOnConflict(FBPROFILE_TABLE, null, row, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
         return id;
     }

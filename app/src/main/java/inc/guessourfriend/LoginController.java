@@ -135,7 +135,7 @@ public class LoginController extends FragmentActivity {
                                                 }
 
                                                 // programmatically switch to another activity (the first activity we want to show)
-                                                Intent myIntent = new Intent(LoginController.this, SlideNavigationController.class);
+                                                Intent myIntent = new Intent(LoginController.this, ChallengeAFriendController.class);
                                                 startActivity(myIntent);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
