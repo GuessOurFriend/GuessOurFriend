@@ -97,8 +97,6 @@ public class Friend implements Serializable{
         // TODO: discuss the final logic
     }
 
-
-
     @Override
     public int hashCode() {
         return (int) (facebookID ^ (facebookID >>> 32));

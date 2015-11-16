@@ -1,5 +1,7 @@
 package inc.guessourfriend;
 
+import android.test.AndroidTestCase;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by sellmaurer on 11/15/15.
  */
-public class EndOfGameControllerTest {
+public class EndOfGameControllerTest extends AndroidTestCase {
 
     FBProfileModel fbProfileModel;
 
