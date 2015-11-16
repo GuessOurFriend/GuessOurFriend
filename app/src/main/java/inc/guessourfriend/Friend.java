@@ -24,10 +24,10 @@ public class Friend implements Serializable{
         this.firstName = "";
         this.lastName = "";
         this.profilePicture = "";
-        this.matchesLost = -1;
-        this.matchesWon =-1;
-        this.points =-1;
-        this.ratings =-1;
+        this.matchesLost = 0;
+        this.matchesWon =0;
+        this.points =0;
+        this.ratings =0;
 
     }
 
