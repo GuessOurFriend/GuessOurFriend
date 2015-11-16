@@ -40,7 +40,7 @@ public class FriendTest extends AndroidTestCase {
     {
         Friend friend=new Friend();
         friend.incrementMatchesLost();
-        assertEquals(friend.getMatchesLost,1);
+        assertEquals(friend.getMatchesLost(),1);
     }
     public void testmatchesWon()
     {
@@ -55,16 +55,16 @@ public class FriendTest extends AndroidTestCase {
         friend.toggleBlacklisted();
         assertEquals(friend.isBlacklisted(),false);
     }
-   // public void testgetPoints()
-  //  {
-    //    Friend friend=new Friend();
-      //  friend.points=100;
-        //assertEquals(friend.getPoints(),100);
-    //}
-    //public void testgetRating()
-    //{
-      //  Friend friend=new Friend();
-        //friend.ratings=5;
-       // assertEquals(friend.getRatings(),5);
-    //}
+    public void testgetPoints()
+    {
+        Friend friend=new Friend();
+        friend.points=100;
+   assertEquals(friend.getPoints(),100);
+    }
+    public void testgetRating()
+    {
+        Friend friend=new Friend();
+        friend.ratings=5;
+        assertEquals(friend.getRatings(),5);
+    }
 }
