@@ -94,6 +94,10 @@ public class NetworkRequestHelper {
         }.execute();
     }
 
+    //////////////////////////////////////////////////
+    //Bug Reports
+    //////////////////////////////////////////////////
+
     //POST /bug_reports
     public static void sendBugReport(String title, String message) {
         JSONObject data = new JSONObject();
@@ -106,6 +110,10 @@ public class NetworkRequestHelper {
 
         new NetworkRequestRunner("POST", ROOT_URL + "/bug_reports", getAuthToken()).execute(data);
     }
+
+    //////////////////////////////////////////////////
+    //Game Info
+    //////////////////////////////////////////////////
 
     //GET /game_board
     public static void getGameBoard(int gameId) {
@@ -123,6 +131,10 @@ public class NetworkRequestHelper {
             }
         }.execute(data);
     }
+
+    //////////////////////////////////////////////////
+    //Challenges
+    //////////////////////////////////////////////////
 
     //POST /challenges
     public static void sendChallenge(long challengeeId) {
@@ -181,5 +193,4 @@ public class NetworkRequestHelper {
             }
         }.execute();
     }
-
 }
