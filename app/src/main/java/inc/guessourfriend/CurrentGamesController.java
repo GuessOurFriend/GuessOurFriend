@@ -14,11 +14,10 @@ import java.util.List;
 public class CurrentGamesController extends SlideNavigationController {
 
     FBProfileModel fbProfileModel = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext());
-    CurrentGameListModel currentGameListModel; //get from database
 
     ListView listView;
 
-    private List<Game> gameList = currentGameListModel.getCurrentGameList();
+    private List<Game> gameList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +28,7 @@ public class CurrentGamesController extends SlideNavigationController {
 
         listView = (ListView) findViewById(R.id.current_games_list);
 
+        gameList = currentGameListModel.getCurrentGameList();
         String[] gameListFriendNames = new String[gameList.size()];
 
         for (int i = 0; i < gameList.size(); i++) {
@@ -38,6 +38,7 @@ public class CurrentGamesController extends SlideNavigationController {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, gameListFriendNames);
         listView.setAdapter(adapter);
+        /*
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -56,5 +57,6 @@ public class CurrentGamesController extends SlideNavigationController {
 
             }
         });
+        */
     }
 }
