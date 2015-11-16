@@ -28,6 +28,16 @@ public class CurrentGamesController extends SlideNavigationController {
 
         listView = (ListView) findViewById(R.id.current_games_list);
 
+        //TODO get current game list from server
+        //// test game
+        fbProfileModel.friendList = DatabaseHelper.getFriendList(this);
+        Game newGame = new Game();
+        newGame.setStateOfGame(Game.START_OF_GAME);
+        newGame.myID = fbProfileModel.facebookID;
+        newGame.opponentID = fbProfileModel.friendList.get(0).facebookID;
+        currentGameListModel.getCurrentGameList().add(newGame);
+        ////
+
         gameList = currentGameListModel.getCurrentGameList();
         String[] gameListFriendNames = new String[gameList.size()];
 
@@ -38,7 +48,7 @@ public class CurrentGamesController extends SlideNavigationController {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, gameListFriendNames);
         listView.setAdapter(adapter);
-        /*
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -47,16 +57,19 @@ public class CurrentGamesController extends SlideNavigationController {
                 Intent myIntent;
                 if (gameList.get(itemPosition).getStateOfGame() == 0) { // Start of Game
                     myIntent = new Intent(CurrentGamesController.this, StartOfGameController.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("opponentID", gameList.get(itemPosition).opponentID);
+                    myIntent.putExtras(bundle);
                 } else if (gameList.get(itemPosition).getStateOfGame() == 1) { // Middle of Game
                     myIntent = new Intent(CurrentGamesController.this, MiddleOfGameController.class);
                 } else { //?? End of Game?
-                    myIntent = new Intent(CurrentGamesController.this, MiddleOfGameController.class);
+                    myIntent = new Intent(CurrentGamesController.this, EndOfGameController.class);
                 }
 
                 startActivity(myIntent);
 
             }
         });
-        */
+
     }
 }

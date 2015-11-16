@@ -1,18 +1,31 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/choose_mystery_friend_textview"
+        android:text="Select Mystery Friend"
+        android:textSize="24sp"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/choose_mystery_friend_button"
+        android:text="Choose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/choose_mystery_friend_textview"/>
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gridview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:columnWidth="90dp"
-        android:numColumns="auto_fit"
+        android:numColumns="4"
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp"
         android:stretchMode="columnWidth"
-        android:gravity="center" />
+        android:layout_below="@+id/choose_mystery_friend_textview"/>
 
-</LinearLayout>
+</RelativeLayout>
     <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
     <!--android:layout_width="match_parent" android:layout_height="match_parent">-->
 

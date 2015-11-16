@@ -62,13 +62,11 @@ public class ChallengeAFriendController extends SlideNavigationController {
                             public void onClick(DialogInterface dialog, int id) {
                                 outgoingChallengeListModel.addOutgoingChallenge(
                                         new OutgoingChallenge(fbProfileModel.friendList.get(itemPosition).getFacebookID()));
-                                Log.v("first challengee id", "" + outgoingChallengeListModel
-                                        .getOutgoingChallengeList().get(itemPosition).getChallengeeID());
-                                Log.v("item position", "" + itemPosition);
+//                                Log.v("first challengee id", "" + outgoingChallengeListModel
+//                                        .getOutgoingChallengeList().get(itemPosition).getChallengeeID());
+//                                Log.v("item position", "" + itemPosition);
                                 Toast.makeText(getApplicationContext(),
                                         "Position:" + itemPosition + " ListItem: " + itemValue, Toast.LENGTH_SHORT).show();
-//                                Intent myIntent = new Intent(ChallengeAFriendController.this, StartOfGameController.class);
-//                                startActivity(myIntent);
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {

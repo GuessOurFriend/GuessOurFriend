@@ -3,6 +3,7 @@ package inc.guessourfriend;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -48,9 +49,10 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
+            imageView.setLayoutParams(new GridView.LayoutParams(300, 300));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8 ,8, 8, 8);
+            imageView.setPadding(8, 8, 8, 8);
+            imageView.setBackgroundColor(Color.parseColor("#80ffffff"));
         } else {
             imageView = (ImageView) convertView;
         }
@@ -93,4 +95,5 @@ public class ImageAdapter extends BaseAdapter {
             bmImage.setImageBitmap(result);
         }
     }
+
 }

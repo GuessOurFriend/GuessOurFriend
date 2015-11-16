@@ -11,9 +11,9 @@ public class Game {
     public boolean isMyTurn;
     public int stateOfGame;
     public int numberOfQuestions;
-    public final int START_OF_GAME = 0;
-    public final int MIDDLE_OF_GAME = 1;
-    public final int END_OF_GAME = 2;
+    public static final int START_OF_GAME = 0;
+    public static final int MIDDLE_OF_GAME = 1;
+    public static final int END_OF_GAME = 2;
 
     public Game(){
         super();
