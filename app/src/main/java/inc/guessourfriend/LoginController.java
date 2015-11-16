@@ -41,39 +41,6 @@ public class LoginController extends FragmentActivity {
     private AccessTokenTracker accessTokenTracker;
     private boolean isResumed;
 
-    public void createUserOnServer(final long facebookID, final String firstName, final String lastName, final String profilePicture) {
-
-        JSONObject dataToPost = new JSONObject();
-        JSONObject user = new JSONObject();
-        try {
-            user.put("fb_id", facebookID);
-            user.put("gcm_id", "");
-            user.put("first_name", firstName);
-            user.put("last_name", lastName);
-            dataToPost.put("user", user);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        //Request a member from the queue asynchronously
-        new NetworkRequestRunner("POST", "https://guess-our-friend.herokuapp.com/users") {
-            @Override
-            protected void onPostExecute(JSONObject result) {
-                //Parse the auth token in the response so we can update this user in the future
-                String authToken = null;
-                try {
-                    authToken = result.getString("token");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                //Insert the FBProfile into the local database
-                DatabaseHelper.insertOrUpdateFBProfile(LoginController.this, facebookID, authToken,
-                        firstName, lastName, profilePicture);
-            }
-        }.execute(dataToPost);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +81,7 @@ public class LoginController extends FragmentActivity {
                                                 //Send the user to our server
                                                 if (DatabaseHelper.getFBProfile(LoginController.this) == null)
                                                 {
-                                                    createUserOnServer(facebookID, firstName, lastName, profilePicture);
+                                                    NetworkRequestHelper.createUserOnServer(facebookID, firstName, lastName, profilePicture);
                                                 }
 
                                                 //TODO: Delete this. It's here incase someone else needs the gcm_id manually added

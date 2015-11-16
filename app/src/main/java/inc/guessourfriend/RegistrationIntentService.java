@@ -25,12 +25,7 @@ import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
-
-import inc.guessourfriend.R;
 
 public class RegistrationIntentService extends IntentService {
 
@@ -95,20 +90,7 @@ public class RegistrationIntentService extends IntentService {
         //TODO: Delete debug print
         System.out.println("GCM Token:" + token);
 
-        //Set up the json object to PUT
-        JSONObject data = new JSONObject();
-        try {
-            data.put("gcm_id", token);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        //Get the auth token
-        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).authToken;
-
-        // Add custom implementation, as needed.
-        //Request a member from the queue asynchronously
-        new NetworkRequestRunner("PUT", "https://guess-our-friend.herokuapp.com/user/gcm_id", authToken).execute(data);
+        NetworkRequestHelper.updateGcmId(token);
     }
 
     /**
