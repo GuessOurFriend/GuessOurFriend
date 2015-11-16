@@ -41,6 +41,8 @@ public class NetworkRequestHelper {
                     e.printStackTrace();
                 }
 
+
+
                 //Insert the FBProfile into the local database
                 DatabaseHelper.insertOrUpdateFBProfile(GuessOurFriend.getAppContext(), facebookID, authToken,
                         firstName, lastName, profilePicture);

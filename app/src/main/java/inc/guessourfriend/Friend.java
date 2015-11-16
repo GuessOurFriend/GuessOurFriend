@@ -8,12 +8,12 @@ import java.io.Serializable;
  * Created by sellmaurer on 10/31/15.
  */
 
-public class Friend implements Serializable{
+public class Friend{
     public long facebookID;
     public String firstName;
     public String lastName;
     public String profilePicture;
-    public boolean isBlacklisted = false ; //Manav: I added this field along with some methods to keep track if the friend is backlisted.
+    public boolean isBlacklisted = false ;
     public long matchesWon;
     public long matchesLost;
     public long points;

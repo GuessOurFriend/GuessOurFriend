@@ -57,7 +57,8 @@ public class TestController extends SlideNavigationController {
         new NetworkRequestRunner("GET", "https://guess-our-friend.herokuapp.com/user", authToken) {
             @Override
             protected void onPostExecute(JSONObject result) {
-                System.out.println(result.toString());
+                JSONObject theAuthToken = result;
+                System.out.println("The auth token: " + theAuthToken.toString());
             }
         }.execute();
     }

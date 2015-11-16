@@ -24,11 +24,14 @@ import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -81,6 +84,7 @@ public class LoginController extends FragmentActivity {
                                                 //Send the user to our server
                                                 if (DatabaseHelper.getFBProfile(LoginController.this) == null)
                                                 {
+                                                    DatabaseHelper.insertOrUpdateFBProfile(getApplicationContext(), facebookID, null, firstName, lastName, profilePicture);
                                                     NetworkRequestHelper.createUserOnServer(facebookID, firstName, lastName, profilePicture);
                                                 }
 
@@ -108,7 +112,7 @@ public class LoginController extends FragmentActivity {
                                                         }
 
                                                         //Get the auth token
-                                                        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).getAuthToken();
+                                                        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).authToken;
 
                                                         // Add custom implementation, as needed.
                                                         //Request a member from the queue asynchronously
