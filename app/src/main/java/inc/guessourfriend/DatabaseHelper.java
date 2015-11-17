@@ -98,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             long facebookID = cur.getLong(cur.getColumnIndex("facebookID"));
             String firstName = cur.getString(cur.getColumnIndex("firstName"));
             String lastName = cur.getString(cur.getColumnIndex("lastName"));
-            String authToken = cur.getString(cur.getColumnIndex("lastName"));
+            String authToken = cur.getString(cur.getColumnIndex("authToken"));
             String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
             FBProfileModel fbProfileModel = new FBProfileModel(facebookID, authToken, firstName, lastName, profilePicture, null);
             fbProfileModels.add(fbProfileModel);
