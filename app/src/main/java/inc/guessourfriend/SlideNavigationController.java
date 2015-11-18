@@ -181,12 +181,6 @@ public class SlideNavigationController extends AppCompatActivity {
 //  mDrawerList.setItemChecked(position, true);
 //  setTitle(listArray[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
-        // These two if and one else statements make it so that a new activity doesn't get
-        //      created if the user selects the activity that they are currently using
-        //      from the slide navigation menu.
-        if(SlideNavigationController.position == position){
-            return;
-        }
         if(position == -1){
             SlideNavigationController.position = 0;
         }else{
