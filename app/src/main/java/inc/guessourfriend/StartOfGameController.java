@@ -97,11 +97,11 @@ public class StartOfGameController extends SlideNavigationController {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_of_game_controller);
-        getLayoutInflater().inflate(R.layout.activity_current_games_controller, frameLayout); // change view
-        //TODO navigation drawer does not currently work...
-//        mDrawerList.setItemChecked(position, true);
-//        setTitle(listArray[position]);
+        // setting up slide menu
+        getLayoutInflater().inflate(R.layout.activity_start_of_game_controller, frameLayout);
+        mDrawerList.setItemChecked(position, true);
+        setTitle(listArray[position]);
+
         Intent intentExtras = getIntent();
         Bundle extrasBundle = intentExtras.getExtras();
         if (!extrasBundle.isEmpty()) {
