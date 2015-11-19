@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import inc.guessourfriend.SQLiteDB.DatabaseHelper;
-import inc.guessourfriend.Model;
+import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
 import inc.guessourfriend.R;
 import inc.guessourfriend.SupportingClasses.Friend;

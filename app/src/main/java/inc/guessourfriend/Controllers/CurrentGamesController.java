@@ -11,7 +11,7 @@ import java.util.List;
 
 import inc.guessourfriend.SQLiteDB.DatabaseHelper;
 import inc.guessourfriend.SupportingClasses.Game;
-import inc.guessourfriend.Model;
+import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.R;
 
 public class CurrentGamesController extends SlideNavigationController {

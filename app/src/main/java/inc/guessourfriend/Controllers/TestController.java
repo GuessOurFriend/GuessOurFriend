@@ -13,7 +13,7 @@ import com.facebook.FacebookSdk;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import inc.guessourfriend.Model;
+import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.SupportingClasses.MutualFriendList;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestRunner;
 import inc.guessourfriend.R;

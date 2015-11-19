@@ -12,7 +12,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import inc.guessourfriend.SupportingClasses.IncomingChallenge;
-import inc.guessourfriend.Model;
+import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.R;
 
 public class ChallengesController extends SlideNavigationController {

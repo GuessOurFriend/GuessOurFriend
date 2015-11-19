@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import inc.guessourfriend.SupportingClasses.Friend;
-import inc.guessourfriend.Model;
+import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.R;
 
 /**

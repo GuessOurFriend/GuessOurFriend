@@ -1,4 +1,4 @@
-package inc.guessourfriend;
+package inc.guessourfriend.Application;
 
 import android.app.Application;
 

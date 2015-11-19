@@ -10,7 +10,7 @@ import com.facebook.login.widget.ProfilePictureView;
 
 import inc.guessourfriend.SupportingClasses.Friend;
 import inc.guessourfriend.SupportingClasses.Game;
-import inc.guessourfriend.Model;
+import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.R;
 
 public class EndOfGameController extends SlideNavigationController {

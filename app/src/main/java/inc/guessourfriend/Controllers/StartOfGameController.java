@@ -18,7 +18,7 @@ import java.util.List;
 
 import inc.guessourfriend.SupportingClasses.Game;
 import inc.guessourfriend.SupportingClasses.ImageAdapter;
-import inc.guessourfriend.Model;
+import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.SupportingClasses.MutualFriend;
 import inc.guessourfriend.SupportingClasses.MutualFriendList;
 import inc.guessourfriend.R;

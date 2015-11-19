@@ -7,7 +7,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
-import inc.guessourfriend.Model;
+import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.R;
 
 public class LeaderboardController extends SlideNavigationController {
