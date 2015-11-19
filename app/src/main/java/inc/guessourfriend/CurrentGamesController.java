@@ -13,8 +13,7 @@ import java.util.List;
 
 public class CurrentGamesController extends SlideNavigationController {
 
-    FBProfileModel fbProfileModel = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext());
-
+    private Model model;
     ListView listView;
 
     private List<Game> gameList;
@@ -22,6 +21,9 @@ public class CurrentGamesController extends SlideNavigationController {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // get the models
+        model = (Model) getApplicationContext();
+        // set up slide navigation
         getLayoutInflater().inflate(R.layout.activity_current_games_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
@@ -30,19 +32,18 @@ public class CurrentGamesController extends SlideNavigationController {
 
         //TODO get current game list from server
         //// test game
-        fbProfileModel.friendList = DatabaseHelper.getFriendList(this);
+        model.fbProfileModel.friendList = DatabaseHelper.getFriendList(this);
         Game newGame = new Game();
         newGame.setStateOfGame(Game.START_OF_GAME);
-        newGame.myID = fbProfileModel.facebookID;
-        newGame.opponentID = fbProfileModel.friendList.get(0).facebookID;
-        currentGameListModel.getCurrentGameList().add(newGame);
-        ////
+        newGame.myID = model.fbProfileModel.facebookID;
+        newGame.opponentID = model.fbProfileModel.friendList.get(0).facebookID;
+        model.currentGameListModel.getCurrentGameList().add(newGame);
 
-        gameList = currentGameListModel.getCurrentGameList();
+        gameList = model.currentGameListModel.getCurrentGameList();
         String[] gameListFriendNames = new String[gameList.size()];
 
         for (int i = 0; i < gameList.size(); i++) {
-            gameListFriendNames[i] = fbProfileModel.getFriendById(gameList.get(i).getOpponentId()).getFirstName();
+            gameListFriendNames[i] = model.fbProfileModel.getFriendById(gameList.get(i).getOpponentId()).firstName;
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,

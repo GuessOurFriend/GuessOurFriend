@@ -34,22 +34,22 @@ public class EndOfGameControllerTest extends AndroidTestCase {
         boolean testPassed = true;
 
         Friend friend1 = fbProfileModel.friendList.get(0);
-        if((friend1.getFacebookID() != 1) && (!friend1.getFirstName().equalsIgnoreCase("manav"))){
+        if((friend1.facebookID != 1) && (!friend1.firstName.equalsIgnoreCase("manav"))){
             testPassed = false;
         }
 
         Friend friend2 = fbProfileModel.friendList.get(1);
-        if((friend2.getFacebookID() != 2) && (!friend2.getFirstName().equalsIgnoreCase("laura"))){
+        if((friend2.facebookID != 2) && (!friend2.firstName.equalsIgnoreCase("laura"))){
             testPassed = false;
         }
 
         Friend friend3 = fbProfileModel.friendList.get(2);
-        if((friend3.getFacebookID() != 3) && (!friend3.getFirstName().equalsIgnoreCase("eric"))){
+        if((friend3.facebookID != 3) && (!friend3.firstName.equalsIgnoreCase("eric"))){
             testPassed = false;
         }
 
         Friend friend4 = fbProfileModel.friendList.get(3);
-        if((friend4.getFacebookID() != 4) && (!friend4.getFirstName().equalsIgnoreCase("ash"))){
+        if((friend4.facebookID != 4) && (!friend4.firstName.equalsIgnoreCase("ash"))){
             testPassed = false;
         }
         Assert.assertEquals(true, testPassed);

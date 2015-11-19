@@ -53,12 +53,12 @@ public class MutualFriend {
 
         Friend friend = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext())
                 .getFriendById(facebookID);
-        return friend.getFirstName();
+        return friend.firstName;
     }
 
     public String getProfilePic() {
         Friend friend = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext())
                 .getFriendById(facebookID);
-        return friend.getProfilePicture();
+        return friend.profilePicture;
     }
 }

@@ -36,7 +36,7 @@ public class FBProfileModel {
     public Friend getFriendById(long friendID) {
         if(friendList != null) {
             for (int i = 0; i < friendList.size(); i++) {
-                if (friendList.get(i).getFacebookID() == friendID) {
+                if (friendList.get(i).facebookID == friendID) {
                     return friendList.get(i);
                 }
             }

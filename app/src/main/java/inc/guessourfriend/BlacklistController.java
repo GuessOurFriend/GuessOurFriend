@@ -22,6 +22,7 @@ import java.util.List;
 
 public class BlacklistController extends SlideNavigationController {
 
+    private Model model;
     private ListView mainListView ;
     private Friend[] friends ;
     private ArrayAdapter<Friend> listAdapter ;
@@ -30,7 +31,9 @@ public class BlacklistController extends SlideNavigationController {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        // get the models
+        model = (Model) getApplicationContext();
+        // set up slide navigation
         getLayoutInflater().inflate(R.layout.activity_blacklist_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
         setTitle("Blacklist");
@@ -134,7 +137,7 @@ public class BlacklistController extends SlideNavigationController {
 
             checkBox.setTag( friend );
             checkBox.setChecked( friend.isBlacklisted());
-            textView.setText( friend.getFirstName() );
+            textView.setText( friend.firstName );
 
             return convertView;
         }

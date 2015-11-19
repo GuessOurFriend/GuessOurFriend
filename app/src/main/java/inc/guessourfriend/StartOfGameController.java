@@ -22,12 +22,12 @@ import java.util.Random;
  * Created by Laura on 11/14/2015.
  */
 public class StartOfGameController extends SlideNavigationController {
-//    FBProfileModel fbProfileModel = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext());
-//    ArrayList<Friend> friendList = DatabaseHelper.getFriendList(GuessOurFriend.getAppContext());
-    List<MutualFriend> famousPeople;
-    Game game = new Game();
-    int highlighted = -1;
-    ImageView previouslySelected = null;
+
+    private Model model;
+    private List<MutualFriend> famousPeople;
+    private Game game = new Game();
+    private int highlighted = -1;
+    private ImageView previouslySelected = null;
 
     private String[] getImageURLs() {
         String[] imageURLs = new String[game.myPool.getMutualFriendList().size()];
@@ -97,7 +97,9 @@ public class StartOfGameController extends SlideNavigationController {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setting up slide menu
+        // get the models
+        model = (Model) getApplicationContext();
+        // set up slide navigation
         getLayoutInflater().inflate(R.layout.activity_start_of_game_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);

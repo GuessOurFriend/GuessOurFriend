@@ -1,18 +1,14 @@
 package inc.guessourfriend;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.transition.Slide;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 // Now, when people install or engage with your app, you'll see
 //      this data reflected in your app's Insights dashboard:
 //      https://www.facebook.com/analytics/468962606617084/
-import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -24,19 +20,20 @@ import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 public class LoginController extends FragmentActivity {
 
+    private Model model;
     private static final String TAG_CANCEL = "Cancel";
     private static final String TAG_ERROR = "Error";
     private LoginButton loginButton;
@@ -47,6 +44,8 @@ public class LoginController extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // get the models
+        model = (Model) getApplicationContext();
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_login_controller);
         callbackManager = CallbackManager.Factory.create();
@@ -70,76 +69,9 @@ public class LoginController extends FragmentActivity {
                                         } else {
                                             System.out.println("Success");
                                             JSONObject json = response.getJSONObject();
-                                            try {
-                                                //TODO: Remove debugging info
-                                                String jsonresult = String.valueOf(json);
-                                                System.out.println("JSON Result" + jsonresult);
-
-                                                //Get the basic info for this user
-                                                long facebookID = Long.parseLong(json.getString("id"));
-                                                String firstName = json.getString("first_name");
-                                                String lastName = json.getString("last_name");
-                                                String profilePicture = json.getJSONObject("picture").getJSONObject("data").getString("url");
-
-                                                //Send the user to our server
-                                                if (DatabaseHelper.getFBProfile(LoginController.this) == null)
-                                                {
-                                                    DatabaseHelper.insertOrUpdateFBProfile(getApplicationContext(), facebookID, null, firstName, lastName, profilePicture);
-                                                    NetworkRequestHelper.createUserOnServer(facebookID, firstName, lastName, profilePicture);
-                                                }
-
-                                                //TODO: Delete this. It's here incase someone else needs the gcm_id manually added
-                                                /*new AsyncTask<String, String, String>() {
-
-                                                    @Override
-                                                    protected String doInBackground(String... params) {
-                                                        try {
-                                                            return InstanceID.getInstance(LoginController.this).getToken(getString(R.string.gcm_defaultSenderId),
-                                                                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-                                                        } catch (IOException e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                        return "";
-                                                    }
-                                                    @Override
-                                                    protected void onPostExecute(String token) {
-                                                        System.out.println("Hello: " + token);
-                                                        JSONObject data = new JSONObject();
-                                                        try {
-                                                            data.put("gcm_id", token);
-                                                        } catch (JSONException e) {
-                                                            e.printStackTrace();
-                                                        }
-
-                                                        //Get the auth token
-                                                        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).authToken;
-
-                                                        // Add custom implementation, as needed.
-                                                        //Request a member from the queue asynchronously
-                                                        new NetworkRequestRunner("PUT", "https://guess-our-friend.herokuapp.com/user/gcm_id", authToken).execute(data);
-                                                    }
-                                                }.execute();*/
-
-                                                //Get the friends that were returned
-                                                //TODO: Take paging into account
-                                                JSONArray friends = json.getJSONObject("friends").getJSONArray("data");
-
-                                                //Loop through the list of friends
-                                                for (int i = 0; i < friends.length(); i++) {
-                                                    JSONObject friendJSONObject = friends.getJSONObject(i);
-                                                    facebookID = Long.parseLong(friendJSONObject.getString("id"));
-                                                    firstName = friendJSONObject.getString("first_name");
-                                                    lastName = friendJSONObject.getString("last_name");
-                                                    profilePicture = friendJSONObject.getJSONObject("picture").getJSONObject("data").getString("url");
-                                                    DatabaseHelper.insertOrUpdateFriend(LoginController.this, facebookID, firstName, lastName, profilePicture);
-                                                }
-
-                                                // programmatically switch to another activity (the first activity we want to show)
-                                                Intent myIntent = new Intent(LoginController.this, ChallengeAFriendController.class);
-                                                startActivity(myIntent);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
+                                            takeCareOfInitialDatabaseSetupUponFBLogin(json);
+                                            Intent myIntent = new Intent(LoginController.this, ChallengeAFriendController.class);
+                                            startActivity(myIntent);
                                         }
                                     }
                                 }
@@ -156,6 +88,66 @@ public class LoginController extends FragmentActivity {
                         // App code
                     }
                 });
+    }
+
+    private void takeCareOfInitialDatabaseSetupUponFBLogin(JSONObject json){
+        try {
+            String jsonresult = String.valueOf(json);
+            System.out.println("JSON Result" + jsonresult);
+
+            long facebookID = Long.parseLong(json.getString("id"));
+            String firstName = json.getString("first_name");
+            String lastName = json.getString("last_name");
+            String profilePicture = json.getJSONObject("picture").getJSONObject("data").getString("url");
+            model.fbProfileModel = DatabaseHelper.getFBProfile(getApplicationContext());
+
+            //Send the user to our server
+            if (DatabaseHelper.getFBProfile(getApplicationContext()) == null)
+            {
+                DatabaseHelper.insertOrUpdateFBProfile(getApplicationContext(), facebookID,
+                        null, firstName, lastName, profilePicture);
+                NetworkRequestHelper.createUserOnServer(facebookID, firstName, lastName, profilePicture);
+            }else{
+                DatabaseHelper.insertOrUpdateFBProfile(getApplicationContext(), facebookID,
+                        model.fbProfileModel.authToken, firstName, lastName, profilePicture);
+            }
+
+            model.fbProfileModel = DatabaseHelper.getFBProfile(getApplicationContext());
+
+            //TODO: Take paging into account
+            //Get the friends that were returned from facebooks
+            JSONArray friends = json.getJSONObject("friends").getJSONArray("data");
+            HashMap<Long, Friend> friendListMap = new HashMap<Long, Friend>();
+            for (int i = 0; i < friends.length(); i++) {
+                JSONObject friend = friends.getJSONObject(i);
+                facebookID = Long.parseLong(friend.getString("id"));
+                firstName = friend.getString("first_name");
+                lastName = friend.getString("last_name");
+                profilePicture = friend.getJSONObject("picture").getJSONObject("data").getString("url");
+                Friend myFriend = new Friend(facebookID, firstName, lastName, profilePicture);
+                friendListMap.put(facebookID, myFriend);
+            }
+
+            // Clean up the Group Table by deleting rows which contain deleted friends
+            ArrayList<Friend> deletedFriends = DatabaseHelper.findDeletedFriends(getApplicationContext(), friendListMap);
+            for(int i = 0; i < deletedFriends.size(); i++){
+                DatabaseHelper.deleteFriendWithIDFromFriendTableAndFacebookIDBlacklistPairTable(getApplicationContext(),
+                        deletedFriends.get(i).facebookID);
+            }
+
+            // Update the user's friend list in the database with the new friend list
+            Set<Long> friendListKeys = friendListMap.keySet();
+            Iterator<Long> itr = friendListKeys.iterator();
+            while(itr.hasNext()){
+                Friend friend = friendListMap.get(itr.next());
+                DatabaseHelper.insertOrUpdateFriend(getApplicationContext(), friend.facebookID,
+                        friend.firstName, friend.lastName, friend.profilePicture);
+            }
+
+            model.fbProfileModel.friendList = DatabaseHelper.getFriendList(getApplicationContext());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -207,5 +199,37 @@ public class LoginController extends FragmentActivity {
         super.onDestroy();
         accessTokenTracker.stopTracking();
     }
+
+    //TODO: Delete this. It's here incase someone else needs the gcm_id manually added
+    /*new AsyncTask<String, String, String>() {
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                return InstanceID.getInstance(LoginController.this).getToken(getString(R.string.gcm_defaultSenderId),
+                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return "";
+        }
+        @Override
+        protected void onPostExecute(String token) {
+            System.out.println("Hello: " + token);
+            JSONObject data = new JSONObject();
+            try {
+                data.put("gcm_id", token);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            //Get the auth token
+            String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).authToken;
+
+            // Add custom implementation, as needed.
+            //Request a member from the queue asynchronously
+            new NetworkRequestRunner("PUT", "https://guess-our-friend.herokuapp.com/user/gcm_id", authToken).execute(data);
+        }
+    }.execute();*/
 
 }

@@ -15,23 +15,25 @@ import java.util.List;
 
 public class ChallengesController extends SlideNavigationController {
 
-    IncomingChallengeListModel incomingChallengeListModel = new IncomingChallengeListModel();
-    private List<IncomingChallenge> incomingChallengeList = incomingChallengeListModel.getIncomingChallengeList();
 
-    //For View
+    private Model model;
+    private List<IncomingChallenge> incomingChallengeList;
     ListView listView;
 
-
-    //For View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //debug statements: to be removed later
         //String Hello = "Hello";
         //Log.v("Test: challenges:manav","" + Hello);
         super.onCreate(savedInstanceState);
+        // get the models
+        model = (Model) getApplicationContext();
+        // set up slide navigation
         getLayoutInflater().inflate(R.layout.activity_challenges_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
+
+        incomingChallengeList = model.incomingChallengeListModel.getIncomingChallengeList();
 
         listView = (ListView) findViewById(R.id.incominglist);
         IncomingChallenge test = new IncomingChallenge(77778);

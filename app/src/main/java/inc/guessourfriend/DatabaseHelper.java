@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -121,10 +122,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public static long deleteFriendWithID(Context context, long facebookID){
+    public static long deleteFriendWithIDFromFriendTableAndFacebookIDBlacklistPairTable(Context context, long facebookID){
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         long id = db.delete(FRIEND_TABLE, "facebookID=?", new String[]{String.valueOf(facebookID)});
+        db.delete(FACEBOOKIDBLACKLISTPAIR_TABLE, "facebookID=?", new String[]{String.valueOf(facebookID)});
         db.close();
         return id;
     }
@@ -150,24 +152,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             friend = new Friend(facebookID, firstName, lastName, profilePicture);
         }
         return friend;
-    }
-
-    public static ArrayList<Friend> getFriendList(Context context)
-    {
-        ArrayList<Friend> friendList = new ArrayList<Friend>();
-        DatabaseHelper databaseHelper = new DatabaseHelper(context);
-        SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        Cursor cur = db.rawQuery("SELECT * FROM " + FRIEND_TABLE, new String[]{});
-        while(cur.moveToNext()) {
-            long facebookID = cur.getLong(cur.getColumnIndex("facebookID"));
-            String firstName = cur.getString(cur.getColumnIndex("firstName"));
-            String lastName = cur.getString(cur.getColumnIndex("lastName"));
-            String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
-            Friend friend = new Friend(facebookID, firstName, lastName, profilePicture);
-            friendList.add(friend);
-        }
-        db.close();
-        return friendList;
     }
 
     public static boolean isThisFacebookIDBlacklisted(Context context, long facebookID)
@@ -288,5 +272,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return profile;
     }
 
+    public static HashMap<Long, Friend> getFriendMap(Context context)
+    {
+        HashMap<Long, Friend> friendMap = new HashMap<Long, Friend>();
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cur = db.rawQuery("SELECT * FROM " + FRIEND_TABLE, new String[]{});
+        while(cur.moveToNext()) {
+            long facebookID = cur.getLong(cur.getColumnIndex("facebookID"));
+            String firstName = cur.getString(cur.getColumnIndex("firstName"));
+            String lastName = cur.getString(cur.getColumnIndex("lastName"));
+            String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
+            Friend friend = new Friend(facebookID, firstName, lastName, profilePicture);
+            friendMap.put(facebookID, friend);
+        }
+        db.close();
+        return friendMap;
+    }
+
+    public static ArrayList<Friend> getFriendList(Context context)
+    {
+        ArrayList<Friend> friendList = new ArrayList<Friend>();
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cur = db.rawQuery("SELECT * FROM " + FRIEND_TABLE, new String[]{});
+        while(cur.moveToNext()) {
+            long facebookID = cur.getLong(cur.getColumnIndex("facebookID"));
+            String firstName = cur.getString(cur.getColumnIndex("firstName"));
+            String lastName = cur.getString(cur.getColumnIndex("lastName"));
+            String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
+            Friend friend = new Friend(facebookID, firstName, lastName, profilePicture);
+            friendList.add(friend);
+        }
+        db.close();
+        return friendList;
+    }
+
+    public static ArrayList<Friend> findDeletedFriends(Context context, HashMap<Long, Friend> newFriendList){
+        ArrayList<Friend> deletedFriendList = new ArrayList<Friend>();
+        ArrayList<Friend> storedFriendList = DatabaseHelper.getFriendList(context);
+        for(int i = 0; i < storedFriendList.size(); i++){
+            Friend friend = storedFriendList.get(i);
+            if(newFriendList.get(friend.facebookID) == null){
+                deletedFriendList.add(friend);
+            }
+        }
+        return deletedFriendList;
+    }
 }
 

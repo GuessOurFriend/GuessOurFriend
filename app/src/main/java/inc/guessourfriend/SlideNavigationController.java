@@ -66,32 +66,11 @@ public class SlideNavigationController extends AppCompatActivity {
      */
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
-    FBProfileModel fbProfileModel;
-    CurrentGameListModel currentGameListModel;
-    IncomingChallengeListModel incomingChallengeListModel;
-    LeaderboardListModel leaderboardListModel;
-    MutualFriendList mutualFriendList;
-    OutgoingChallengeListModel outgoingChallengeListModel;
-    Game game;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer_base_layout);
-
-        fbProfileModel = DatabaseHelper.getFBProfile(this);
-        fbProfileModel.friendList = DatabaseHelper.getFriendList(this);
-
-        // This onCreate method gets call whenever a subclass is instantiated.
-        //      This means that we have to re-initialize all Models every time
-        //      a controller is created (might be a performance hit, but
-        //      we won't worry about that now).
-        currentGameListModel = new CurrentGameListModel();
-        incomingChallengeListModel = new IncomingChallengeListModel();
-        leaderboardListModel = new LeaderboardListModel();
-        mutualFriendList = new MutualFriendList();
-        outgoingChallengeListModel = new OutgoingChallengeListModel();
 
         frameLayout = (FrameLayout)findViewById(R.id.content_frame);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

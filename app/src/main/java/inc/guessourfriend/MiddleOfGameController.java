@@ -18,6 +18,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class MiddleOfGameController extends AppCompatActivity {
 
+    private Model model;
     private String intentReceivedKey = "messageReceived";
     private String intentSentMessageSuccessKey = "sentMessageSuccess";
     private GoogleCloudMessaging gcm;
@@ -25,6 +26,8 @@ public class MiddleOfGameController extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // get the models
+        model = (Model) getApplicationContext();
         setContentView(R.layout.activity_middle_of_game_controller);
         gcm = GoogleCloudMessaging.getInstance(this);
         setUpIntentListeners();

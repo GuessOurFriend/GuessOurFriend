@@ -13,11 +13,11 @@ public class Friend{
     public String firstName;
     public String lastName;
     public String profilePicture;
-    public boolean isBlacklisted = false ;
-    public long matchesWon;
-    public long matchesLost;
-    public long points;
-    public long ratings;
+    public boolean isBlacklisted = false;
+    private long matchesWon;
+    private long matchesLost;
+    private long points;
+    private long rating;
 
     public Friend(){
         this.facebookID = -1;
@@ -27,7 +27,7 @@ public class Friend{
         this.matchesLost = 0;
         this.matchesWon =0;
         this.points =0;
-        this.ratings =0;
+        this.rating =0;
 
     }
 
@@ -36,19 +36,6 @@ public class Friend{
         this.firstName = firstName;
         this.lastName = lastName;
         this.profilePicture = profilePicture;
-    }
-
-    public long getFacebookID(){
-        return this.facebookID;
-    }
-    public String getFirstName(){
-        return this.firstName;
-    }
-    public String getLastName(){
-        return this.lastName;
-    }
-    public String getProfilePicture(){
-        return this.profilePicture;
     }
 
     @Override
@@ -63,11 +50,13 @@ public class Friend{
             return false;
         }
     }
-    public boolean isBlacklisted() {
+
+
+    public boolean isBlacklisted(){
         return isBlacklisted;
     }
-    public void setBlacklisted(boolean isBlacklisted) {
-        this.isBlacklisted = isBlacklisted;
+    public void setBlacklisted(boolean blacklisted){
+        isBlacklisted = blacklisted;
     }
     public void toggleBlacklisted() {
         isBlacklisted = !isBlacklisted ;
@@ -76,7 +65,7 @@ public class Friend{
         return points;
     }
     public long getRatings() {
-        return ratings;
+        return rating;
     }
     public long getMatchesWon() {
         return matchesWon;
@@ -90,11 +79,12 @@ public class Friend{
     public void incrementMatchesLost(){
         matchesLost++;
     }
-    public void updatePoints (long points) {
+    public void updatePoints () {
         points = points + 1;  // TODO: discuss the final logic
     }
-    public void updateRatings (long ratings) {
+    public void updateRatings () {
         // TODO: discuss the final logic
+        rating = 5;
     }
 
     @Override

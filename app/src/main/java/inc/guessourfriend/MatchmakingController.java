@@ -1,6 +1,5 @@
 package inc.guessourfriend;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,21 +9,16 @@ import android.widget.Button;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 public class MatchmakingController extends SlideNavigationController {
 
-    //For Model
-    FBProfileModel fbProfileModel = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext());
+    private Model model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // get the models
+        model = (Model) getApplicationContext();
+        // set up slide navigation
         getLayoutInflater().inflate(R.layout.activity_matchmaking_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
@@ -57,8 +51,7 @@ public class MatchmakingController extends SlideNavigationController {
         Button button = (Button) findViewById(R.id.find_a_game_button);
         button.setEnabled(false);
 
-        //Get the auth token
-        String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).authToken;
+        String authToken = model.fbProfileModel.authToken;
 
         //Request a member from the queue asynchronously
         //TODO: Point this at our server when it's running

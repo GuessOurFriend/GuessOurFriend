@@ -10,24 +10,24 @@ public class FriendTest extends AndroidTestCase {
 
     public void testgetFacebookID() {
         Friend friend = new Friend(101, "Ashwini", "Balasubramanian", "pp");
-        assertEquals(friend.getFacebookID(), 101);
+        assertEquals(friend.facebookID, 101);
 
     }
     public void testgetFirstName()
     {
         Friend friend= new Friend(101,"Ashwini","Balasubramanian","pp");
-        assertEquals(friend.getFirstName(),"Ashwini");
+        assertEquals(friend.firstName,"Ashwini");
 
     }
     public void testgetLastName()
     {
         Friend friend= new Friend(101,"Ashwini","Balasubramanian","pp");
-        assertEquals(friend.getLastName(),"Balasubramanian");
+        assertEquals(friend.lastName,"Balasubramanian");
     }
     public void testgetProfilePicture()
     {
         Friend friend= new Friend(101,"Ashwini","Balasubramanian","pp");
-        assertEquals(friend.getProfilePicture(),"pp");
+        assertEquals(friend.profilePicture,"pp");
     }
     public void testsetBlacklisted()
     {
@@ -58,13 +58,13 @@ public class FriendTest extends AndroidTestCase {
     public void testgetPoints()
     {
         Friend friend=new Friend();
-        friend.points=100;
-   assertEquals(friend.getPoints(),100);
+        friend.updatePoints();
+        assertEquals(friend.getPoints(),1);
     }
     public void testgetRating()
     {
         Friend friend=new Friend();
-        friend.ratings=5;
+        friend.updateRatings();
         assertEquals(friend.getRatings(),5);
     }
 }
