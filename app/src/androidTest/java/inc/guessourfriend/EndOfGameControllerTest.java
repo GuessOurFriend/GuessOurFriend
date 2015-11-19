@@ -8,6 +8,9 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import inc.guessourfriend.Models.FBProfileModel;
+import inc.guessourfriend.SupportingClasses.Friend;
+
 /**
  * Created by sellmaurer on 11/15/15.
  */

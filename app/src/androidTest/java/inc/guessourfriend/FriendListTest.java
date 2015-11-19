@@ -2,11 +2,12 @@ package inc.guessourfriend;
 
 import android.test.AndroidTestCase;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import static org.junit.Assert.*;
+
+import inc.guessourfriend.Models.FBProfileModel;
+import inc.guessourfriend.SupportingClasses.Friend;
 
 /**
  * Created by Laura on 11/15/2015.

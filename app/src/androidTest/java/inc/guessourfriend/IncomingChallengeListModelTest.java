@@ -3,12 +3,14 @@ package inc.guessourfriend;
 import android.test.AndroidTestCase;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import inc.guessourfriend.Models.IncomingChallengeListModel;
+import inc.guessourfriend.SupportingClasses.IncomingChallenge;
 
 /**
  * Created by mgarg on 11/15/15.

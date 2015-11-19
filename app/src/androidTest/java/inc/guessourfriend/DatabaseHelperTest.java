@@ -7,8 +7,10 @@ import android.test.AndroidTestCase;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
+
+import inc.guessourfriend.Models.FBProfileModel;
+import inc.guessourfriend.SQLiteDB.DatabaseHelper;
 
 public class DatabaseHelperTest extends AndroidTestCase {
 

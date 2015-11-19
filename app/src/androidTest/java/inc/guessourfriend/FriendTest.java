@@ -2,6 +2,8 @@ package inc.guessourfriend;
 
 import android.test.AndroidTestCase;
 
+import inc.guessourfriend.SupportingClasses.Friend;
+
 /**
  * Created by Ashwini1505 on 15-11-2015.
  */

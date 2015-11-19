@@ -2,6 +2,13 @@ package inc.guessourfriend;
 
 import android.app.Application;
 
+import inc.guessourfriend.Models.CurrentGameListModel;
+import inc.guessourfriend.Models.FBProfileModel;
+import inc.guessourfriend.Models.IncomingChallengeListModel;
+import inc.guessourfriend.Models.LeaderboardListModel;
+import inc.guessourfriend.Models.OutgoingChallengeListModel;
+import inc.guessourfriend.SQLiteDB.DatabaseHelper;
+
 /**
  * Created by sellmaurer on 11/16/15.
  */
