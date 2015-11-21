@@ -1,6 +1,7 @@
 package inc.guessourfriend.SupportingClasses;
 
 import inc.guessourfriend.SQLiteDB.DatabaseHelper;
+import inc.guessourfriend.Application.Model;
 
 /**
  * Created by Laura on 11/1/2015.
@@ -51,13 +52,13 @@ public class MutualFriend {
 
     public String getName() {
 
-        Friend friend = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext())
+        Friend friend = DatabaseHelper.getFBProfile(Model.getAppContext())
                 .getFriendById(facebookID);
         return friend.firstName;
     }
 
     public String getProfilePic() {
-        Friend friend = DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext())
+        Friend friend = DatabaseHelper.getFBProfile(Model.getAppContext())
                 .getFriendById(facebookID);
         return friend.profilePicture;
     }
