@@ -32,7 +32,7 @@ public class MutualFriendList {
         myBundle.putString("fields", "context.fields(mutual_friends{id,name,picture})");
         GraphRequest request = GraphRequest.newGraphPathRequest(
                 AccessToken.getCurrentAccessToken(),
-                "/10154358099544816",
+                "/113926395639559",
                 new GraphRequest.Callback() {
                     @Override
                     public void onCompleted(GraphResponse response) {
