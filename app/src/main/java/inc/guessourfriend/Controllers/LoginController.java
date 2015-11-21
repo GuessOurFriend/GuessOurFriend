@@ -207,35 +207,24 @@ public class LoginController extends FragmentActivity {
     }
 
     //TODO: Delete this. It's here incase someone else needs the gcm_id manually added
-    /*new AsyncTask<String, String, String>() {
+    /*private void reGetGcmId() {
+        new AsyncTask<String, String, String>() {
 
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                return InstanceID.getInstance(LoginController.this).getToken(getString(R.string.gcm_defaultSenderId),
-                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            } catch (IOException e) {
-                e.printStackTrace();
+            @Override
+            protected String doInBackground(String... params) {
+                try {
+                    return InstanceID.getInstance(LoginController.this).getToken(getString(R.string.gcm_defaultSenderId),
+                            GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return "";
             }
-            return "";
-        }
-        @Override
-        protected void onPostExecute(String token) {
-            System.out.println("Hello: " + token);
-            JSONObject data = new JSONObject();
-            try {
-                data.put("gcm_id", token);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            @Override
+            protected void onPostExecute(String token) {
+                NetworkRequestHelper.updateGcmId(token);
             }
-
-            //Get the auth token
-            String authToken = DatabaseHelper.getFBProfile(getApplicationContext()).authToken;
-
-            // Add custom implementation, as needed.
-            //Request a member from the queue asynchronously
-            new NetworkRequestRunner("PUT", "https://guess-our-friend.herokuapp.com/user/gcm_id", authToken).execute(data);
-        }
-    }.execute();*/
+        }.execute();
+    }*/
 
 }

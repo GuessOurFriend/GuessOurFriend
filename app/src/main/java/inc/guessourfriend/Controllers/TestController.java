@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import inc.guessourfriend.Application.Model;
+import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
 import inc.guessourfriend.SupportingClasses.MutualFriendList;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestRunner;
 import inc.guessourfriend.R;
@@ -58,14 +59,7 @@ public class TestController extends SlideNavigationController {
     }
 
     public void dbload(View view) {
-        String authToken = model.fbProfileModel.authToken;
-        new NetworkRequestRunner("GET", "https://guess-our-friend.herokuapp.com/user", authToken) {
-            @Override
-            protected void onPostExecute(JSONObject result) {
-                JSONObject theAuthToken = result;
-                System.out.println("The auth token: " + theAuthToken.toString());
-            }
-        }.execute();
+        NetworkRequestHelper.getUser();
     }
 
     public void sendTestMessage(View view) {

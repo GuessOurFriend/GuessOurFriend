@@ -44,8 +44,6 @@ public class NetworkRequestHelper {
                     e.printStackTrace();
                 }
 
-
-
                 //Insert the FBProfile into the local database
                 DatabaseHelper.insertOrUpdateFBProfile(Model.getAppContext(), facebookID, authToken,
                         firstName, lastName, profilePicture);
@@ -91,10 +89,12 @@ public class NetworkRequestHelper {
 
     //GET /user
     public static void getUser() {
-        new NetworkRequestRunner("GET", ROOT_URL + "/user") {
+        new NetworkRequestRunner("GET", ROOT_URL + "/user", getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
                 //TODO: Implement
+                JSONObject theAuthToken = result;
+                System.out.println("The auth token: " + theAuthToken.toString());
             }
         }.execute();
     }
@@ -120,21 +120,24 @@ public class NetworkRequestHelper {
     //Game Info
     //////////////////////////////////////////////////
 
-    //GET /game_board
-    public static void getGameBoard(int gameId) {
-        JSONObject data = new JSONObject();
-        try {
-            data.put("game_id", gameId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        new NetworkRequestRunner("GET", ROOT_URL + "/game_board") {
+    //GET /user/all_games
+    public static void getAllGames() {
+        new NetworkRequestRunner("GET", ROOT_URL + "/user/all_games", getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
                 //TODO: Implement
             }
-        }.execute(data);
+        }.execute();
+    }
+
+    //GET /game_board
+    public static void getGameBoard(int gameId) {
+        new NetworkRequestRunner("GET", ROOT_URL + "/game_board&game_id=" + gameId, getAuthToken()) {
+            @Override
+            protected void onPostExecute(JSONObject result) {
+                //TODO: Implement
+            }
+        }.execute();
     }
 
     //////////////////////////////////////////////////
@@ -181,7 +184,7 @@ public class NetworkRequestHelper {
 
     //GET user/incoming_challenges
     public static void getIncomingChallenges() {
-        new NetworkRequestRunner("GET", ROOT_URL + "/user/incoming_challenges") {
+        new NetworkRequestRunner("GET", ROOT_URL + "/user/incoming_challenges", getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
                 //TODO: Implement
@@ -191,7 +194,7 @@ public class NetworkRequestHelper {
 
     //GET user/outgoing_challenges
     public static void getOutgoingChallenges() {
-        new NetworkRequestRunner("GET", ROOT_URL + "/user/outgoing_challenges") {
+        new NetworkRequestRunner("GET", ROOT_URL + "/user/outgoing_challenges", getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
                 //TODO: Implement
