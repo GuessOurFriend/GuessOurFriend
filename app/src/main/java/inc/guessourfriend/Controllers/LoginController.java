@@ -106,7 +106,11 @@ public class LoginController extends FragmentActivity {
             String lastName = json.getString("last_name");
             String profilePicture = json.getJSONObject("picture").getJSONObject("data").getString("url");
             model.fbProfileModel = DatabaseHelper.getFBProfile(getApplicationContext());
-
+            if(model.fbProfileModel != null){
+                if(model.fbProfileModel.facebookID != facebookID){
+                    DatabaseHelper.deleteFBProfile(getApplicationContext());
+                }
+            }
             //Send the user to our server
             if (DatabaseHelper.getFBProfile(getApplicationContext()) == null)
             {
