@@ -37,4 +37,8 @@ public class OutgoingChallengeListModel {
         //TODO: remove challenge from database
         outgoingChallengeList.remove(toDelete);
     }
+
+    public void refreshData(){
+        // update this model's data with the data in the database
+    }
 }

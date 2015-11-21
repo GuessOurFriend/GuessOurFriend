@@ -1,6 +1,7 @@
 package inc.guessourfriend.Application;
 
 import android.app.Application;
+import android.content.Context;
 
 import inc.guessourfriend.Models.CurrentGameListModel;
 import inc.guessourfriend.Models.FBProfileModel;
@@ -13,6 +14,7 @@ import inc.guessourfriend.SQLiteDB.DatabaseHelper;
  * Created by sellmaurer on 11/16/15.
  */
 public class Model extends Application {
+    private static Context context;
 
     public FBProfileModel fbProfileModel;
     public CurrentGameListModel currentGameListModel;
@@ -23,7 +25,7 @@ public class Model extends Application {
     @Override
     public void onCreate (){
         super.onCreate();
-
+        Model.context = getApplicationContext();
         fbProfileModel = DatabaseHelper.getFBProfile(this);
         if(fbProfileModel == null){
             fbProfileModel = new FBProfileModel();
@@ -34,6 +36,10 @@ public class Model extends Application {
         incomingChallengeListModel = new IncomingChallengeListModel();
         leaderboardListModel = new LeaderboardListModel();
         outgoingChallengeListModel = new OutgoingChallengeListModel();
+    }
+
+    public static Context getAppContext() {
+        return Model.context;
     }
 }
 

@@ -71,5 +71,7 @@ public class LeaderboardListModel {
         // Just need to insert the user's Facebook's ID and points in the hashmap using puts
     }
 
-
+    public void refreshData(){
+        // update this model's data with the data in the database
+    }
 }

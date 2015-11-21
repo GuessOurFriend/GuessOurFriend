@@ -22,4 +22,8 @@ public class CurrentGameListModel {
     //private void populateCurrentGameList() {
     //    //TODO: get current games from database
     //}
+
+    public void refreshData(){
+        // update this model's data with the data in the database
+    }
 }

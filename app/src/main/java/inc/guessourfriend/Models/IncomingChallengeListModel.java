@@ -35,4 +35,8 @@ public class IncomingChallengeListModel {
         //TODO: remove challenge from database
         IncomingChallengeList.remove(toDelete);
     }
+
+    public void refreshData(){
+        // update this model's data with the data in the database
+    }
 }

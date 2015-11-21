@@ -3,15 +3,15 @@ package inc.guessourfriend.NetworkCommunication;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.SQLiteDB.DatabaseHelper;
-import inc.guessourfriend.SupportingClasses.GuessOurFriend;
 
 public class NetworkRequestHelper {
 
     private static final String ROOT_URL = "https://guess-our-friend.herokuapp.com";
 
     private static String getAuthToken() {
-        return DatabaseHelper.getFBProfile(GuessOurFriend.getAppContext()).authToken;
+        return DatabaseHelper.getFBProfile(Model.getAppContext()).authToken;
     }
 
     //////////////////////////////////////////////////
@@ -47,7 +47,7 @@ public class NetworkRequestHelper {
 
 
                 //Insert the FBProfile into the local database
-                DatabaseHelper.insertOrUpdateFBProfile(GuessOurFriend.getAppContext(), facebookID, authToken,
+                DatabaseHelper.insertOrUpdateFBProfile(Model.getAppContext(), facebookID, authToken,
                         firstName, lastName, profilePicture);
             }
         }.execute(data);
