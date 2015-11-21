@@ -145,7 +145,7 @@ public class NetworkRequestHelper {
     //////////////////////////////////////////////////
 
     //POST /challenges
-    public static void sendChallenge(long challengeeId) {
+    public static void sendChallenge(String challengeeId) {
         JSONObject data = new JSONObject();
         try {
             data.put("challengee_fb_id", challengeeId);
@@ -198,6 +198,8 @@ public class NetworkRequestHelper {
             @Override
             protected void onPostExecute(JSONObject result) {
                 //TODO: Implement
+                JSONObject x = result;
+                JSONObject y = x;
             }
         }.execute();
     }
