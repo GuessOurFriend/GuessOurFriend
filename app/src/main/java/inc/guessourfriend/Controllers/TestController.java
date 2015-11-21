@@ -54,8 +54,9 @@ public class TestController extends SlideNavigationController {
     }
 
     public void pressed(View view){
-        MutualFriendList testing = new MutualFriendList();
-        testing.populateMutualFriendList(this);
+        //MutualFriendList testing = new MutualFriendList();
+        //testing.populateMutualFriendList(this);
+        NetworkRequestHelper.getAllGames();
     }
 
     public void dbload(View view) {

@@ -132,7 +132,7 @@ public class NetworkRequestHelper {
 
     //GET /game_board
     public static void getGameBoard(int gameId) {
-        new NetworkRequestRunner("GET", ROOT_URL + "/game_board&game_id=" + gameId, getAuthToken()) {
+        new NetworkRequestRunner("GET", ROOT_URL + "/game_board?game_id=" + gameId, getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
                 //TODO: Implement
@@ -157,11 +157,12 @@ public class NetworkRequestHelper {
     }
 
     //DELETE challenge/respond_as_challengee
-    public static void deleteChallengeFromChallengee(long challengerId, long challengeeId) {
+    public static void deleteChallengeFromChallengee(long challengeId, long challengerId, boolean accept) {
         JSONObject data = new JSONObject();
         try {
-            data.put("challenge_id", challengerId);
-            data.put("challengee_id", challengeeId);
+            data.put("challenge_id", challengeId);
+            data.put("challenger_id", challengerId);
+            data.put("accept", accept);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -170,10 +171,10 @@ public class NetworkRequestHelper {
     }
 
     //DELETE challenge/respond_as_challenger
-    public static void deleteChallengeFromChallenger(long challengerId, long challengeeId) {
+    public static void deleteChallengeFromChallenger(long challengeId, long challengeeId) {
         JSONObject data = new JSONObject();
         try {
-            data.put("challenge_id", challengerId);
+            data.put("challenge_id", challengeId);
             data.put("challengee_id", challengeeId);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -198,8 +199,6 @@ public class NetworkRequestHelper {
             @Override
             protected void onPostExecute(JSONObject result) {
                 //TODO: Implement
-                JSONObject x = result;
-                JSONObject y = x;
             }
         }.execute();
     }

@@ -107,6 +107,12 @@ public class NetworkRequestRunner extends AsyncTask<JSONObject, String, JSONObje
         JSONObject jsonResult = null;
         try {
             jsonResult = new JSONObject(stringResult);
+
+            //Print out if there was an error
+            if (jsonResult.has("errors")) {
+                System.err.println(jsonResult.getString("errors"));
+                return null;
+            }
         } catch (JSONException ex) {
             //This shouldn't happen unless the server messes up and passes back non-JSON
             ex.printStackTrace();
