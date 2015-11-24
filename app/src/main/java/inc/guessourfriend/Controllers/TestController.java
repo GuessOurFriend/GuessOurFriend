@@ -59,6 +59,11 @@ public class TestController extends SlideNavigationController {
         NetworkRequestHelper.getAllGames();
     }
 
+    public void switchToMoGController(View view) {
+        Intent myIntent = new Intent(TestController.this, MiddleOfGameController.class);
+        startActivity(myIntent);
+    }
+
     public void dbload(View view) {
         NetworkRequestHelper.getUser();
     }

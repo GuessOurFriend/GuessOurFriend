@@ -121,4 +121,10 @@ public class NetworkRequestRunner extends AsyncTask<JSONObject, String, JSONObje
         //Return the parsed JSONObject
         return jsonResult;
     }
+
+    //TODO: Delete this, it's just a default implementation to have proof the request executed
+    @Override
+    protected void onPostExecute(JSONObject result) {
+        System.out.println("Data: " + result);
+    }
 }

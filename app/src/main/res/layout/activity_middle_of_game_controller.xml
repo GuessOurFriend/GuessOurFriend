@@ -13,7 +13,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
+        android:inputType="text"
         android:ems="10"
         android:id="@+id/theMessage"
         android:layout_alignParentLeft="true"
@@ -22,7 +22,8 @@
         android:layout_alignParentEnd="true"
         android:hint="Type your message here"
         android:layout_alignParentBottom="true"
-        android:minLines="2"
+        android:imeOptions="actionSend"
+        android:singleLine="true"
         android:enabled="true" />
 
     <TextView

@@ -13,7 +13,11 @@ import android.widget.TextView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import inc.guessourfriend.Application.Model;
+import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
 import inc.guessourfriend.R;
 
 public class MiddleOfGameController extends AppCompatActivity {
@@ -22,6 +26,8 @@ public class MiddleOfGameController extends AppCompatActivity {
     private String intentReceivedKey = "messageReceived";
     private String intentSentMessageSuccessKey = "sentMessageSuccess";
     private GoogleCloudMessaging gcm;
+    AtomicInteger msgId = new AtomicInteger();
+    private long gameId = 1l;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,20 +37,23 @@ public class MiddleOfGameController extends AppCompatActivity {
         setContentView(R.layout.activity_middle_of_game_controller);
         gcm = GoogleCloudMessaging.getInstance(this);
         setUpIntentListeners();
+        setUpEnterAndSendTheMessage();
     }
 
     private void setUpEnterAndSendTheMessage(){
-        EditText theMessage = (EditText) findViewById(R.id.theMessage);
-        theMessage.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        final EditText theMessage = (EditText) findViewById(R.id.theMessage);
+        theMessage.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
                     //gcm.send
                     // TODO: gcm.send needs the other person's ID in order to send messages
                     //      We're assuming that our ID is the instanceID from the
                     //      GuessOurFriendInstanceIDListenerService class. We need to send each of
                     //      the players IDs to our database in order to get each others IDs and
                     //      send messages to each other.
+                    NetworkRequestHelper.sendQuestion(gameId, theMessage.getText().toString());
+                    return true;
                 }
                 return false;
             }
@@ -56,9 +65,9 @@ public class MiddleOfGameController extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 EditText conversation = (EditText) findViewById(R.id.conversation);
-                conversation.append(intent.getStringExtra(intentReceivedKey) + "\n");
+                conversation.append(intent.getStringExtra("body") + "\n");
             }
-        }, new IntentFilter(intentReceivedKey));
+        }, new IntentFilter(intentReceivedKey + gameId));
 
         registerReceiver(new BroadcastReceiver() {
             @Override

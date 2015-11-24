@@ -140,6 +140,19 @@ public class NetworkRequestHelper {
         }.execute();
     }
 
+    //POST /questions
+    public static void sendQuestion(long gameId, String question) {
+        JSONObject data = new JSONObject();
+        try {
+            data.put("game_id", gameId);
+            data.put("content", question);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new NetworkRequestRunner("POST", ROOT_URL + "/questions", getAuthToken()).execute(data);
+    }
+
     //////////////////////////////////////////////////
     //Challenges
     //////////////////////////////////////////////////
