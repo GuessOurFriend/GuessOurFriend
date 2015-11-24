@@ -1,8 +1,10 @@
 package inc.guessourfriend.Controllers;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,11 +22,14 @@ import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -76,6 +81,7 @@ public class LoginController extends FragmentActivity {
                                             System.out.println("Success");
                                             JSONObject json = response.getJSONObject();
                                             takeCareOfInitialDatabaseSetupUponFBLogin(json);
+                                            reGetGcmId();
                                             Intent myIntent = new Intent(LoginController.this, ChallengeAFriendController.class);
                                             startActivity(myIntent);
                                         }
@@ -211,7 +217,7 @@ public class LoginController extends FragmentActivity {
     }
 
     //TODO: Delete this. It's here incase someone else needs the gcm_id manually added
-    /*private void reGetGcmId() {
+    private void reGetGcmId() {
         new AsyncTask<String, String, String>() {
 
             @Override
@@ -227,8 +233,10 @@ public class LoginController extends FragmentActivity {
             @Override
             protected void onPostExecute(String token) {
                 NetworkRequestHelper.updateGcmId(token);
+                String test = token;
+                Log.v("Token: ", token);
             }
         }.execute();
-    }*/
+    }
 
 }
