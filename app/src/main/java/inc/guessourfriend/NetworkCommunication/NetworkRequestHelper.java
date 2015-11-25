@@ -216,6 +216,46 @@ public class NetworkRequestHelper {
         }.execute(data);
     }
 
+    //POST /game/guess
+    public static void guessMysteryFriend(OnTaskCompleted listener, long gameId, long guessedFacebookID) {
+        final OnTaskCompleted theListener = listener;
+        JSONObject data = new JSONObject();
+        try {
+            data.put("game_id", gameId);
+            data.put("guess_id", guessedFacebookID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new NetworkRequestRunner("POST", ROOT_URL + "/game/guess", getAuthToken()){
+            @Override
+            protected void onPostExecute(JSONObject result) {
+                String passedMessage = "Player has given up the guess opportunity";
+                String wonMessage = "You have won the game";
+                String guessWasWrongMessage = "Your guess is wrong. Your opponent will be rewarded with two questions";
+                String theMessage = "";
+                String theError = "";
+                try{
+                    System.out.println(result);
+                    if (result.has("errors")) {
+                        System.err.println(result.getString("errors"));
+                        return;
+                    }
+                    theMessage = result.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(theMessage.equals(passedMessage)){
+                    theListener.onTaskCompleted("passedUpMyGuess", null);
+                }else if(theMessage.equals(guessWasWrongMessage)){
+                    theListener.onTaskCompleted("myGuessWasWrong", null);
+                }else{
+                    theListener.onTaskCompleted("iWon", null);
+                }
+            }
+        }.execute(data);
+    }
+
     //////////////////////////////////////////////////
     //Challenges
     //////////////////////////////////////////////////

@@ -82,4 +82,14 @@
         android:maxLines="100"
         android:enabled="false" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pass up my guess"
+        android:id="@+id/passMyGuessButton"
+        android:layout_above="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:onClick="passMyGuessButtonClicked" />
+
 </RelativeLayout>

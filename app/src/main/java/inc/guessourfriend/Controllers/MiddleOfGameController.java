@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Network;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -30,7 +32,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     private GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
     private long gameId = 4l;
-    private int lastQuestionId = 6;
+    private int lastQuestionId = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,10 @@ public class MiddleOfGameController extends SlideNavigationController implements
         answerQuestion(2);
     }
 
+    public void passMyGuessButtonClicked(View view) {
+        NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, gameId, -1);
+    }
+
     private void setUpEnterAndSendTheMessage(){
         final EditText theMessage = (EditText) findViewById(R.id.theMessage);
         theMessage.setOnEditorActionListener(new EditText.OnEditorActionListener() {
@@ -90,7 +96,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                 EditText conversation = (EditText) findViewById(R.id.conversation);
                 conversation.append(intent.getStringExtra("body") + "\n");
             }
-        }, new IntentFilter(intentReceivedKey + gameId));
+        }, new IntentFilter(intentReceivedKey));
     }
 
     public void onTaskCompleted(String taskName, Object resultModel){
@@ -100,6 +106,14 @@ public class MiddleOfGameController extends SlideNavigationController implements
             conversation.append(theMessage.getText() + "\n");
             theMessage.setText("");
         } else if(taskName.equalsIgnoreCase("questionAnswered")) {
+
+        } else if(taskName.equalsIgnoreCase("passedUpMyGuess")) {
+            Log.v("Successfully: ", "passed up my guess");
+        } else if(taskName.equalsIgnoreCase("myGuessWasWrong")) {
+
+        } else if(taskName.equalsIgnoreCase("iWon")) {
+
+        } else{
 
         }
     }
