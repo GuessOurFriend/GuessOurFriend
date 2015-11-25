@@ -18,8 +18,6 @@ public class IncomingChallengeListModel {
     private void populateIncomingChallengeList() {
 
         // Hardcoding the data for testing
-        IncomingChallenge test = new IncomingChallenge(77777);
-        this.IncomingChallengeList.add(test);
 
         //TODO: get challenges from database
     }

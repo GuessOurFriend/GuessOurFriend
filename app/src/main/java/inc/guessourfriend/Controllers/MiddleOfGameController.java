@@ -30,6 +30,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     private GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
     private long gameId = 4l;
+    private int lastQuestionId = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,22 @@ public class MiddleOfGameController extends SlideNavigationController implements
         gcm = GoogleCloudMessaging.getInstance(this);
         setUpIntentListeners();
         setUpEnterAndSendTheMessage();
+    }
+
+    private void answerQuestion(int answer) {
+        NetworkRequestHelper.answerQuestion(MiddleOfGameController.this, gameId, lastQuestionId, answer);
+    }
+
+    public void yesButtonClick(View view) {
+        answerQuestion(1);
+    }
+
+    public void noButtonClick(View view) {
+        answerQuestion(0);
+    }
+
+    public void idkButtonClick(View view) {
+        answerQuestion(2);
     }
 
     private void setUpEnterAndSendTheMessage(){
@@ -70,7 +87,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         }, new IntentFilter(intentReceivedKey + gameId));
     }
 
-    public void onTaskCompleted(String taskName){
+    public void onTaskCompleted(String taskName, Object resultModel){
         if(taskName.equalsIgnoreCase("questionSent")){
             EditText theMessage = (EditText) findViewById(R.id.theMessage);
             EditText conversation = (EditText) findViewById(R.id.conversation);
@@ -82,6 +99,8 @@ public class MiddleOfGameController extends SlideNavigationController implements
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
+        } else if(taskName.equalsIgnoreCase("questionAnswered")) {
+
         }
     }
 }

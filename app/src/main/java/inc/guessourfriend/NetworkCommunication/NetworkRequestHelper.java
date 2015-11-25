@@ -2,11 +2,14 @@ package inc.guessourfriend.NetworkCommunication;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import inc.guessourfriend.Application.Model;
+import inc.guessourfriend.Models.IncomingChallengeListModel;
 import inc.guessourfriend.SQLiteDB.DatabaseHelper;
+import inc.guessourfriend.SupportingClasses.IncomingChallenge;
 
 public class NetworkRequestHelper {
 
@@ -169,9 +172,45 @@ public class NetworkRequestHelper {
                     e.printStackTrace();
                 }
                 if(actualResult.equals(success)){
-                    theListener.onTaskCompleted("questionSent");
+                    theListener.onTaskCompleted("questionSent", null);
                 }else{
                     Log.v("questionSent error: ", actualResult);
+                }
+            }
+        }.execute(data);
+    }
+
+    //POST /question/answer
+    public static void answerQuestion(OnTaskCompleted listener, long gameId, int questionId, int answer) {
+        final OnTaskCompleted theListener = listener;
+        JSONObject data = new JSONObject();
+        try {
+            data.put("game_id", gameId);
+            data.put("question_id", questionId);
+            data.put("answer", answer);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new NetworkRequestRunner("POST", ROOT_URL + "/question/answer", getAuthToken()){
+            @Override
+            protected void onPostExecute(JSONObject result) {
+                String success = "Successfully answered the question";
+                String actualResult = "";
+                try{
+                    System.out.println(result);
+                    if (result.has("errors")) {
+                        System.err.println(result.getString("errors"));
+                        return;
+                    }
+                    actualResult = result.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(actualResult.equals(success)){
+                    theListener.onTaskCompleted("questionAnswered", null);
+                }else{
+                    Log.v("qAnswered error: ", actualResult);
                 }
             }
         }.execute(data);
@@ -225,15 +264,33 @@ public class NetworkRequestHelper {
         final OnTaskCompleted theListener = listener;
         new NetworkRequestRunner("GET", ROOT_URL + "/user/incoming_challenges", getAuthToken()) {
             @Override
-            protected void onPostExecute(JSONObject result) {
+            protected void onPostExecute(JSONObject jsonResult) {
+                //Create the challenge list
+                IncomingChallengeListModel result = new IncomingChallengeListModel();
+
+                //Attempt to parse the json
                 try {
-                    JSONObject result2 = result;
-                    String string = result.getString("challenger");
-                    string.toCharArray();
+                    JSONArray jsonArray = jsonResult.getJSONArray("results");
+
+                    //Loop through all the challenges
+                    for (int i=0; i < jsonArray.length(); i++) {
+                        //Parse this challenge's properties
+                        JSONObject challenge = jsonArray.getJSONObject(i);
+                        long challengeId = challenge.getLong("challenge_id");
+                        long challengerId = challenge.getLong("challenger_id");
+                        String firstName = challenge.getString("first_name");
+                        String lastName = challenge.getString("last_name");
+                        String fbId = challenge.getString("fb_id");
+
+                        //Create and add a challenge
+                        IncomingChallenge curr = new IncomingChallenge(challengeId, challengerId, firstName, lastName, fbId);
+                        result.IncomingChallengeList.add(curr);
+                    }
+
                 }catch (JSONException e){
                     e.printStackTrace();
                 }
-                theListener.onTaskCompleted("getIncomingChallenges");
+                theListener.onTaskCompleted("getIncomingChallenges", result);
             }
         }.execute();
     }

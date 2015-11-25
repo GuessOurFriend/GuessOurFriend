@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import inc.guessourfriend.Models.IncomingChallengeListModel;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
 import inc.guessourfriend.NetworkCommunication.OnTaskCompleted;
 import inc.guessourfriend.SupportingClasses.IncomingChallenge;
@@ -19,10 +20,10 @@ import inc.guessourfriend.R;
 
 public class ChallengesController extends SlideNavigationController implements OnTaskCompleted {
 
-
     private Model model;
-    private List<IncomingChallenge> incomingChallengeList;
     ListView listView;
+    private ArrayAdapter<IncomingChallenge> mAdapter;
+    private List<IncomingChallenge> currentChallenges;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,29 +38,22 @@ public class ChallengesController extends SlideNavigationController implements O
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
 
+        currentChallenges = model.incomingChallengeListModel.getIncomingChallengeList();
+
+        //Go get the incoming challenges
         NetworkRequestHelper.getIncomingChallenges(ChallengesController.this);
 
-        incomingChallengeList = model.incomingChallengeListModel.getIncomingChallengeList();
-
         listView = (ListView) findViewById(R.id.incominglist);
-        IncomingChallenge test = new IncomingChallenge(77778);
-        incomingChallengeList.add(test);
-        Long [] incomingchallengerID = new Long[incomingChallengeList.size()];
 
-        for (int i = 0; i < incomingChallengeList.size(); i++) {
-            incomingchallengerID[i] = incomingChallengeList.get(i).getChallengerID();
-        }
+        mAdapter = new ArrayAdapter<IncomingChallenge>(this, android.R.layout.simple_list_item_1,
+                currentChallenges);
 
-        ArrayAdapter<Long> incomingchallengelistAdapter =
-                new ArrayAdapter<Long>(this, android.R.layout.simple_list_item_1, incomingchallengerID);
-
-        listView.setAdapter(incomingchallengelistAdapter);
+        listView.setAdapter(mAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final int itemPosition = position;
-                final Long itemValue = (Long) listView.getItemAtPosition(position);
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                final IncomingChallenge itemValue = (IncomingChallenge) listView.getItemAtPosition(position);
 
                 AlertDialog.Builder adb = new AlertDialog.Builder(ChallengesController.this);
                 adb.setTitle("Accept Challenge Request");
@@ -68,7 +62,7 @@ public class ChallengesController extends SlideNavigationController implements O
                             public void onClick(DialogInterface dialog, int id) {
                             // TODO: Go to Start of Game Controller on clicking the accept button, and start the new activity
                                 Toast.makeText(getApplicationContext(),
-                                        "Position:" + itemPosition + " ListItem: " + itemValue, Toast.LENGTH_SHORT).show();
+                                        "Position:" + position + " ListItem: " + itemValue.firstName, Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -84,11 +78,12 @@ public class ChallengesController extends SlideNavigationController implements O
 
     }
 
-    public void onTaskCompleted(String taskName){
+    public void onTaskCompleted(String taskName, Object result){
         if(taskName.equalsIgnoreCase("getIncomingChallenges")){
+            model.incomingChallengeListModel = (IncomingChallengeListModel) result;
+            currentChallenges = model.incomingChallengeListModel.getIncomingChallengeList();
 
-            // refresh the UI
-            int i = 0;
+            mAdapter.notifyDataSetChanged();
         }
     }
 }
