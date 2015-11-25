@@ -21,10 +21,10 @@ public class EndOfGameControllerTest extends AndroidTestCase {
     public void setUp() throws Exception {
         fbProfileModel = new FBProfileModel();
         ArrayList<Friend> friendList = new ArrayList<Friend>();
-        Friend friend1 = new Friend(1, "manav", "garg", "propic1");
-        Friend friend2 = new Friend(2, "laura", "xu", "propic2");
-        Friend friend3 = new Friend(3, "eric", "koth", "propic3");
-        Friend friend4 = new Friend(4, "ash", "balasubramanian", "propic4");
+        Friend friend1 = new Friend(1, "manav", "garg", "propic1", false);
+        Friend friend2 = new Friend(2, "laura", "xu", "propic2", false);
+        Friend friend3 = new Friend(3, "eric", "koth", "propic3", false);
+        Friend friend4 = new Friend(4, "ash", "balasubramanian", "propic4", false);
         friendList.add(friend1);
         friendList.add(friend2);
         friendList.add(friend3);

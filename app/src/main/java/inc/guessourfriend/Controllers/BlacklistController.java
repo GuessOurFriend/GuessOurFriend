@@ -58,7 +58,7 @@ public class BlacklistController extends SlideNavigationController {
 
         if ( friends == null ) {
             friends = new Friend[] {
-                    new Friend(7775,"Eric","Eric","someurl"), new Friend(7774,"Brian","Brian","someurl"), new Friend(7778,"Laura","Laura","someurl"), new Friend(7777,"Steve","Steve","someurl"),new Friend(7779,"Ash","Ash","someurl"),new Friend(7776,"Manav","Manav","someurl")
+                    new Friend(7775,"Eric","Eric","someurl", false), new Friend(7774,"Brian","Brian","someurl", false), new Friend(7778,"Laura","Laura","someurl", false), new Friend(7777,"Steve","Steve","someurl", false),new Friend(7779,"Ash","Ash","someurl", false),new Friend(7776,"Manav","Manav","someurl", false)
             };
         }
         ArrayList<Friend> friendList = new ArrayList<Friend>();

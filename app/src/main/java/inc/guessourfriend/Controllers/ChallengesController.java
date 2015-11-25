@@ -11,11 +11,13 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
+import inc.guessourfriend.NetworkCommunication.OnTaskCompleted;
 import inc.guessourfriend.SupportingClasses.IncomingChallenge;
 import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.R;
 
-public class ChallengesController extends SlideNavigationController {
+public class ChallengesController extends SlideNavigationController implements OnTaskCompleted {
 
 
     private Model model;
@@ -34,6 +36,8 @@ public class ChallengesController extends SlideNavigationController {
         getLayoutInflater().inflate(R.layout.activity_challenges_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
+
+        NetworkRequestHelper.getIncomingChallenges(ChallengesController.this);
 
         incomingChallengeList = model.incomingChallengeListModel.getIncomingChallengeList();
 
@@ -78,5 +82,13 @@ public class ChallengesController extends SlideNavigationController {
         });
 
 
+    }
+
+    public void onTaskCompleted(String taskName){
+        if(taskName.equalsIgnoreCase("getIncomingChallenges")){
+
+            // refresh the UI
+            int i = 0;
+        }
     }
 }

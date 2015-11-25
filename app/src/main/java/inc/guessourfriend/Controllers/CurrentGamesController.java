@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import inc.guessourfriend.SQLiteDB.DatabaseHelper;
@@ -40,7 +41,11 @@ public class CurrentGamesController extends SlideNavigationController {
         newGame.setStateOfGame(Game.START_OF_GAME);
         newGame.myID = model.fbProfileModel.facebookID;
         newGame.opponentID = model.fbProfileModel.friendList.get(0).facebookID;
-        model.currentGameListModel.getCurrentGameList().add(newGame);
+        if(model.currentGameListModel.getCurrentGameList().size() >= 1){
+            
+        }else{
+            model.currentGameListModel.getCurrentGameList().add(newGame);
+        }
 
         gameList = model.currentGameListModel.getCurrentGameList();
         String[] gameListFriendNames = new String[gameList.size()];

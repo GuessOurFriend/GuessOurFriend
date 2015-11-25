@@ -9,7 +9,7 @@ public class Friend{
     public String firstName;
     public String lastName;
     public String profilePicture;
-    public boolean isBlacklisted = false;
+    public boolean isBlacklisted;
     private long matchesWon;
     private long matchesLost;
     private long points;
@@ -27,11 +27,16 @@ public class Friend{
 
     }
 
-    public Friend(long facebookID, String firstName, String lastName, String profilePicture){
+    public Friend(long facebookID, String firstName, String lastName, String profilePicture, boolean isBlacklisted){
         this.facebookID = facebookID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.profilePicture = profilePicture;
+        this.isBlacklisted = isBlacklisted;
+        this.matchesLost = 0;
+        this.matchesWon =0;
+        this.points =0;
+        this.rating =0;
     }
 
     @Override

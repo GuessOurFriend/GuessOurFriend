@@ -11,6 +11,7 @@ import android.view.MenuItem;
 // Now, when people install or engage with your app, you'll see
 //      this data reflected in your app's Insights dashboard:
 //      https://www.facebook.com/analytics/468962606617084/
+import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -36,6 +37,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import inc.guessourfriend.NetworkCommunication.OnTaskCompleted;
 import inc.guessourfriend.SQLiteDB.DatabaseHelper;
 import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
@@ -51,6 +53,8 @@ public class LoginController extends FragmentActivity {
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private boolean isResumed;
+    private HashMap<Long, Friend> friendListMap;
+    private AccessToken accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,7 @@ public class LoginController extends FragmentActivity {
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
-                    public void onSuccess(LoginResult loginResult) {
+                    public void onSuccess(final LoginResult loginResult) {
                         Bundle myBundle = new Bundle();
                         myBundle.putString("fields", "id,first_name,last_name,picture,friends{id,first_name,last_name,picture}");
                         new GraphRequest(
@@ -79,8 +83,8 @@ public class LoginController extends FragmentActivity {
                                             System.out.println("ERROR");
                                         } else {
                                             System.out.println("Success");
-                                            JSONObject json = response.getJSONObject();
-                                            takeCareOfInitialDatabaseSetupUponFBLogin(json);
+                                            accessToken = loginResult.getAccessToken();
+                                            takeCareOfInitialDatabaseSetupUponFBLogin(response);
                                             reGetGcmId();
                                             Intent myIntent = new Intent(LoginController.this, ChallengeAFriendController.class);
                                             startActivity(myIntent);
@@ -102,8 +106,9 @@ public class LoginController extends FragmentActivity {
                 });
     }
 
-    private void takeCareOfInitialDatabaseSetupUponFBLogin(JSONObject json){
+    private void takeCareOfInitialDatabaseSetupUponFBLogin(GraphResponse response){
         try {
+            JSONObject json = response.getJSONObject();
             String jsonresult = String.valueOf(json);
             System.out.println("JSON Result" + jsonresult);
 
@@ -111,14 +116,10 @@ public class LoginController extends FragmentActivity {
             String firstName = json.getString("first_name");
             String lastName = json.getString("last_name");
             String profilePicture = json.getJSONObject("picture").getJSONObject("data").getString("url");
+            DatabaseHelper.updateCurrentUser(getApplicationContext(), facebookID);
             model.fbProfileModel = DatabaseHelper.getFBProfile(getApplicationContext());
-            if(model.fbProfileModel != null){
-                if(model.fbProfileModel.facebookID != facebookID){
-                    DatabaseHelper.deleteFBProfile(getApplicationContext());
-                }
-            }
             //Send the user to our server
-            if (DatabaseHelper.getFBProfile(getApplicationContext()) == null)
+            if (model.fbProfileModel == null)
             {
                 DatabaseHelper.insertOrUpdateFBProfile(getApplicationContext(), facebookID,
                         null, firstName, lastName, profilePicture);
@@ -129,40 +130,84 @@ public class LoginController extends FragmentActivity {
             }
 
             model.fbProfileModel = DatabaseHelper.getFBProfile(getApplicationContext());
+            model.fbProfileModel.friendList = DatabaseHelper.getFriendList(getApplicationContext());
 
-            //TODO: Take paging into account
-            //Get the friends that were returned from facebooks
+            friendListMap = new HashMap<Long, Friend>();
+            //Get the friends that were returned from Facebook
             JSONArray friends = json.getJSONObject("friends").getJSONArray("data");
-            HashMap<Long, Friend> friendListMap = new HashMap<Long, Friend>();
             for (int i = 0; i < friends.length(); i++) {
                 JSONObject friend = friends.getJSONObject(i);
                 facebookID = Long.parseLong(friend.getString("id"));
                 firstName = friend.getString("first_name");
                 lastName = friend.getString("last_name");
                 profilePicture = friend.getJSONObject("picture").getJSONObject("data").getString("url");
-                Friend myFriend = new Friend(facebookID, firstName, lastName, profilePicture);
+                Friend myFriend = new Friend(facebookID, firstName, lastName, profilePicture, false);
                 friendListMap.put(facebookID, myFriend);
             }
+            doPaging(response);
 
-            // Clean up the Group Table by deleting rows which contain deleted friends
-            ArrayList<Friend> deletedFriends = DatabaseHelper.findDeletedFriends(getApplicationContext(), friendListMap);
-            for(int i = 0; i < deletedFriends.size(); i++){
-                DatabaseHelper.deleteFriendWithIDFromFriendTableAndFacebookIDBlacklistPairTable(getApplicationContext(),
-                        deletedFriends.get(i).facebookID);
-            }
-
-            // Update the user's friend list in the database with the new friend list
-            Set<Long> friendListKeys = friendListMap.keySet();
-            Iterator<Long> itr = friendListKeys.iterator();
-            while(itr.hasNext()){
-                Friend friend = friendListMap.get(itr.next());
-                DatabaseHelper.insertOrUpdateFriend(getApplicationContext(), friend.facebookID,
-                        friend.firstName, friend.lastName, friend.profilePicture);
-            }
-
-            model.fbProfileModel.friendList = DatabaseHelper.getFriendList(getApplicationContext());
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void cleanFriendList(){
+        // Clean up the Friends Table by deleting rows which contain deleted friends
+        ArrayList<Friend> deletedFriends = DatabaseHelper.findDeletedFriends(getApplicationContext(), friendListMap);
+        for(int i = 0; i < deletedFriends.size(); i++) {
+            DatabaseHelper.deleteFriendWithID(getApplicationContext(), deletedFriends.get(i).facebookID);
+        }
+
+        // Update the user's friend list in the database with the new friend list
+        Set<Long> friendListKeys = friendListMap.keySet();
+        Iterator<Long> itr = friendListKeys.iterator();
+        while(itr.hasNext()){
+            Friend friend = friendListMap.get(itr.next());
+            DatabaseHelper.insertOrUpdateFriend(getApplicationContext(),
+                    friend.facebookID, friend.firstName, friend.lastName, friend.profilePicture, friend.isBlacklisted);
+        }
+        model.fbProfileModel.friendList = DatabaseHelper.getFriendList(getApplicationContext());
+    }
+
+    private void doPaging(GraphResponse response){
+        // Taking paging into account
+        GraphRequest nextPageRequest = response.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
+
+        if(nextPageRequest != null) {
+            nextPageRequest.setCallback(new GraphRequest.Callback() {
+                public void onCompleted(GraphResponse newResponse) {
+                    if (newResponse.getError() != null) {
+                        Log.v("FBGraphRequest Error: ", newResponse.getError().getErrorMessage());
+                    } else {
+                        System.out.println("Success");
+                        try {
+                            JSONObject json = newResponse.getJSONObject();
+                            //Get the friends that were returned from Facebook
+                            JSONArray friends = json.getJSONObject("friends").getJSONArray("data");
+                            for (int i = 0; i < friends.length(); i++) {
+                                JSONObject friend = friends.getJSONObject(i);
+                                long facebookID = Long.parseLong(friend.getString("id"));
+                                String firstName = friend.getString("first_name");
+                                String lastName = friend.getString("last_name");
+                                String profilePicture = friend.getJSONObject("picture").getJSONObject("data").getString("url");
+                                Friend myFriend = new Friend(facebookID, firstName, lastName, profilePicture, false);
+                                friendListMap.put(facebookID, myFriend);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    GraphRequest newNextPageRequest = newResponse.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
+                    if (newNextPageRequest != null) {
+                        doPaging(newResponse);
+                    } else {
+                        cleanFriendList();
+                    }
+                }
+            });
+            nextPageRequest.executeAsync();
+        }else{
+            cleanFriendList();
         }
     }
 
@@ -216,7 +261,6 @@ public class LoginController extends FragmentActivity {
         accessTokenTracker.stopTracking();
     }
 
-    //TODO: Delete this. It's here incase someone else needs the gcm_id manually added
     private void reGetGcmId() {
         new AsyncTask<String, String, String>() {
 
@@ -233,8 +277,6 @@ public class LoginController extends FragmentActivity {
             @Override
             protected void onPostExecute(String token) {
                 NetworkRequestHelper.updateGcmId(token);
-                String test = token;
-                Log.v("Token: ", token);
             }
         }.execute();
     }

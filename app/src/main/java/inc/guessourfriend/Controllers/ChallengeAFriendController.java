@@ -10,7 +10,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import inc.guessourfriend.Application.Model;
-import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
 import inc.guessourfriend.SupportingClasses.OutgoingChallenge;
 import inc.guessourfriend.R;
 
@@ -53,17 +52,13 @@ public class ChallengeAFriendController extends SlideNavigationController {
                 adb.setMessage("Send " + itemValue + " a challenge request?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                //Get the facebook id of the row we clicked
-                                long challengeeId = model.fbProfileModel.friendList.get(itemPosition).facebookID;
-
                                 model.outgoingChallengeListModel.addOutgoingChallenge(
-                                        new OutgoingChallenge(challengeeId));
-
-                                //Send the request to the server
-                                NetworkRequestHelper.sendChallenge(Long.toString(challengeeId));
-
+                                        new OutgoingChallenge(model.fbProfileModel.friendList.get(itemPosition).facebookID));
+//                                Log.v("first challengee id", "" + model.outgoingChallengeListModel
+//                                        .getOutgoingChallengeList().get(itemPosition).getChallengeeID());
+//                                Log.v("item position", "" + itemPosition);
                                 Toast.makeText(getApplicationContext(),
-                                        "Challenged: " + challengeeId, Toast.LENGTH_SHORT).show();
+                                        "Position:" + itemPosition + " ListItem: " + itemValue, Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {

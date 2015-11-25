@@ -26,12 +26,7 @@ public class Model extends Application {
     public void onCreate (){
         super.onCreate();
         Model.context = getApplicationContext();
-        fbProfileModel = DatabaseHelper.getFBProfile(this);
-        if(fbProfileModel == null){
-            fbProfileModel = new FBProfileModel();
-        }
-        fbProfileModel.friendList = DatabaseHelper.getFriendList(this);
-
+        fbProfileModel = new FBProfileModel();
         currentGameListModel = new CurrentGameListModel();
         incomingChallengeListModel = new IncomingChallengeListModel();
         leaderboardListModel = new LeaderboardListModel();

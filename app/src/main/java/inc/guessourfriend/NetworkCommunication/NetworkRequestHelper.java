@@ -1,5 +1,7 @@
 package inc.guessourfriend.NetworkCommunication;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,7 +41,11 @@ public class NetworkRequestHelper {
                 //Parse the auth token in the response so we can update this user in the future
                 String authToken = null;
                 try {
-                    authToken = result.getString("token");
+                    if(result != null){
+                        authToken = result.getString("token");
+                    }else{
+                        Log.v("Can't get auth token: ", "User already exists");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -197,11 +203,19 @@ public class NetworkRequestHelper {
     }
 
     //GET user/incoming_challenges
-    public static void getIncomingChallenges() {
+    public static void getIncomingChallenges(OnTaskCompleted listener) {
+        final OnTaskCompleted theListener = listener;
         new NetworkRequestRunner("GET", ROOT_URL + "/user/incoming_challenges", getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
-                //TODO: Implement
+                try {
+                    JSONObject result2 = result;
+                    String string = result.getString("challenger");
+                    string.toCharArray();
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+                theListener.onTaskCompleted("getIncomingChallenges");
             }
         }.execute();
     }
