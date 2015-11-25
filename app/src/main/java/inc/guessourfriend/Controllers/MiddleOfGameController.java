@@ -34,7 +34,7 @@ public class MiddleOfGameController extends SlideNavigationController {
         // get the models
         model = (Model) getApplicationContext();
         // set up slide navigation
-        getLayoutInflater().inflate(R.layout.activity_leaderboard_controller, frameLayout);
+        getLayoutInflater().inflate(R.layout.activity_middle_of_game_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
 
