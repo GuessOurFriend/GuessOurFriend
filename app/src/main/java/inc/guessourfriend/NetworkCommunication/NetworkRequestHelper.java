@@ -148,7 +148,8 @@ public class NetworkRequestHelper {
     }
 
     //POST /questions
-    public static void sendQuestion(long gameId, String question) {
+    public static void sendQuestion(OnTaskCompleted listener, long gameId, String question) {
+        final OnTaskCompleted theListener = listener;
         JSONObject data = new JSONObject();
         try {
             data.put("game_id", gameId);
@@ -157,7 +158,23 @@ public class NetworkRequestHelper {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("POST", ROOT_URL + "/questions", getAuthToken()).execute(data);
+        new NetworkRequestRunner("POST", ROOT_URL + "/questions", getAuthToken()){
+            @Override
+            protected void onPostExecute(JSONObject result) {
+                String success = "Successfully sent the question";
+                String actualResult = "";
+                try{
+                    actualResult = result.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(actualResult.equals(success)){
+                    theListener.onTaskCompleted("questionSent");
+                }else{
+                    Log.v("questionSent error: ", actualResult);
+                }
+            }
+        }.execute(data);
     }
 
     //////////////////////////////////////////////////

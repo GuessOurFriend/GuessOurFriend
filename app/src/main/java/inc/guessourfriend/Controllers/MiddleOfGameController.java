@@ -7,7 +7,9 @@ import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -18,15 +20,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
+import inc.guessourfriend.NetworkCommunication.OnTaskCompleted;
 import inc.guessourfriend.R;
 
-public class MiddleOfGameController extends SlideNavigationController {
+public class MiddleOfGameController extends SlideNavigationController implements OnTaskCompleted {
     private Model model;
     private String intentReceivedKey = "messageReceived";
     private String intentSentMessageSuccessKey = "sentMessageSuccess";
     private GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
-    private long gameId = 1l;
+    private long gameId = 4l;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,7 @@ public class MiddleOfGameController extends SlideNavigationController {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    NetworkRequestHelper.sendQuestion(gameId, theMessage.getText().toString());
+                    NetworkRequestHelper.sendQuestion(MiddleOfGameController.this, gameId, theMessage.getText().toString());
                     return true;
                 }
                 return false;
@@ -65,15 +68,20 @@ public class MiddleOfGameController extends SlideNavigationController {
                 conversation.append(intent.getStringExtra("body") + "\n");
             }
         }, new IntentFilter(intentReceivedKey + gameId));
+    }
 
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                EditText theMessage = (EditText) findViewById(R.id.theMessage);
-                EditText conversation = (EditText) findViewById(R.id.conversation);
-                conversation.append(theMessage.getText() + "\n");
-                theMessage.setText("");
+    public void onTaskCompleted(String taskName){
+        if(taskName.equalsIgnoreCase("questionSent")){
+            EditText theMessage = (EditText) findViewById(R.id.theMessage);
+            EditText conversation = (EditText) findViewById(R.id.conversation);
+            conversation.append(theMessage.getText() + "\n");
+            theMessage.setText("");
+            // Check if no view has focus:
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
-        }, new IntentFilter(intentSentMessageSuccessKey));
+        }
     }
 }
