@@ -53,6 +53,12 @@ public class MiddleOfGameController extends SlideNavigationController implements
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     NetworkRequestHelper.sendQuestion(MiddleOfGameController.this, gameId, theMessage.getText().toString());
+                    // Check if no view has focus:
+                    View view = getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
                     return true;
                 }
                 return false;
@@ -76,12 +82,6 @@ public class MiddleOfGameController extends SlideNavigationController implements
             EditText conversation = (EditText) findViewById(R.id.conversation);
             conversation.append(theMessage.getText() + "\n");
             theMessage.setText("");
-            // Check if no view has focus:
-            View view = this.getCurrentFocus();
-            if (view != null) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            }
         }
     }
 }
