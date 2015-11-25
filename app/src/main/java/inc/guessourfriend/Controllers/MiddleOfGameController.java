@@ -65,6 +65,10 @@ public class MiddleOfGameController extends SlideNavigationController implements
         answerQuestion(2);
     }
 
+    public void getGameBoardButtonClicked(View view) {
+        NetworkRequestHelper.getGameBoard(MiddleOfGameController.this, gameId);
+    }
+
     public void passMyGuessButtonClicked(View view) {
         NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, gameId, -1);
     }

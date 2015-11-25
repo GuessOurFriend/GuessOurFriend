@@ -92,4 +92,14 @@
         android:layout_centerHorizontal="true"
         android:onClick="passMyGuessButtonClicked" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get This Game Board"
+        android:id="@+id/getGameBoardButton"
+        android:layout_above="@+id/passMyGuessButton"
+        android:layout_centerHorizontal="true"
+        android:onClick="getGameBoardButtonClicked" />
+
 </RelativeLayout>

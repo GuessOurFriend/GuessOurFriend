@@ -141,11 +141,12 @@ public class NetworkRequestHelper {
     }
 
     //GET /game_board
-    public static void getGameBoard(int gameId) {
+    public static void getGameBoard(OnTaskCompleted listener, long gameId) {
         new NetworkRequestRunner("GET", ROOT_URL + "/game_board?game_id=" + gameId, getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
-                //TODO: Implement
+                JSONObject json = result;
+                Log.v("Stupid json: ", result.toString());
             }
         }.execute();
     }
