@@ -85,7 +85,7 @@ public class LoginController extends FragmentActivity {
                                             System.out.println("Success");
                                             accessToken = loginResult.getAccessToken();
                                             takeCareOfInitialDatabaseSetupUponFBLogin(response);
-                                            reGetGcmId();
+                                            //reGetGcmId();
                                             Intent myIntent = new Intent(LoginController.this, ChallengeAFriendController.class);
                                             startActivity(myIntent);
                                         }
@@ -127,6 +127,9 @@ public class LoginController extends FragmentActivity {
             }else{
                 DatabaseHelper.insertOrUpdateFBProfile(getApplicationContext(), facebookID,
                         model.fbProfileModel.authToken, firstName, lastName, profilePicture);
+                // TODO: delete this line after all testing of application is finished +
+                // TODO:        tell server guys to make duplicate user creation not return the auth token
+                NetworkRequestHelper.createUserOnServer(facebookID, firstName, lastName, profilePicture);
             }
 
             model.fbProfileModel = DatabaseHelper.getFBProfile(getApplicationContext());

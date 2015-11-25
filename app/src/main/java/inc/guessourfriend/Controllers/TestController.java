@@ -1,7 +1,9 @@
 package inc.guessourfriend.Controllers;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,12 +11,17 @@ import android.view.View;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.FacebookSdk;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
+import inc.guessourfriend.SQLiteDB.DatabaseHelper;
 import inc.guessourfriend.SupportingClasses.MutualFriendList;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestRunner;
 import inc.guessourfriend.R;
@@ -65,7 +72,10 @@ public class TestController extends SlideNavigationController {
     }
 
     public void dbload(View view) {
+        Log.v("Auth token is: ", model.fbProfileModel.authToken);
+        Log.v("Auth token is: ", DatabaseHelper.getFBProfile(getApplicationContext()).authToken);
         NetworkRequestHelper.getUser();
+        reGetGcmId();
     }
 
     public void sendTestMessage(View view) {
@@ -127,5 +137,25 @@ public class TestController extends SlideNavigationController {
     public void onDestroy() {
         super.onDestroy();
         accessTokenTracker.stopTracking();
+    }
+
+    private void reGetGcmId() {
+        new AsyncTask<String, String, String>() {
+
+            @Override
+            protected String doInBackground(String... params) {
+                try {
+                    return InstanceID.getInstance(TestController.this).getToken(getString(R.string.gcm_defaultSenderId),
+                            GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return "";
+            }
+            @Override
+            protected void onPostExecute(String token) {
+                NetworkRequestHelper.updateGcmId(token);
+            }
+        }.execute();
     }
 }

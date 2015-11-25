@@ -20,8 +20,7 @@ import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
 import inc.guessourfriend.R;
 
-public class MiddleOfGameController extends AppCompatActivity {
-
+public class MiddleOfGameController extends SlideNavigationController {
     private Model model;
     private String intentReceivedKey = "messageReceived";
     private String intentSentMessageSuccessKey = "sentMessageSuccess";
@@ -34,7 +33,11 @@ public class MiddleOfGameController extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // get the models
         model = (Model) getApplicationContext();
-        setContentView(R.layout.activity_middle_of_game_controller);
+        // set up slide navigation
+        getLayoutInflater().inflate(R.layout.activity_leaderboard_controller, frameLayout);
+        mDrawerList.setItemChecked(position, true);
+        setTitle(listArray[position]);
+
         gcm = GoogleCloudMessaging.getInstance(this);
         setUpIntentListeners();
         setUpEnterAndSendTheMessage();
@@ -46,12 +49,6 @@ public class MiddleOfGameController extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    //gcm.send
-                    // TODO: gcm.send needs the other person's ID in order to send messages
-                    //      We're assuming that our ID is the instanceID from the
-                    //      GuessOurFriendInstanceIDListenerService class. We need to send each of
-                    //      the players IDs to our database in order to get each others IDs and
-                    //      send messages to each other.
                     NetworkRequestHelper.sendQuestion(gameId, theMessage.getText().toString());
                     return true;
                 }

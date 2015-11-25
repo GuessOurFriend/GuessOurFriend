@@ -43,6 +43,7 @@ public class NetworkRequestHelper {
                 try {
                     if(result != null){
                         authToken = result.getString("token");
+                        String token = authToken;
                     }else{
                         Log.v("Can't get auth token: ", "User already exists");
                     }
