@@ -117,7 +117,7 @@ public class LoginController extends FragmentActivity {
             String lastName = json.getString("last_name");
             String profilePicture = json.getJSONObject("picture").getJSONObject("data").getString("url");
             DatabaseHelper.updateCurrentUser(getApplicationContext(), facebookID);
-            model.fbProfileModel = DatabaseHelper.getFBProfile(getApplicationContext());
+            model.fbProfileModel = DatabaseHelper.getFBProfileWithID(getApplicationContext(), facebookID);
             //Send the user to our server
             if (model.fbProfileModel == null)
             {
@@ -132,7 +132,7 @@ public class LoginController extends FragmentActivity {
                 NetworkRequestHelper.createUserOnServer(facebookID, firstName, lastName, profilePicture);
             }
 
-            model.fbProfileModel = DatabaseHelper.getFBProfile(getApplicationContext());
+            model.fbProfileModel = DatabaseHelper.getFBProfileWithID(getApplicationContext(), facebookID);
             model.fbProfileModel.friendList = DatabaseHelper.getFriendList(getApplicationContext());
 
             friendListMap = new HashMap<Long, Friend>();

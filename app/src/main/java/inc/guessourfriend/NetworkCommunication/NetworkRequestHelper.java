@@ -16,7 +16,7 @@ public class NetworkRequestHelper {
     private static final String ROOT_URL = "https://guess-our-friend.herokuapp.com";
 
     private static String getAuthToken() {
-        return DatabaseHelper.getFBProfile(Model.getAppContext()).authToken;
+        return DatabaseHelper.getCurrentUsersFBProfile(Model.getAppContext()).authToken;
     }
 
     //////////////////////////////////////////////////
