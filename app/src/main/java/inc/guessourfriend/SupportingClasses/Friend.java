@@ -10,6 +10,7 @@ public class Friend{
     public String lastName;
     public String profilePicture;
     public boolean isBlacklisted;
+    public boolean isChallenged;
     private long matchesWon;
     private long matchesLost;
     private long points;
@@ -53,14 +54,15 @@ public class Friend{
     }
 
 
-    public boolean isBlacklisted(){
-        return isBlacklisted;
-    }
-    public void setBlacklisted(boolean blacklisted){
-        isBlacklisted = blacklisted;
-    }
+    public boolean isBlacklisted(){return isBlacklisted;}
+    public boolean isChallenged(){return isChallenged;}
+    public void setBlacklisted(boolean blacklisted){isBlacklisted = blacklisted;}
+    public void setChallenged(boolean challenged){isChallenged = challenged;}
     public void toggleBlacklisted() {
         isBlacklisted = !isBlacklisted ;
+    }
+    public void toggleChallenged() {
+        isChallenged = !isChallenged ;
     }
     public long getPoints() {
         return points;
