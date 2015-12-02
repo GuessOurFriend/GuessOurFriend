@@ -304,7 +304,8 @@ public class NetworkRequestHelper {
     //////////////////////////////////////////////////
 
     //POST /challenges
-    public static void sendChallenge(String challengeeId) {
+    public static void sendChallenge(/*OnTaskCompleted listener,*/ final String challengeeId) {
+        //final OnTaskCompleted theListener = listener;
         JSONObject data = new JSONObject();
         try {
             data.put("challengee_fb_id", challengeeId);
@@ -312,7 +313,26 @@ public class NetworkRequestHelper {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("POST", ROOT_URL + "/challenges", getAuthToken()).execute(data);
+        new NetworkRequestRunner("POST", ROOT_URL + "/challenges", getAuthToken()){
+            /*@Override
+            protected void onPostExecute(JSONObject jsonResult) {
+                Long challengeid = 1L;
+                //Attempt to parse the json
+                try {
+
+                        challengeid = jsonResult.getLong("id");
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+                String a = new String();
+                a= challengeid.toString();
+                theListener.onTaskCompleted(a, null);
+            }*/
+
+
+
+        }.execute(data);
     }
 
     //DELETE challenge/respond_as_challengee
