@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +21,7 @@ import java.util.List;
 
 import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
+import inc.guessourfriend.NetworkCommunication.OnTaskCompleted;
 import inc.guessourfriend.SupportingClasses.Friend;
 import inc.guessourfriend.SupportingClasses.OutgoingChallenge;
 import inc.guessourfriend.R;
@@ -26,7 +29,7 @@ import inc.guessourfriend.R;
 /**
  * Created by Laura on 10/31/2015.
  */
-public class ChallengeAFriendController extends SlideNavigationController {
+public class ChallengeAFriendController extends SlideNavigationController /*implements OnTaskCompleted*/ {
 
     private Model model;
     ListView mainListView;
@@ -52,17 +55,65 @@ public class ChallengeAFriendController extends SlideNavigationController {
             @Override
             public void onItemClick(AdapterView<?> parent, View item,
                                     int position, long id) {
-                Friend friend = listAdapter.getItem(position);
-                friend.toggleChallenged();
-                FriendViewHolder viewHolder = (FriendViewHolder) item.getTag();
-                viewHolder.getCheckBox().setChecked(friend.isChallenged());
-                long challengeeId = model.fbProfileModel.friendList.get(position).facebookID;
+                final int itemPosition = position;
+                final Friend friend = listAdapter.getItem(position);
+                //friend.toggleChallenged();
+                final FriendViewHolder viewHolder = (FriendViewHolder) item.getTag();
+                //viewHolder.getCheckBox().setChecked(friend.isChallenged());
 
-                model.outgoingChallengeListModel.addOutgoingChallenge(
-                        new OutgoingChallenge(challengeeId));
+                /////////////****  start*////////////////////
+                String itemValue = model.fbProfileModel.friendList.get(position).firstName;
+                final boolean Challengedstatus = model.fbProfileModel.friendList.get(itemPosition).isChallenged;
+                String dialogmsg = new String();
+                String dialogmsg2 = new String();
+                if (Challengedstatus == false) {
+                    dialogmsg = "Send " + itemValue + " a challenge request?";
+                    dialogmsg2 = "Send Challenge Request";
+                } else {
+                    dialogmsg = "Delete " + itemValue + " a challenge request?";
+                    dialogmsg2 = "Delete Challenge Request";
+                }
 
-                //Send the request to the server
-                NetworkRequestHelper.sendChallenge(Long.toString(challengeeId));
+                AlertDialog.Builder adb = new AlertDialog.Builder(ChallengeAFriendController.this);
+                adb.setTitle(dialogmsg2);
+                adb.setMessage(dialogmsg)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //Get the facebook id of the row we clicked
+                                long challengeeId = model.fbProfileModel.friendList.get(itemPosition).facebookID;
+                                friend.toggleChallenged();
+                                viewHolder.getCheckBox().setChecked(friend.isChallenged());
+                                if (Challengedstatus == false) {
+                                    model.outgoingChallengeListModel.addOutgoingChallenge(
+                                            new OutgoingChallenge(challengeeId));
+
+                                    //Send the request to the server
+                                    NetworkRequestHelper.sendChallenge(Long.toString(challengeeId));
+
+                                    Toast.makeText(getApplicationContext(),
+                                            "Challenged: " + challengeeId, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    model.outgoingChallengeListModel.deleteOutgoingChallenge(
+                                            new OutgoingChallenge(challengeeId));
+
+                                    //Send the request to the server
+                                    // dummy challenge id for now TODO: Complete it later
+                                    Long challengeid = 2L;
+                                    NetworkRequestHelper.deleteChallengeFromChallenger(challengeid, challengeeId);
+
+                                    Toast.makeText(getApplicationContext(),
+                                            "Deleted: " + challengeeId, Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alertDialog = adb.create();
+                alertDialog.show();
 
             }
         });
@@ -109,7 +160,7 @@ public class ChallengeAFriendController extends SlideNavigationController {
             Friend friend = (Friend) this.getItem( itemPosition );
 
             // The child views in each row.
-            CheckBox checkBox ;
+            final CheckBox checkBox ;
             TextView textView ;
 
             // Create a new row view
@@ -134,16 +185,65 @@ public class ChallengeAFriendController extends SlideNavigationController {
 
             checkBox.setOnClickListener( new View.OnClickListener() {
                 public void onClick(View v) {
-                    CheckBox cb = (CheckBox) v ;
-                    Friend friend = (Friend) cb.getTag();
-                    friend.setChallenged(cb.isChecked());
-                    long challengeeId = model.fbProfileModel.friendList.get(itemPosition).facebookID;
+                    final CheckBox cb = (CheckBox) v ;
+                    final Friend friend = (Friend) cb.getTag();
+                    //friend.setChallenged(cb.isChecked());
 
-                    model.outgoingChallengeListModel.addOutgoingChallenge(
-                            new OutgoingChallenge(challengeeId));
+                    String itemValue = model.fbProfileModel.friendList.get(itemPosition).firstName;
+                    final boolean Challengedstatus = model.fbProfileModel.friendList.get(itemPosition).isChallenged;
+                    String dialogmsg = new String();
+                    String dialogmsg2 = new String();
+                    if (Challengedstatus == false) {
+                        dialogmsg = "Send " + itemValue + " a challenge request?";
+                        dialogmsg2 = "Send Challenge Request";
+                    } else {
+                        dialogmsg = "Delete " + itemValue + " a challenge request?";
+                        dialogmsg2 = "Delete Challenge Request";
+                    }
 
-                    //Send the request to the server
-                    NetworkRequestHelper.sendChallenge(Long.toString(challengeeId));
+
+                    AlertDialog.Builder adb = new AlertDialog.Builder(ChallengeAFriendController.this);
+                    adb.setTitle(dialogmsg2);
+                    adb.setMessage(dialogmsg)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //Get the facebook id of the row we clicked
+                                    long challengeeId = model.fbProfileModel.friendList.get(itemPosition).facebookID;
+                                    friend.setChallenged(cb.isChecked());
+
+                                    if(Challengedstatus == false) {
+                                        model.outgoingChallengeListModel.addOutgoingChallenge(
+                                                new OutgoingChallenge(challengeeId));
+
+                                        //Send the request to the server
+                                        NetworkRequestHelper.sendChallenge(Long.toString(challengeeId));
+
+                                        Toast.makeText(getApplicationContext(),
+                                                "Challenged: " + challengeeId, Toast.LENGTH_SHORT).show();
+                                    }
+                                    else{
+                                        model.outgoingChallengeListModel.deleteOutgoingChallenge(
+                                                new OutgoingChallenge(challengeeId));
+
+                                        //Send the request to the server
+                                        // dummy challenge id for now TODO: Complete it later
+                                        Long challengeid = 2L;
+                                        NetworkRequestHelper.deleteChallengeFromChallenger(challengeid,challengeeId);
+
+                                        Toast.makeText(getApplicationContext(),
+                                                "Deleted: " + challengeeId, Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    checkBox.setChecked(friend.isChallenged());
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog alertDialog = adb.create();
+                    alertDialog.show();
 
                 }
             });
@@ -157,42 +257,23 @@ public class ChallengeAFriendController extends SlideNavigationController {
 
     }
 
+ /*   public void onTaskCompleted(String taskName, Object resultModel){
+        if(taskName.equalsIgnoreCase("questionSent")){
+            EditText theMessage = (EditText) findViewById(R.id.theMessage);
+            EditText conversation = (EditText) findViewById(R.id.conversation);
+            conversation.append(theMessage.getText() + "\n");
+            theMessage.setText("");
+        } else if(taskName.equalsIgnoreCase("questionAnswered")) {
 
-      /*  ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, friendNames);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final int itemPosition = position;
-                final String itemValue = (String) listView.getItemAtPosition(position);
+        } else if(taskName.equalsIgnoreCase("passedUpMyGuess")) {
+            Log.v("Successfully: ", "passed up my guess");
+        } else if(taskName.equalsIgnoreCase("myGuessWasWrong")) {
 
-                AlertDialog.Builder adb = new AlertDialog.Builder(ChallengeAFriendController.this);
-                adb.setTitle("Send Challenge Request");
-                adb.setMessage("Send " + itemValue + " a challenge request?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //Get the facebook id of the row we clicked
-                                long challengeeId = model.fbProfileModel.friendList.get(itemPosition).facebookID;
+        } else if(taskName.equalsIgnoreCase("iWon")) {
 
-                                model.outgoingChallengeListModel.addOutgoingChallenge(
-                                        new OutgoingChallenge(challengeeId));
+        } else{
 
-                                //Send the request to the server
-                                NetworkRequestHelper.sendChallenge(Long.toString(challengeeId));
+        }
+    }*/
 
-                                Toast.makeText(getApplicationContext(),
-                                        "Challenged: " + challengeeId, Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alertDialog = adb.create();
-                alertDialog.show();
-            }
-        });
-    } */
 }
