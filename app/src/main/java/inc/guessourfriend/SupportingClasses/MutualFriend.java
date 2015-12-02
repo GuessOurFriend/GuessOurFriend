@@ -52,13 +52,13 @@ public class MutualFriend {
 
     public String getName() {
 
-        Friend friend = DatabaseHelper.getFBProfile(Model.getAppContext())
+        Friend friend = DatabaseHelper.getCurrentUsersFBProfile(Model.getAppContext())
                 .getFriendById(facebookID);
         return friend.firstName;
     }
 
     public String getProfilePic() {
-        Friend friend = DatabaseHelper.getFBProfile(Model.getAppContext())
+        Friend friend = DatabaseHelper.getCurrentUsersFBProfile(Model.getAppContext())
                 .getFriendById(facebookID);
         return friend.profilePicture;
     }

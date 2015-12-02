@@ -1,14 +1,72 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="inc.guessourfriend.Controllers.MiddleOfGameController">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView4" />
+        android:id="@+id/top_panel"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Turn"
+            android:textSize="12dp"
+            android:id="@+id/your_turn_text"/>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pass Guess"
+            android:textSize="10dp"
+            android:id="@+id/passMyGuessButton"
+            android:layout_centerHorizontal="true"
+            android:onClick="passMyGuessButtonClicked"
+            android:layout_centerVertical="true" />
+
+        <com.facebook.login.widget.ProfilePictureView
+            android:id="@+id/opponent_mystery_friend"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get Game Board"
+            android:textSize="10dp"
+            android:id="@+id/getGameBoardButton"
+            android:layout_above="@+id/passMyGuessButton"
+            android:layout_centerHorizontal="true"
+            android:onClick="getGameBoardButtonClicked" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Their Turn"
+            android:textSize="12dp"
+            android:id="@+id/their_turn_text"/>
+
+    </LinearLayout>
+
+    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/middle_of_game_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnWidth="60dp"
+        android:numColumns="4"
+        android:verticalSpacing="5dp"
+        android:horizontalSpacing="5dp"
+        android:stretchMode="columnWidth"
+        android:layout_below="@+id/top_panel"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -56,22 +114,12 @@
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Messaging Below"
-        android:id="@+id/textView2"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/conversation"
-        android:layout_below="@+id/textView2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:hint="This is your conversation history"
@@ -80,16 +128,7 @@
         android:layout_above="@+id/theMessage"
         android:minLines="5"
         android:maxLines="100"
-        android:enabled="false" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pass up my guess"
-        android:id="@+id/passMyGuessButton"
-        android:layout_above="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:onClick="passMyGuessButtonClicked" />
+        android:enabled="false"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

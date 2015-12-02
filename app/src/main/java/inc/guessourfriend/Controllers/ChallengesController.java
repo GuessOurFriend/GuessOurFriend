@@ -53,6 +53,7 @@ public class ChallengesController extends SlideNavigationController implements O
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 final IncomingChallenge itemValue = (IncomingChallenge) listView.getItemAtPosition(position);
 
+                // TODO: Add a cancel button to the alert dialog
                 AlertDialog.Builder adb = new AlertDialog.Builder(ChallengesController.this);
                 adb.setTitle("Accept Challenge Request");
                 adb.setMessage("Accept " + itemValue + "'s challenge request?")

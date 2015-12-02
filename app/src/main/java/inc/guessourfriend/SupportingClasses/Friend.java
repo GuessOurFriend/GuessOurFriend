@@ -4,16 +4,27 @@ package inc.guessourfriend.SupportingClasses;
  * Created by sellmaurer on 10/31/15.
  */
 
-public class Friend{
+public class Friend implements Comparable<Friend>{
     public long facebookID;
     public String firstName;
     public String lastName;
     public String profilePicture;
     public boolean isBlacklisted;
+    public boolean isChallenged;
     private long matchesWon;
     private long matchesLost;
     private long points;
     private long rating;
+
+    @Override
+    public int compareTo(Friend otherFriend) throws UnsupportedOperationException {
+        if(otherFriend != null){
+            if(otherFriend instanceof Friend){
+                return (this.firstName + this.lastName).compareTo(otherFriend.firstName + otherFriend.lastName);
+            }
+        }
+        throw new UnsupportedOperationException("passed in compareTo for Friend class is null or not of the right type of object");
+    }
 
     public Friend(){
         this.facebookID = -1;
@@ -53,14 +64,15 @@ public class Friend{
     }
 
 
-    public boolean isBlacklisted(){
-        return isBlacklisted;
-    }
-    public void setBlacklisted(boolean blacklisted){
-        isBlacklisted = blacklisted;
-    }
+    public boolean isBlacklisted(){return isBlacklisted;}
+    public boolean isChallenged(){return isChallenged;}
+    public void setBlacklisted(boolean blacklisted){isBlacklisted = blacklisted;}
+    public void setChallenged(boolean challenged){isChallenged = challenged;}
     public void toggleBlacklisted() {
         isBlacklisted = !isBlacklisted ;
+    }
+    public void toggleChallenged() {
+        isChallenged = !isChallenged ;
     }
     public long getPoints() {
         return points;

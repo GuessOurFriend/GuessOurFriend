@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import inc.guessourfriend.Models.FBProfileModel;
@@ -119,7 +120,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public static FBProfileModel getFBProfile(Context context)
+    public static FBProfileModel getFBProfileWithID(Context context, long facebookID)
+    {
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cur = db.rawQuery("SELECT * FROM " + FBPROFILE_TABLE + " WHERE facebookID = ?",
+                new String[]{Long.toString(facebookID)});
+
+        //Declare a profile to return
+        FBProfileModel profile = null;
+
+        //If we have a profile in the table matching the facebookID, get it
+        if (cur.moveToNext()) {
+            String authToken = cur.getString(cur.getColumnIndex("authToken"));
+            String firstName = cur.getString(cur.getColumnIndex("firstName"));
+            String lastName = cur.getString(cur.getColumnIndex("lastName"));
+            String profilePicture = cur.getString(cur.getColumnIndex("profilePicture"));
+            profile = new FBProfileModel(facebookID, authToken, firstName, lastName, profilePicture, null);
+        }
+        db.close();
+        return profile;
+    }
+
+    public static FBProfileModel getCurrentUsersFBProfile(Context context)
     {
         long facebookID = DatabaseHelper.getCurrentUser(context);
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
@@ -177,6 +200,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
+    /*public static long deleteAllFriends(Context context){
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        long id = db.delete(FRIEND_TABLE, null, new String[]{});
+        db.close();
+        return id;
+    }*/
+
     public static long deleteFriendsForCurrentUser(Context context){
         long userID = DatabaseHelper.getCurrentUser(context);
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
@@ -196,7 +227,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public static Friend getCurrentFriendWithID(Context context, long friendID){
+    public static Friend getFriendWithID(Context context, long friendID){
         long userID = DatabaseHelper.getCurrentUser(context);
         Friend friend = null;
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
@@ -262,6 +293,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             friendList.add(friend);
         }
         db.close();
+        Collections.sort(friendList);
         return friendList;
     }
 

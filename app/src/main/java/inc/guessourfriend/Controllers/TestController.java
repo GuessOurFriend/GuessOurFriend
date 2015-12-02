@@ -73,7 +73,7 @@ public class TestController extends SlideNavigationController {
 
     public void dbload(View view) {
         Log.v("Auth token is: ", model.fbProfileModel.authToken);
-        Log.v("Auth token is: ", DatabaseHelper.getFBProfile(getApplicationContext()).authToken);
+        Log.v("Auth token is: ", DatabaseHelper.getCurrentUsersFBProfile(getApplicationContext()).authToken);
         NetworkRequestHelper.getUser();
         reGetGcmId();
     }

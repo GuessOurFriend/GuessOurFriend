@@ -62,7 +62,7 @@ public class DatabaseHelperTest extends AndroidTestCase {
             db.close();
 
             //Act - call the method we are testing
-            FBProfileModel model = DatabaseHelper.getFBProfile(this.getContext());
+            FBProfileModel model = DatabaseHelper.getCurrentUsersFBProfile(this.getContext());
 
             //Assert
             Assert.assertNotNull("The model was null.", model);

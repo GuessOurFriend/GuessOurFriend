@@ -22,12 +22,17 @@ public class OutgoingChallengeListModel {
     }
 
     public ArrayList<OutgoingChallenge> getOutgoingChallengeList() {
-
+        /*if(outgoingChallengeList==null){
+            outgoingChallengeList = new ArrayList<>();
+        }*/
         return outgoingChallengeList;
     }
 
     public void addOutgoingChallenge(OutgoingChallenge toAdd) {
 
+        /*if(outgoingChallengeList==null){
+            outgoingChallengeList = new ArrayList<>();
+        }*/
         //TODO: add challenge to database
         outgoingChallengeList.add(toAdd);
     }

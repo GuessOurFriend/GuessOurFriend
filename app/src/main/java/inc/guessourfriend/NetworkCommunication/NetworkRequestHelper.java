@@ -16,7 +16,7 @@ public class NetworkRequestHelper {
     private static final String ROOT_URL = "https://guess-our-friend.herokuapp.com";
 
     private static String getAuthToken() {
-        return DatabaseHelper.getFBProfile(Model.getAppContext()).authToken;
+        return DatabaseHelper.getCurrentUsersFBProfile(Model.getAppContext()).authToken;
     }
 
     //////////////////////////////////////////////////
@@ -108,6 +108,10 @@ public class NetworkRequestHelper {
             }
         }.execute();
     }
+    //DELETE /user
+    public static void deleteUser() {
+        new NetworkRequestRunner("DELETE", ROOT_URL + "/user", getAuthToken()).execute();
+    }
 
     //////////////////////////////////////////////////
     //Bug Reports
@@ -141,11 +145,12 @@ public class NetworkRequestHelper {
     }
 
     //GET /game_board
-    public static void getGameBoard(int gameId) {
+    public static void getGameBoard(OnTaskCompleted listener, long gameId) {
         new NetworkRequestRunner("GET", ROOT_URL + "/game_board?game_id=" + gameId, getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
-                //TODO: Implement
+                JSONObject json = result;
+                Log.v("Stupid json: ", result.toString());
             }
         }.execute();
     }
