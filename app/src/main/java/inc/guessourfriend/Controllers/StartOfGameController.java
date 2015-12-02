@@ -12,6 +12,14 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,8 +39,67 @@ public class StartOfGameController extends SlideNavigationController {
     private Model model;
     private List<MutualFriend> famousPeople;
     private Game game = new Game();
-    private int highlighted = -1;
-    private ImageView previouslySelected = null;
+    private int highlightedFriendPos = -1;
+    private MutualFriend highlightedFriend = null;
+    private MutualFriend currentlySelected = null;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // get the models
+        model = (Model) getApplicationContext();
+        // set up slide navigation
+        getLayoutInflater().inflate(R.layout.activity_start_of_game_controller, frameLayout);
+        mDrawerList.setItemChecked(position, true);
+        setTitle(listArray[position]);
+
+        //Get the opponentID from the view we just came from (Challenges)
+        Intent intentExtras = getIntent();
+        Bundle extrasBundle = intentExtras.getExtras();
+        if (!extrasBundle.isEmpty()) {
+            boolean hasID = extrasBundle.containsKey("opponentID");
+            if (hasID) {
+                game.opponentID = extrasBundle.getLong("opponentID");
+
+                //Set up the select mystery friend button
+                Button button = (Button) findViewById(R.id.choose_mystery_friend_button);
+                button.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        if (highlightedFriend != null) {
+                            AlertDialog.Builder adb = new AlertDialog.Builder(StartOfGameController.this);
+                            adb.setTitle("Select Mystery Friend");
+                            adb.setMessage("Choose " + highlightedFriend.fullName + " as mystery friend?")
+                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            currentlySelected = highlightedFriend;
+                                            Toast.makeText(getApplicationContext(),
+                                                    currentlySelected.fullName + " selected", Toast.LENGTH_SHORT).show();
+                                            currentlySelected.isMysteryFriend = true;
+                                            //TODO change value in db
+                                            game.setStateOfGame(Game.MIDDLE_OF_GAME);
+                                            Intent intent = new Intent(StartOfGameController.this, MiddleOfGameController.class);
+                                            //startActivity(intent);
+                                        }
+                                    })
+                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+                            AlertDialog alertDialog = adb.create();
+                            alertDialog.show();
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "No friend selected", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                //Go and set up the new game
+                createNewGame();
+            }
+        }
+    }
 
     private String[] getImageURLs() {
         String[] imageURLs = new String[game.myPool.getMutualFriendList().size()];
@@ -42,22 +109,101 @@ public class StartOfGameController extends SlideNavigationController {
         return imageURLs;
     }
 
-    private MutualFriendList generatePool(long opponentID) {
-        MutualFriendList poolMFL = new MutualFriendList();
-        List<MutualFriend> newPool = new ArrayList<MutualFriend>();
-        MutualFriendList mutualFriends = new MutualFriendList();
-        mutualFriends.populateMutualFriendList(this); // give opponentID (?)
-        if (mutualFriends.mutualFriendList.size() < 20) {
-            newPool = mutualFriends.mutualFriendList;
-            newPool.addAll(getFamousPeople(20 - mutualFriends.mutualFriendList.size()));
-        } else {
-            Collections.shuffle(mutualFriends.mutualFriendList);
-            for (int i = 0; i < 20; i++) {
-                newPool.add(mutualFriends.mutualFriendList.get(i));
-            }
-        }
-        poolMFL.mutualFriendList = newPool;
-        return poolMFL;
+    private void createNewGame() {
+        //Make the call to Facebook to get the mutual friends with this person
+        Bundle myBundle = new Bundle();
+        myBundle.putString("fields", "context.fields(mutual_friends{id,name,picture})");
+        GraphRequest request = GraphRequest.newGraphPathRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + game.opponentID,
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse response) {
+                        //Set up a temp collection for all the friends
+                        List<MutualFriend> allMutualFriends = new ArrayList<MutualFriend>();
+                        game.myPool = new MutualFriendList();
+                        game.myPool.mutualFriendList = new ArrayList<MutualFriend>();
+
+                        if (response.getError() != null) {
+                            System.out.println("MutualFriend Error" + response.getError().toString());
+                        } else {
+                            System.out.println("MutualFriend Success");
+                            JSONObject json = response.getJSONObject();
+                            try {
+                                //TODO: Remove debugging info
+                                String jsonresult = String.valueOf(json);
+                                System.out.println("JSON Result" + jsonresult);
+
+                                //Get the list of mutual friends from the JSON
+                                //TODO: Handle paging?
+                                JSONArray mutualFriends = json.getJSONObject("context").getJSONObject("mutual_friends").getJSONArray("data");
+
+                                //Loop through the list of mutual friends
+                                for (int i = 0; i < mutualFriends.length(); i++) {
+                                    JSONObject friend = mutualFriends.getJSONObject(i);
+                                    long facebookID = Long.parseLong(friend.getString("id"));
+                                    String fullName = friend.getString("name");
+                                    String profilePicture = friend.getJSONObject("picture").getJSONObject("data").getString("url");
+
+                                    //Insert this friend into the list
+                                    MutualFriend newFriend = new MutualFriend(facebookID, fullName, profilePicture, false);
+                                    allMutualFriends.add(newFriend);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            //Add up to 20 mutual friends and fill the rest with famous people
+                            if (allMutualFriends.size() < 20) {
+                                int numMutualFriends = allMutualFriends.size();
+                                game.myPool.mutualFriendList.addAll(allMutualFriends);
+                                game.myPool.mutualFriendList.addAll(getFamousPeople(20 - numMutualFriends));
+                            } else {
+                                Collections.shuffle(allMutualFriends);
+                                for (int i = 0; i < 20; i++) {
+                                    game.myPool.mutualFriendList.add(allMutualFriends.get(i));
+                                }
+                            }
+
+                            //Set up the view
+                            final GridView gridView = (GridView) findViewById(R.id.gridview);
+
+                            //Set up an adapter to hold all the profile pictures
+                            ImageAdapter imageAdapter = new ImageAdapter(StartOfGameController.this, getImageURLs());
+                            gridView.setAdapter(imageAdapter);
+
+                            //Set up the click handler for each of the images
+                            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                                    //Get the ImageView
+                                    ImageView selectedImage = (ImageView) v;
+                                    selectedImage.setCropToPadding(true);
+
+                                    //Highlight/Unhighlight the friend that was clicked
+                                    if (highlightedFriendPos == position) {
+                                        selectedImage.setColorFilter(Color.parseColor("#00000000"));
+                                        //selectedImage.setBackgroundColor(Color.parseColor("#80ffffff"));
+                                        highlightedFriendPos = -1;
+                                        highlightedFriend = null;
+                                    } else {
+                                        if (highlightedFriend != null) {
+                                            //Unhighlight the old highlighted friend
+                                            ((ImageView) gridView.getChildAt(highlightedFriendPos)).setColorFilter(Color.parseColor("#00000000"));
+                                            //gridView.getChildAt(position).setBackgroundColor(Color.parseColor("#80ffffff"));
+                                        }
+                                        highlightedFriendPos = position;
+                                        highlightedFriend = game.myPool.mutualFriendList.get(position);
+                                        selectedImage.setColorFilter(Color.parseColor("#55ffff00"));
+                                        //selectedImage.setBackgroundColor(Color.parseColor("#ffff00"));
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+        );
+        request.setParameters(myBundle);
+        request.executeAsync();
     }
 
     private List<MutualFriend> getFamousPeople(int numNeeded) {
@@ -97,107 +243,5 @@ public class StartOfGameController extends SlideNavigationController {
             famousPeople.add(new MutualFriend(-1, "Britney Spears", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Britney_Spears_2013_%28Straighten_Crop%29.jpg/220px-Britney_Spears_2013_%28Straighten_Crop%29.jpg", false));
 
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // get the models
-        model = (Model) getApplicationContext();
-        // set up slide navigation
-        getLayoutInflater().inflate(R.layout.activity_start_of_game_controller, frameLayout);
-        mDrawerList.setItemChecked(position, true);
-        setTitle(listArray[position]);
-
-        Intent intentExtras = getIntent();
-        Bundle extrasBundle = intentExtras.getExtras();
-        if (!extrasBundle.isEmpty()) {
-            boolean hasLong = extrasBundle.containsKey("opponentID");
-            if (hasLong) {
-                game.opponentID = extrasBundle.getLong("opponentID");
-            }
-        }
-
-        //TODO currently pool is only famous people (populateMutualFriendList in MutualFriendListModel)
-        final MutualFriendList pool1 = new MutualFriendList();
-        pool1.mutualFriendList = getFamousPeople(20);
-//        MutualFriendList pool1 = generatePool(game.opponentID);
-
-        game.myPool = pool1;
-
-        GridView gridView = (GridView) findViewById(R.id.gridview);
-
-        final ImageAdapter imageAdapter = new ImageAdapter(this, getImageURLs());
-        gridView.setAdapter(imageAdapter);
-
-//        gridView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                Toast.makeText(StartOfGameController.this, "" + position + " hold", Toast.LENGTH_SHORT).show();
-//                return true;
-//            }
-//        });
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                final int pos = position;
-                ImageView selectedImage = (ImageView) v;
-                selectedImage.setCropToPadding(true);
-                if (highlighted == position) {
-                    selectedImage.setBackgroundColor(Color.parseColor("#80ffffff"));
-                    highlighted = -1;
-                    previouslySelected = null;
-                } else {
-                    if (previouslySelected != null) {
-                        previouslySelected.setBackgroundColor(Color.parseColor("#80ffffff"));
-                    }
-                    previouslySelected = selectedImage;
-                    highlighted = position;
-                    selectedImage.setBackgroundColor(Color.parseColor("#ffff00"));
-                }
-
-                Button button = (Button) findViewById(R.id.choose_mystery_friend_button);
-                button.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        if (highlighted != -1) {
-                            AlertDialog.Builder adb = new AlertDialog.Builder(StartOfGameController.this);
-                            adb.setTitle("Select Mystery Friend");
-                            adb.setMessage("Choose " + pool1.mutualFriendList.get(pos).fullName + " as mystery friend?")
-                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-
-                                            Toast.makeText(getApplicationContext(),
-                                                    pool1.mutualFriendList.get(pos).fullName + " selected", Toast.LENGTH_SHORT).show();
-                                            pool1.mutualFriendList.get(pos).isMysteryFriend = true;
-                                            //TODO change value in db
-                                            game.setStateOfGame(Game.MIDDLE_OF_GAME);
-                                            Intent intent = new Intent(StartOfGameController.this, MiddleOfGameController.class);
-                                            //startActivity(intent);
-                                        }
-                                    })
-                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-                            AlertDialog alertDialog = adb.create();
-                            alertDialog.show();
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    "No friend selected", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        });
-        Button button = (Button) findViewById(R.id.choose_mystery_friend_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (highlighted == -1) {
-                    Toast.makeText(getApplicationContext(),
-                            "No friend selected", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
     }
 }

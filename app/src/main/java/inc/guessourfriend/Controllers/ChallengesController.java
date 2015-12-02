@@ -2,6 +2,7 @@ package inc.guessourfriend.Controllers;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -66,6 +67,10 @@ public class ChallengesController extends SlideNavigationController implements O
                                 //TODO: Switch directly to StartOfGameController instead?
                                 mAdapter.remove(itemValue);
                                 mAdapter.notifyDataSetChanged();
+
+                                Intent intent = new Intent(ChallengesController.this, StartOfGameController.class);
+                                intent.putExtra("opponentID", itemValue.fbId);
+                                startActivity(intent);
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
