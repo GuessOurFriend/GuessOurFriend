@@ -272,6 +272,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return friendMap;
     }
 
+    public static ArrayList<Long> getListOfFriendIDs(Context context)
+    {
+        long userID = DatabaseHelper.getCurrentUser(context);
+        ArrayList<Long> friendIDList = new ArrayList<Long>();
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cur = db.rawQuery("SELECT * FROM " + FRIEND_TABLE + " WHERE userID = ?", new String[]{Long.toString(userID)});
+        while(cur.moveToNext()) {
+            long facebookID = cur.getLong(cur.getColumnIndex("friendID"));
+            friendIDList.add(facebookID);
+        }
+        db.close();
+        return friendIDList;
+    }
+
     public static ArrayList<Friend> getFriendList(Context context)
     {
         long userID = DatabaseHelper.getCurrentUser(context);

@@ -406,4 +406,79 @@ public class NetworkRequestHelper {
             }
         }.execute();
     }
+
+    //POST /game/match_making
+    public static void enterMatchmaking(OnTaskCompleted listener){
+        final OnTaskCompleted theListener = listener;
+        // Friend list needs to be sent to the server in order for the server to tell us if any
+        //      of our friends are currently in matchmaking. If any of our friends are found in
+        //      matchmaking, the server will create a game with the friend that has been in the
+        //      matchmaking queue the longest and return us that game object.
+        ArrayList<Long> listOfFriendIDs = DatabaseHelper.getListOfFriendIDs(Model.getAppContext());
+        JSONArray friendIDs = new JSONArray(listOfFriendIDs);
+        JSONObject friendIDJSONObject = new JSONObject();
+        try {
+            friendIDJSONObject.put("friends", friendIDs);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new NetworkRequestRunner("POST", ROOT_URL + "/game/match_making", getAuthToken()){
+            @Override
+            protected void onPostExecute(JSONObject result) {
+                String message = "";
+                String noFriendAvailableMessage = "There are no available friends in the " +
+                        "matchmaking pool. You have been placed in the pool.";
+                try{
+                    if (result.has("errors")) {
+                        Log.v("Matchmaking error: ", result.getString("errors"));
+                        return;
+                    }
+                    message = result.getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if(message.equals(noFriendAvailableMessage)){
+                    theListener.onTaskCompleted("entered matchmaking queue", null);
+                }else{
+                    JSONObject gameJSONObject = null;
+                    Game game = new Game();
+                    try{
+                        gameJSONObject = result.getJSONObject("game");
+                        game.myID = gameJSONObject.getLong("game_id");
+                        game.opponentID = gameJSONObject.getLong("fb_id");
+                        game.opponentFirstName = gameJSONObject.getString("first_name");
+                        game.opponentLastName = gameJSONObject.getString("last_name");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    theListener.onTaskCompleted("found a game", game);
+                }
+            }
+        }.execute(friendIDJSONObject);
+    }
+
+    // PUT /game/remove_from_match_making
+    public static void leaveMatchmaking(OnTaskCompleted listener){
+        final OnTaskCompleted theListener = listener;
+        new NetworkRequestRunner("PUT", ROOT_URL + "/game/remove_from_match_making", getAuthToken()){
+            @Override
+            protected void onPostExecute(JSONObject result) {
+                JSONObject result2 = result; // FIXME: result is returning nothing - talk to Brian about fixing this.
+                String success = "Successfully removed yourself from the match making pool";
+                try{
+                    if (result.has("errors")) {
+                        Log.v("Matchmaking error: ", result.getString("errors"));
+                        return;
+                    }
+                    if(result.getString("message").equals(success)){
+                        theListener.onTaskCompleted("left the matchmaking queue", null);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute();
+    }
 }

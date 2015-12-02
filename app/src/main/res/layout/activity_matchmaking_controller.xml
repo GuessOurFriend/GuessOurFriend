@@ -19,9 +19,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Find a game"
+        android:text="Enter Matchmaking Queue"
         android:id="@+id/find_a_game_button"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:onClick="onBeginMatchmaking"/>
+        android:onClick="onMatchmakingButtonClick"/>
 </RelativeLayout>
