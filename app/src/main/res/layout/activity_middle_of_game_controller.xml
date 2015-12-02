@@ -72,14 +72,15 @@
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/middle_of_game_gridview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:columnWidth="60dp"
         android:numColumns="4"
         android:verticalSpacing="5dp"
         android:horizontalSpacing="5dp"
         android:stretchMode="columnWidth"
-        android:layout_below="@+id/top_panel"
-        android:layout_above="@+id/conversation" />
+        android:layout_above="@+id/conversation"
+        android:layout_below="@+id/top_panel"/>
+
 
     <EditText
         android:layout_width="wrap_content"
@@ -91,41 +92,46 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_above="@+id/buttonPane"
+        android:layout_alignBottom="@+id/bottom_panel"
         android:hint="Type your message here"
         android:imeOptions="actionSend"
         android:singleLine="true"
         android:enabled="true" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonPane"
+        android:id="@+id/bottom_panel"
         android:layout_alignParentBottom="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_panel"
+            android:layout_alignParentBottom="true">
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/yesButton"
+                android:onClick="yesButtonClick"
+                android:text="Yes"
+                android:layout_weight="1"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/noButton"
+                android:onClick="noButtonClick"
+                android:text="No"
+                android:layout_weight="1"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/idkButton"
+                android:onClick="idkButtonClick"
+                android:text="Not Sure"
+                android:layout_weight="1"/>
+        </LinearLayout>
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/yesButton"
-            android:onClick="yesButtonClick"
-            android:text="Yes"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/noButton"
-            android:onClick="noButtonClick"
-            android:text="No"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/idkButton"
-            android:onClick="idkButtonClick"
-            android:text="Not Sure"/>
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <EditText
         android:layout_width="wrap_content"
@@ -133,15 +139,14 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/conversation"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:hint="This is your conversation history"
-        android:layout_alignRight="@+id/theMessage"
-        android:layout_alignEnd="@+id/theMessage"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
         android:layout_above="@+id/theMessage"
         android:minLines="5"
         android:maxLines="100"
         android:enabled="false"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="false" />
 
 </RelativeLayout>
