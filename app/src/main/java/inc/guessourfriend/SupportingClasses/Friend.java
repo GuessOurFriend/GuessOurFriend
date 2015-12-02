@@ -16,6 +16,7 @@ public class Friend implements Comparable<Friend>{
     private long points;
     private long rating;
 
+
     @Override
     public int compareTo(Friend otherFriend) throws UnsupportedOperationException {
         if(otherFriend != null){

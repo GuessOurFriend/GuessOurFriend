@@ -350,11 +350,10 @@ public class NetworkRequestHelper {
     }
 
     //DELETE challenge/respond_as_challenger
-    public static void deleteChallengeFromChallenger(long challengeId, long challengeeId) {
+    public static void deleteChallengeFromChallenger( long challengeeId) {
         JSONObject data = new JSONObject();
         try {
-            data.put("challenge_id", challengeId);
-            data.put("challengee_id", challengeeId);
+            data.put("challengee_fb_id", challengeeId);
         } catch (JSONException e) {
             e.printStackTrace();
         }

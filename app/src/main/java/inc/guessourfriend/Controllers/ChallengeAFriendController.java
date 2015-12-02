@@ -48,8 +48,8 @@ public class ChallengeAFriendController extends SlideNavigationController /*impl
         mainListView = (ListView) findViewById(R.id.challengeafriendlist);
 
 
-        ArrayList<Friend> friendList = new ArrayList<Friend>();
-        friendList = model.fbProfileModel.friendList;
+        //ArrayList<Friend> friendList = new ArrayList<Friend>();
+        //friendList = model.fbProfileModel.friendList;
 
         mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -98,8 +98,7 @@ public class ChallengeAFriendController extends SlideNavigationController /*impl
 
                                     //Send the request to the server
                                     // dummy challenge id for now TODO: Complete it later
-                                    Long challengeid = 2L;
-                                    NetworkRequestHelper.deleteChallengeFromChallenger(challengeid, challengeeId);
+                                    NetworkRequestHelper.deleteChallengeFromChallenger(challengeeId);
 
                                     Toast.makeText(getApplicationContext(),
                                             "Deleted: " + challengeeId, Toast.LENGTH_SHORT).show();
@@ -118,7 +117,7 @@ public class ChallengeAFriendController extends SlideNavigationController /*impl
             }
         });
 
-        listAdapter = new FriendArrayAdapter(this, friendList);
+        listAdapter = new FriendArrayAdapter(this, model.fbProfileModel.friendList);
         mainListView.setAdapter(listAdapter);
     }
 
@@ -227,8 +226,7 @@ public class ChallengeAFriendController extends SlideNavigationController /*impl
 
                                         //Send the request to the server
                                         // dummy challenge id for now TODO: Complete it later
-                                        Long challengeid = 2L;
-                                        NetworkRequestHelper.deleteChallengeFromChallenger(challengeid,challengeeId);
+                                        NetworkRequestHelper.deleteChallengeFromChallenger(challengeeId);
 
                                         Toast.makeText(getApplicationContext(),
                                                 "Deleted: " + challengeeId, Toast.LENGTH_SHORT).show();
