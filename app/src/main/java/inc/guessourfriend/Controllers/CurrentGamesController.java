@@ -10,12 +10,14 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
+import inc.guessourfriend.NetworkCommunication.OnTaskCompleted;
 import inc.guessourfriend.SQLiteDB.DatabaseHelper;
 import inc.guessourfriend.SupportingClasses.Game;
 import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.R;
 
-public class CurrentGamesController extends SlideNavigationController {
+public class CurrentGamesController extends SlideNavigationController implements OnTaskCompleted {
 
     private Model model;
     ListView listView;
@@ -34,51 +36,33 @@ public class CurrentGamesController extends SlideNavigationController {
 
         listView = (ListView) findViewById(R.id.current_games_list);
 
-        //TODO get current game list from server
-        //// test game
-        model.fbProfileModel.friendList = DatabaseHelper.getFriendList(this);
-        Game newGame = new Game();
-        newGame.setStateOfGame(Game.START_OF_GAME);
-        newGame.myID = model.fbProfileModel.facebookID;
-        newGame.opponentID = model.fbProfileModel.friendList.get(0).facebookID;
-        if(model.currentGameListModel.getCurrentGameList().size() >= 1){
-            
-        }else{
-            model.currentGameListModel.getCurrentGameList().add(newGame);
-        }
+        //Get the games from the server
+        NetworkRequestHelper.getAllGames(CurrentGamesController.this);
+    }
 
-        gameList = model.currentGameListModel.getCurrentGameList();
-        String[] gameListFriendNames = new String[gameList.size()];
+    @Override
+    public void onTaskCompleted(String taskName, Object model) {
+        if (taskName.equals("gamesLoaded")) {
+            gameList = (List<Game>) model;
 
-        for (int i = 0; i < gameList.size(); i++) {
-            gameListFriendNames[i] = model.fbProfileModel.getFriendById(gameList.get(i).getOpponentId()).firstName;
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, gameListFriendNames);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final int itemPosition = position;
-                final String itemValue = (String) listView.getItemAtPosition(position);
-                Intent myIntent;
-                if (gameList.get(itemPosition).getStateOfGame() == 0) { // Start of Game
-                    myIntent = new Intent(CurrentGamesController.this, StartOfGameController.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putLong("opponentID", gameList.get(itemPosition).opponentID);
-                    myIntent.putExtras(bundle);
-                } else if (gameList.get(itemPosition).getStateOfGame() == 1) { // Middle of Game
-                    myIntent = new Intent(CurrentGamesController.this, MiddleOfGameController.class);
-                } else { //?? End of Game?
-                    myIntent = new Intent(CurrentGamesController.this, EndOfGameController.class);
-                }
-
-                startActivity(myIntent);
-
+            String[] friendNames = new String[gameList.size()];
+            for (int i=0; i<gameList.size(); i++) {
+                friendNames[i] = gameList.get(i).opponentFirstName + " " + gameList.get(i).opponentLastName;
             }
-        });
 
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1, android.R.id.text1, friendNames);
+            listView.setAdapter(adapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Game selectedGame = gameList.get(position);
+                    Intent myIntent = new Intent(CurrentGamesController.this, MiddleOfGameController.class);
+                    myIntent.putExtra("gameId", selectedGame.myID);
+                    startActivity(myIntent);
+                }
+            });
+        }
     }
 }

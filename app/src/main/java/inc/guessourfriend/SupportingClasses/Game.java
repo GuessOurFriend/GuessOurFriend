@@ -6,6 +6,8 @@ package inc.guessourfriend.SupportingClasses;
 public class Game {
     public long myID;
     public long opponentID;
+    public String opponentFirstName;
+    public String opponentLastName;
     public MutualFriendList myPool;
     public MutualFriendList opponentPool;
     public boolean isMyTurn;
