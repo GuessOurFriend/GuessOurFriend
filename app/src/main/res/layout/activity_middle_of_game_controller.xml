@@ -20,7 +20,8 @@
         android:hint="Type your message here"
         android:imeOptions="actionSend"
         android:singleLine="true"
-        android:enabled="true" />
+        android:enabled="true"
+        android:text="no text" />
 
     <LinearLayout
         android:layout_width="match_parent"
