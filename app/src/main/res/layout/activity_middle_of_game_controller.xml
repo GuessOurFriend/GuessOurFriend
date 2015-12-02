@@ -6,10 +6,6 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="inc.guessourfriend.Controllers.MiddleOfGameController">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView4" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,47 +55,49 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Messaging Below"
-        android:id="@+id/textView2"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/conversation"
-        android:layout_below="@+id/textView2"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Your Turn"
+        android:id="@+id/your_turn_text"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="This is your conversation history"
-        android:layout_alignRight="@+id/theMessage"
-        android:layout_alignEnd="@+id/theMessage"
-        android:layout_above="@+id/theMessage"
-        android:minLines="5"
-        android:maxLines="100"
-        android:enabled="false" />
+        android:layout_alignParentStart="true" />
 
     <Button
-        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pass up my guess"
-        android:id="@+id/passMyGuessButton"
-        android:layout_above="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:onClick="passMyGuessButtonClicked" />
+        android:text="Leave"
+        android:id="@+id/leave_button"
+        android:layout_alignTop="@+id/your_turn_text"
+        android:layout_toRightOf="@+id/your_turn_text"
+        android:layout_toEndOf="@+id/your_turn_text" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_toRightOf="@+id/leave_button"
+        android:layout_below="@+id/your_turn_text" />
 
     <Button
-        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get This Game Board"
-        android:id="@+id/getGameBoardButton"
-        android:layout_above="@+id/passMyGuessButton"
-        android:layout_centerHorizontal="true"
-        android:onClick="getGameBoardButtonClicked" />
+        android:text="Bug?"
+        android:id="@+id/bug_button"
+        android:layout_alignTop="@+id/leave_button"
+        android:layout_toRightOf="@+id/imageView"
+        android:layout_toEndOf="@+id/imageView"
+        android:layout_marginLeft="42dp"
+        android:layout_marginStart="42dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Their turn"
+        android:id="@+id/their_turn_text"
+        android:layout_alignBaseline="@+id/bug_button"
+        android:layout_alignBottom="@+id/bug_button"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
