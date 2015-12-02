@@ -6,9 +6,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.Models.IncomingChallengeListModel;
 import inc.guessourfriend.SQLiteDB.DatabaseHelper;
+import inc.guessourfriend.SupportingClasses.Game;
 import inc.guessourfriend.SupportingClasses.IncomingChallenge;
 
 public class NetworkRequestHelper {
@@ -135,11 +138,46 @@ public class NetworkRequestHelper {
     //////////////////////////////////////////////////
 
     //GET /user/all_games
-    public static void getAllGames() {
+    public static void getAllGames(final OnTaskCompleted theListener) {
         new NetworkRequestRunner("GET", ROOT_URL + "/user/all_games", getAuthToken()) {
             @Override
-            protected void onPostExecute(JSONObject result) {
-                //TODO: Implement
+            protected void onPostExecute(JSONObject jsonResult) {
+                ArrayList<Game> result = new ArrayList<Game>();
+
+                System.out.println(jsonResult);
+
+                try{
+                    JSONObject jsonResults = jsonResult.getJSONObject("results");
+                    JSONArray incomingGames = jsonResults.getJSONArray("incoming_games");
+                    JSONArray outgoingGames = jsonResults.getJSONArray("outgoing_games");
+
+                    //Loop through all the games
+                    for (int i=0; i < incomingGames.length(); i++) {
+                        JSONObject curr = incomingGames.getJSONObject(i);
+                        Game temp = new Game();
+                        temp.myID = curr.getLong("game_id");
+                        temp.opponentID = curr.getLong("fb_id");
+                        temp.opponentFirstName = curr.getString("first_name");
+                        temp.opponentLastName = curr.getString("last_name");
+                        result.add(temp);
+                    }
+
+                    for (int i=0; i < outgoingGames.length(); i++) {
+                        JSONObject curr = outgoingGames.getJSONObject(i);
+                        Game temp = new Game();
+                        temp.myID = curr.getLong("game_id");
+                        temp.opponentID = curr.getLong("fb_id");
+                        temp.opponentFirstName = curr.getString("first_name");
+                        temp.opponentLastName = curr.getString("last_name");
+                        result.add(temp);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println(result);
+                theListener.onTaskCompleted("gamesLoaded", result);
             }
         }.execute();
     }
@@ -345,7 +383,7 @@ public class NetworkRequestHelper {
                         long challengerId = challenge.getLong("challenger_id");
                         String firstName = challenge.getString("first_name");
                         String lastName = challenge.getString("last_name");
-                        String fbId = challenge.getString("fb_id");
+                        long fbId = challenge.getLong("fb_id");
 
                         //Create and add a challenge
                         IncomingChallenge curr = new IncomingChallenge(challengeId, challengerId, firstName, lastName, fbId);

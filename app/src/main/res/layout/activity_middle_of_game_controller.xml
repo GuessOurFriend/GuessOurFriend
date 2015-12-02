@@ -1,12 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/middle_of_game_horizontal_margin"
+    android:paddingRight="@dimen/middle_of_game_horizontal_margin"
+    android:paddingTop="@dimen/middle_of_game_vertical_margin"
+    android:paddingBottom="@dimen/middle_of_game_vertical_margin"
     tools:context="inc.guessourfriend.Controllers.MiddleOfGameController">
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,47 +18,69 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Your Turn"
-            android:textSize="14dp"
-            android:id="@+id/your_turn_text"/>
+            android:textSize="12dp"
+            android:id="@+id/your_turn_text"
+            android:layout_below="@+id/their_turn_text"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
         <Button
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Leave"
-            android:textSize="14dp"
-            android:id="@+id/leave_button"/>
+            android:text="Pass Guess"
+            android:textSize="10dp"
+            android:id="@+id/passMyGuessButton"
+            android:onClick="passMyGuessButtonClicked"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/opponent_mystery_friend"
+            android:layout_toStartOf="@+id/opponent_mystery_friend" />
 
         <com.facebook.login.widget.ProfilePictureView
             android:id="@+id/opponent_mystery_friend"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bug?"
-            android:textSize="14dp"
-            android:id="@+id/bug_button"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Their Turn"
-            android:textSize="14dp"
-            android:id="@+id/their_turn_text"/>
+            android:textSize="12dp"
+            android:id="@+id/their_turn_text"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
-    </LinearLayout>
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get Board"
+            android:textSize="10dp"
+            android:id="@+id/getGameBoardButton"
+            android:onClick="getGameBoardButtonClicked"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/their_turn_text"
+            android:layout_toStartOf="@+id/their_turn_text"
+            android:layout_marginRight="29dp"
+            android:layout_marginEnd="29dp" />
+
+    </RelativeLayout>
 
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/middle_of_game_gridview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:columnWidth="60dp"
         android:numColumns="4"
         android:verticalSpacing="5dp"
         android:horizontalSpacing="5dp"
         android:stretchMode="columnWidth"
+        android:layout_above="@+id/conversation"
         android:layout_below="@+id/top_panel"/>
+
 
     <EditText
         android:layout_width="wrap_content"
@@ -69,41 +92,46 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_above="@+id/buttonPane"
+        android:layout_alignBottom="@+id/bottom_panel"
         android:hint="Type your message here"
         android:imeOptions="actionSend"
         android:singleLine="true"
         android:enabled="true" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonPane"
+        android:id="@+id/bottom_panel"
         android:layout_alignParentBottom="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_panel"
+            android:layout_alignParentBottom="true">
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/yesButton"
+                android:onClick="yesButtonClick"
+                android:text="Yes"
+                android:layout_weight="1"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/noButton"
+                android:onClick="noButtonClick"
+                android:text="No"
+                android:layout_weight="1"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/idkButton"
+                android:onClick="idkButtonClick"
+                android:text="Not Sure"
+                android:layout_weight="1"/>
+        </LinearLayout>
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/yesButton"
-            android:onClick="yesButtonClick"
-            android:text="Yes"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/noButton"
-            android:onClick="noButtonClick"
-            android:text="No"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/idkButton"
-            android:onClick="idkButtonClick"
-            android:text="Not Sure"/>
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <EditText
         android:layout_width="wrap_content"
@@ -111,35 +139,14 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/conversation"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:hint="This is your conversation history"
-        android:layout_alignRight="@+id/theMessage"
-        android:layout_alignEnd="@+id/theMessage"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
         android:layout_above="@+id/theMessage"
         android:minLines="5"
         android:maxLines="100"
         android:enabled="false"
-        android:layout_centerVertical="true" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pass up my guess"
-        android:id="@+id/passMyGuessButton"
-        android:layout_centerHorizontal="true"
-        android:onClick="passMyGuessButtonClicked"
-        android:layout_centerVertical="true" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get This Game Board"
-        android:id="@+id/getGameBoardButton"
-        android:layout_above="@+id/passMyGuessButton"
-        android:layout_centerHorizontal="true"
-        android:onClick="getGameBoardButtonClicked" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="false" />
 
 </RelativeLayout>
