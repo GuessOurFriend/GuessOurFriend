@@ -17,14 +17,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Your Turn"
-            android:textSize="14dp"
+            android:textSize="12dp"
             android:id="@+id/your_turn_text"/>
+
         <Button
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Leave"
-            android:textSize="14dp"
-            android:id="@+id/leave_button"/>
+            android:text="Pass Guess"
+            android:textSize="10dp"
+            android:id="@+id/passMyGuessButton"
+            android:layout_centerHorizontal="true"
+            android:onClick="passMyGuessButtonClicked"
+            android:layout_centerVertical="true" />
 
         <com.facebook.login.widget.ProfilePictureView
             android:id="@+id/opponent_mystery_friend"
@@ -33,17 +38,21 @@
             android:layout_centerHorizontal="true" />
 
         <Button
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bug?"
-            android:textSize="14dp"
-            android:id="@+id/bug_button"/>
+            android:text="Get Game Board"
+            android:textSize="10dp"
+            android:id="@+id/getGameBoardButton"
+            android:layout_above="@+id/passMyGuessButton"
+            android:layout_centerHorizontal="true"
+            android:onClick="getGameBoardButtonClicked" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Their Turn"
-            android:textSize="14dp"
+            android:textSize="12dp"
             android:id="@+id/their_turn_text"/>
 
     </LinearLayout>
@@ -121,25 +130,5 @@
         android:maxLines="100"
         android:enabled="false"
         android:layout_centerVertical="true" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pass up my guess"
-        android:id="@+id/passMyGuessButton"
-        android:layout_centerHorizontal="true"
-        android:onClick="passMyGuessButtonClicked"
-        android:layout_centerVertical="true" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get This Game Board"
-        android:id="@+id/getGameBoardButton"
-        android:layout_above="@+id/passMyGuessButton"
-        android:layout_centerHorizontal="true"
-        android:onClick="getGameBoardButtonClicked" />
 
 </RelativeLayout>
