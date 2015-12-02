@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import inc.guessourfriend.Models.FBProfileModel;
@@ -292,6 +293,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             friendList.add(friend);
         }
         db.close();
+        Collections.sort(friendList);
         return friendList;
     }
 

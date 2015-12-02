@@ -54,7 +54,6 @@ public class LoginController extends FragmentActivity {
     private AccessTokenTracker accessTokenTracker;
     private boolean isResumed;
     private HashMap<Long, Friend> friendListMap;
-    private AccessToken accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +82,6 @@ public class LoginController extends FragmentActivity {
                                             System.out.println("ERROR");
                                         } else {
                                             System.out.println("Success");
-                                            accessToken = loginResult.getAccessToken();
                                             takeCareOfInitialDatabaseSetupUponFBLogin(response);
                                             //reGetGcmId();
                                             Intent myIntent = new Intent(LoginController.this, ChallengeAFriendController.class);

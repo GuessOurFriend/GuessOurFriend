@@ -150,7 +150,7 @@ public class ChallengeAFriendController extends SlideNavigationController {
 
             checkBox.setTag( friend );
             checkBox.setChecked( friend.isChallenged());
-            textView.setText( friend.firstName );
+            textView.setText( friend.firstName + " " + friend.lastName);
 
             return convertView;
         }

@@ -4,7 +4,7 @@ package inc.guessourfriend.SupportingClasses;
  * Created by sellmaurer on 10/31/15.
  */
 
-public class Friend{
+public class Friend implements Comparable<Friend>{
     public long facebookID;
     public String firstName;
     public String lastName;
@@ -15,6 +15,16 @@ public class Friend{
     private long matchesLost;
     private long points;
     private long rating;
+
+    @Override
+    public int compareTo(Friend otherFriend) throws UnsupportedOperationException {
+        if(otherFriend != null){
+            if(otherFriend instanceof Friend){
+                return (this.firstName + this.lastName).compareTo(otherFriend.firstName + otherFriend.lastName);
+            }
+        }
+        throw new UnsupportedOperationException("passed in compareTo for Friend class is null or not of the right type of object");
+    }
 
     public Friend(){
         this.facebookID = -1;
