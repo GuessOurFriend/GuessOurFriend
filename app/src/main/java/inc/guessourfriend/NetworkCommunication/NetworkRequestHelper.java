@@ -325,7 +325,7 @@ public class NetworkRequestHelper {
                         long challengerId = challenge.getLong("challenger_id");
                         String firstName = challenge.getString("first_name");
                         String lastName = challenge.getString("last_name");
-                        String fbId = challenge.getString("fb_id");
+                        long fbId = challenge.getLong("fb_id");
 
                         //Create and add a challenge
                         IncomingChallenge curr = new IncomingChallenge(challengeId, challengerId, firstName, lastName, fbId);
