@@ -2,13 +2,10 @@
     <string name="app_name">GuessOurFriend</string>
     <string name="app_id">523218837834969</string>
     <string name="access_token"></string>
-
     <string name="gcm_defaultSenderId">845505583492</string>
 
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_main">MainActivity</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_current_games_controller">CurrentGames</string>
     <string name="title_activity_leaderboard_controller">Leaderboard</string>
     <string name="title_activity_matchmaking_controller">Matchmaking</string>
@@ -17,6 +14,8 @@
     <string name="title_activity_options_controller">Options</string>
     <string name="title_activity_slide_navigation_controller">SlideNavigation</string>
     <string name="title_activity_start_of_game_controller">StartOfGameController</string>
+    <string name="title_activity_middle_of_game_controller">MiddleOfGameController</string>
+    <string name="title_activity_end_of_game_controller">EndOfGameController</string>
 
     <string name="title_section1">Challenge a Friend</string>
     <string name="title_section2">Matchmaking</string>
@@ -28,11 +27,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_example">Example action</string>
-
     <string name="open_drawer">Drawer Open</string>
     <string name="close_drawer">Drawer Close</string>
-    <string name="title_activity_end_of_game_controller">EndOfGameController</string>
 
     <string name="win_mystery_text0">You Won!</string>
     <string name="loss_mystery_text0">You Lost :(</string>
@@ -41,5 +37,4 @@
     <string name="win_mystery_text2">Your mystery friend</string>
     <string name="loss_mystery_text2">Their mystery friend</string>
     <string name="rating_text">Rate how fun it was to play with</string>
-    <string name="title_activity_middle_of_game_controller">MiddleOfGameController</string>
 </resources>
