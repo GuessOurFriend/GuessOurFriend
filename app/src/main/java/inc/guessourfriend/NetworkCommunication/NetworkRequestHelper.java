@@ -108,6 +108,10 @@ public class NetworkRequestHelper {
             }
         }.execute();
     }
+    //DELETE /user
+    public static void deleteUser() {
+        new NetworkRequestRunner("DELETE", ROOT_URL + "/user", getAuthToken()).execute();
+    }
 
     //////////////////////////////////////////////////
     //Bug Reports
