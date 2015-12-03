@@ -20,9 +20,10 @@
             android:text="Your Turn"
             android:textSize="12dp"
             android:id="@+id/your_turn_text"
-            android:layout_below="@+id/their_turn_text"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="5dp" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -33,25 +34,14 @@
             android:id="@+id/passMyGuessButton"
             android:onClick="passMyGuessButtonClicked"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/opponent_mystery_friend"
-            android:layout_toStartOf="@+id/opponent_mystery_friend" />
+            android:layout_toLeftOf="@+id/opponent_mystery_friend" />
 
         <com.facebook.login.widget.ProfilePictureView
             android:id="@+id/opponent_mystery_friend"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Their Turn"
-            android:textSize="12dp"
-            android:id="@+id/their_turn_text"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_centerHorizontal="true" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -62,10 +52,18 @@
             android:id="@+id/getGameBoardButton"
             android:onClick="getGameBoardButtonClicked"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/their_turn_text"
-            android:layout_toStartOf="@+id/their_turn_text"
-            android:layout_marginRight="29dp"
-            android:layout_marginEnd="29dp" />
+            android:layout_toRightOf="@+id/opponent_mystery_friend" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Their Turn"
+            android:textSize="12dp"
+            android:id="@+id/their_turn_text"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="5dp" />
 
     </RelativeLayout>
 
@@ -79,74 +77,59 @@
         android:horizontalSpacing="5dp"
         android:stretchMode="columnWidth"
         android:layout_above="@+id/conversation"
-        android:layout_below="@+id/top_panel"/>
-
+        android:layout_below="@+id/top_panel" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/theMessage"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/bottom_panel"
-        android:hint="Type your message here"
-        android:imeOptions="actionSend"
-        android:singleLine="true"
-        android:enabled="true" />
-
-    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/bottom_panel"
-        android:layout_alignParentBottom="true">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_panel"
-            android:layout_alignParentBottom="true">
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/yesButton"
-                android:onClick="yesButtonClick"
-                android:text="Yes"
-                android:layout_weight="1"/>
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/noButton"
-                android:onClick="noButtonClick"
-                android:text="No"
-                android:layout_weight="1"/>
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/idkButton"
-                android:onClick="idkButtonClick"
-                android:text="Not Sure"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-    </RelativeLayout>
-
-    <EditText
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/conversation"
         android:hint="This is your conversation history"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentLeft="true"
         android:layout_above="@+id/theMessage"
         android:minLines="5"
         android:maxLines="100"
         android:enabled="false"
-        android:layout_centerVertical="true"
-        android:layout_alignParentBottom="false" />
+        android:layout_centerVertical="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10"
+        android:id="@+id/theMessage"
+        android:hint="Type your message here"
+        android:layout_above="@+id/button_panel"
+        android:imeOptions="actionSend"
+        android:singleLine="true"
+        android:enabled="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_panel"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/yesButton"
+            android:onClick="yesButtonClick"
+            android:text="Yes"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/noButton"
+            android:onClick="noButtonClick"
+            android:text="No"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/idkButton"
+            android:onClick="idkButtonClick"
+            android:text="Not Sure"
+            android:layout_weight="1"/>
+    </LinearLayout>
 
 </RelativeLayout>

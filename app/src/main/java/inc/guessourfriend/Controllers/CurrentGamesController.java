@@ -60,6 +60,9 @@ public class CurrentGamesController extends SlideNavigationController implements
                     Game selectedGame = gameList.get(position);
                     Intent myIntent = new Intent(CurrentGamesController.this, MiddleOfGameController.class);
                     myIntent.putExtra("gameId", selectedGame.myID);
+                    myIntent.putExtra("opponentID", selectedGame.opponentID);
+                    myIntent.putExtra("opponentFirstName", selectedGame.opponentFirstName);
+                    myIntent.putExtra("opponentLastName", selectedGame.opponentLastName);
                     startActivity(myIntent);
                 }
             });

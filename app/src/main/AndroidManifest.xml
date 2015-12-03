@@ -45,19 +45,12 @@
             android:value="@string/app_id" />
 
         <activity
-            android:name=".Controllers.TestController"
-            android:label="@string/title_activity_main" >
+            android:name=".Controllers.SlideNavigationController"
+            android:label="@string/title_activity_slide_navigation_controller" >
         </activity>
         <activity
             android:name=".Controllers.ChallengeAFriendController"
-            android:label="ChallengeAFriendController" />
-        <activity
-            android:name=".Controllers.CurrentGamesController"
-            android:label="@string/title_activity_current_games_controller" >
-        </activity>
-        <activity
-            android:name=".Controllers.LeaderboardController"
-            android:label="@string/title_activity_leaderboard_controller" >
+            android:label="ChallengeAFriendController">
         </activity>
         <activity
             android:name=".Controllers.MatchmakingController"
@@ -68,6 +61,28 @@
             android:label="@string/title_activity_challenges_controller" >
         </activity>
         <activity
+            android:name=".Controllers.CurrentGamesController"
+            android:label="@string/title_activity_current_games_controller" >
+        </activity>
+        <activity
+            android:name=".Controllers.StartOfGameController"
+            android:label="@string/title_activity_start_of_game_controller" >
+        </activity>
+        <activity
+            android:name=".Controllers.MiddleOfGameController"
+            android:label="@string/title_activity_middle_of_game_controller"
+            android:windowSoftInputMode="stateHidden">
+            <!--windowSoftInputMode is used to prevent the keyboard from coming up immediately-->
+        </activity>
+        <activity
+            android:name=".Controllers.EndOfGameController"
+            android:label="@string/title_activity_end_of_game_controller" >
+        </activity>
+        <activity
+            android:name=".Controllers.LeaderboardController"
+            android:label="@string/title_activity_leaderboard_controller" >
+        </activity>
+        <activity
             android:name=".Controllers.OptionsController"
             android:label="@string/title_activity_options_controller" >
         </activity>
@@ -76,16 +91,8 @@
             android:label="@string/title_activity_blacklist_controller" >
         </activity>
         <activity
-            android:name=".Controllers.SlideNavigationController"
-            android:label="@string/title_activity_slide_navigation_controller" >
-        </activity>
-        <activity
-            android:name=".Controllers.EndOfGameController"
-            android:label="@string/title_activity_end_of_game_controller" >
-        </activity>
-        <activity
-            android:name=".Controllers.StartOfGameController"
-            android:label="@string/title_activity_start_of_game_controller" >
+            android:name=".Controllers.TestController"
+            android:label="@string/title_activity_main" >
         </activity>
 
         <receiver
@@ -117,11 +124,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-        <activity
-            android:name=".Controllers.MiddleOfGameController"
-            android:label="@string/title_activity_middle_of_game_controller" >
-        </activity>
     </application>
 
 </manifest>

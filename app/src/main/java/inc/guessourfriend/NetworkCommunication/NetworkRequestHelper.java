@@ -185,12 +185,47 @@ public class NetworkRequestHelper {
     }
 
     //GET /game_board
-    public static void getGameBoard(OnTaskCompleted listener, long gameId) {
+    public static void getGameBoard(final OnTaskCompleted theListener, final long gameId) {
         new NetworkRequestRunner("GET", ROOT_URL + "/game_board?game_id=" + gameId, getAuthToken()) {
             @Override
-            protected void onPostExecute(JSONObject result) {
-                JSONObject json = result;
-                Log.v("Stupid json: ", result.toString());
+            protected void onPostExecute(JSONObject jsonResult) {
+                Game gameResult = new Game();
+
+                JSONObject json = jsonResult;
+                Log.v("Stupid json: ", jsonResult.toString());
+
+                try {
+                    JSONObject resultObject = json.getJSONObject("results");
+                    JSONObject questions = resultObject.getJSONObject("questions");
+                    JSONArray outgoingQuestions = questions.getJSONArray("outgoing_questions");
+                    JSONArray incomingQuestions = questions.getJSONArray("incoming_questions");
+                    JSONObject friendsList = resultObject.getJSONObject("friend_list");
+                    JSONArray outgoingFriendsList = friendsList.getJSONArray("outgoing_list");
+                    JSONArray incomingFriendsList = friendsList.getJSONArray("incoming_list");
+                    //Long mysteryFriend = (Long) resultObject.get("mystery_friend"); //TODO: Ignore null
+
+                    //Set up the game
+                    gameResult.myID = gameId;
+
+                    //TODO: Set up the questions
+                    for (int i=0; i < incomingQuestions.length(); i++) {
+
+                    }
+
+                    //TODO: Set up the friend pool
+                    for (int i=0; i < incomingFriendsList.length(); i++) {
+                        JSONObject curr = incomingFriendsList.getJSONObject(i);
+                        String firstName = curr.getString("first_name");
+                        String lastName = curr.getString("last_name");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                theListener.onTaskCompleted("getGameBoard", gameResult);
+                //theListener.onTaskCompleted("getQuestions", result);
+                //theListener.onTaskCompleted("getFriendPool", result);
             }
         }.execute();
     }

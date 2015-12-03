@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Network;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -13,25 +11,27 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
 
+import com.facebook.login.widget.ProfilePictureView;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
 import inc.guessourfriend.NetworkCommunication.OnTaskCompleted;
 import inc.guessourfriend.R;
+import inc.guessourfriend.SupportingClasses.Game;
+import inc.guessourfriend.SupportingClasses.ImageAdapter;
 
 public class MiddleOfGameController extends SlideNavigationController implements OnTaskCompleted {
     private Model model;
     private String intentReceivedKey = "messageReceived";
-    private String intentSentMessageSuccessKey = "sentMessageSuccess";
     private GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
-    private long gameId = 4l;
+    private Game game = new Game();
     private int lastQuestionId = 7;
 
     @Override
@@ -44,13 +44,31 @@ public class MiddleOfGameController extends SlideNavigationController implements
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
 
+        //Set up GCM messaging
         gcm = GoogleCloudMessaging.getInstance(this);
         setUpIntentListeners();
+
+        //Set up the sending of messages
         setUpEnterAndSendTheMessage();
+
+        //Set up the game board
+        Intent intentExtras = getIntent();
+        Bundle extrasBundle = intentExtras.getExtras();
+        if (!extrasBundle.isEmpty()) {
+            game.myID = extrasBundle.getLong("gameId");
+            game.opponentID = extrasBundle.getLong("opponentID");
+            game.opponentFirstName = extrasBundle.getString("opponentFirstName");
+            game.opponentLastName = extrasBundle.getString("opponentLastName");
+            game.setStateOfGame(Game.MIDDLE_OF_GAME);
+            NetworkRequestHelper.getGameBoard(MiddleOfGameController.this, game.myID);
+
+            ProfilePictureView opponent = (ProfilePictureView) findViewById(R.id.opponent_mystery_friend);
+            opponent.setProfileId(Long.toString(game.opponentID));
+        }
     }
 
     private void answerQuestion(int answer) {
-        NetworkRequestHelper.answerQuestion(MiddleOfGameController.this, gameId, lastQuestionId, answer);
+        NetworkRequestHelper.answerQuestion(MiddleOfGameController.this, game.myID, lastQuestionId, answer);
     }
 
     public void yesButtonClick(View view) {
@@ -65,25 +83,28 @@ public class MiddleOfGameController extends SlideNavigationController implements
         answerQuestion(2);
     }
 
+    //TODO: Remove debug button
     public void getGameBoardButtonClicked(View view) {
-        NetworkRequestHelper.getGameBoard(MiddleOfGameController.this, gameId);
+        NetworkRequestHelper.getGameBoard(MiddleOfGameController.this, game.myID);
     }
 
+    //TODO: Remove debug button
     public void passMyGuessButtonClicked(View view) {
-        NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, gameId, -1);
+        NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.myID, -1);
     }
 
+    //Make clicking send on the keyboard send the message
     private void setUpEnterAndSendTheMessage(){
         final EditText theMessage = (EditText) findViewById(R.id.theMessage);
         theMessage.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    NetworkRequestHelper.sendQuestion(MiddleOfGameController.this, gameId, theMessage.getText().toString());
+                    NetworkRequestHelper.sendQuestion(MiddleOfGameController.this, game.myID, theMessage.getText().toString());
                     // Check if no view has focus:
                     View view = getCurrentFocus();
                     if (view != null) {
-                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
                     return true;
@@ -93,6 +114,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         });
     }
 
+    //Set up the recieving of GCM messages to add to the conversation
     private void setUpIntentListeners(){
         registerReceiver(new BroadcastReceiver() {
             @Override
@@ -103,8 +125,35 @@ public class MiddleOfGameController extends SlideNavigationController implements
         }, new IntentFilter(intentReceivedKey));
     }
 
+    private void setUpMutualFriendsList(String[] profilePictureUrls) {
+        //Set up the view
+        final GridView gridView = (GridView) findViewById(R.id.middle_of_game_gridview);
+
+        //Set up an adapter to hold all the profile pictures
+        ImageAdapter imageAdapter = new ImageAdapter(MiddleOfGameController.this, profilePictureUrls);
+        gridView.setAdapter(imageAdapter);
+    }
+
     public void onTaskCompleted(String taskName, Object resultModel){
-        if(taskName.equalsIgnoreCase("questionSent")){
+        if(taskName.equals("getGameBoard")) {
+            Game fullGame = (Game) resultModel;
+
+            //TODO: Make server return this info too?
+            fullGame.myID = game.myID;
+            fullGame.opponentID = game.opponentID;
+            fullGame.opponentFirstName = game.opponentFirstName;
+            fullGame.opponentLastName = game.opponentLastName;
+            game = fullGame;
+
+        } else if (taskName.equals("getFriendPool")) {
+
+            //TODO: Get the list of friends
+
+        } else if (taskName.equals("getQuestions")) {
+
+            //TODO: Load previous questions
+
+        } else if(taskName.equalsIgnoreCase("questionSent")){
             EditText theMessage = (EditText) findViewById(R.id.theMessage);
             EditText conversation = (EditText) findViewById(R.id.conversation);
             conversation.append(theMessage.getText() + "\n");
