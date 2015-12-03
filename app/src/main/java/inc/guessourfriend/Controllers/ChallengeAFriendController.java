@@ -20,16 +20,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import inc.guessourfriend.Application.Model;
+import inc.guessourfriend.Models.OutgoingChallengeListModel;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
 import inc.guessourfriend.NetworkCommunication.OnTaskCompleted;
 import inc.guessourfriend.SupportingClasses.Friend;
+import inc.guessourfriend.SupportingClasses.IncomingChallenge;
 import inc.guessourfriend.SupportingClasses.OutgoingChallenge;
 import inc.guessourfriend.R;
 
-/**
- * Created by Laura on 10/31/2015.
- */
-public class ChallengeAFriendController extends SlideNavigationController /*implements OnTaskCompleted*/ {
+
+public class ChallengeAFriendController extends SlideNavigationController implements OnTaskCompleted {
 
     private Model model;
     ListView mainListView;
@@ -47,9 +47,6 @@ public class ChallengeAFriendController extends SlideNavigationController /*impl
 
         mainListView = (ListView) findViewById(R.id.challengeafriendlist);
 
-
-        //ArrayList<Friend> friendList = new ArrayList<Friend>();
-        //friendList = model.fbProfileModel.friendList;
 
         mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -118,6 +115,7 @@ public class ChallengeAFriendController extends SlideNavigationController /*impl
         });
 
         listAdapter = new FriendArrayAdapter(this, model.fbProfileModel.friendList);
+        NetworkRequestHelper.getOutgoingChallenges(ChallengeAFriendController.this);
         mainListView.setAdapter(listAdapter);
     }
 
@@ -255,23 +253,24 @@ public class ChallengeAFriendController extends SlideNavigationController /*impl
 
     }
 
- /*   public void onTaskCompleted(String taskName, Object resultModel){
-        if(taskName.equalsIgnoreCase("questionSent")){
-            EditText theMessage = (EditText) findViewById(R.id.theMessage);
-            EditText conversation = (EditText) findViewById(R.id.conversation);
-            conversation.append(theMessage.getText() + "\n");
-            theMessage.setText("");
-        } else if(taskName.equalsIgnoreCase("questionAnswered")) {
+    public void onTaskCompleted(String taskName, Object result){
+        if(taskName.equalsIgnoreCase("getOutgoingChallenges")){
+            //Update the model's list and view's list with the result
+            model.outgoingChallengeListModel = (OutgoingChallengeListModel) result;
+            ArrayList <OutgoingChallenge> oclist = new ArrayList<OutgoingChallenge>();
+            oclist = model.outgoingChallengeListModel.getOutgoingChallengeList();
 
-        } else if(taskName.equalsIgnoreCase("passedUpMyGuess")) {
-            Log.v("Successfully: ", "passed up my guess");
-        } else if(taskName.equalsIgnoreCase("myGuessWasWrong")) {
+            for (int i = 0; i < oclist.size(); i++) {
+                    for (int j = 0; j < model.fbProfileModel.friendList.size(); j++) {
+                        if (model.fbProfileModel.friendList.get(j).facebookID == oclist.get(i).fbID) {
+                            model.fbProfileModel.friendList.get(j).isChallenged = true;
+                        }
+                    }
+            }
 
-        } else if(taskName.equalsIgnoreCase("iWon")) {
-
-        } else{
+            listAdapter.notifyDataSetChanged();
 
         }
-    }*/
+    }
 
 }

@@ -10,9 +10,11 @@ import java.util.ArrayList;
 
 import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.Models.IncomingChallengeListModel;
+import inc.guessourfriend.Models.OutgoingChallengeListModel;
 import inc.guessourfriend.SQLiteDB.DatabaseHelper;
 import inc.guessourfriend.SupportingClasses.Game;
 import inc.guessourfriend.SupportingClasses.IncomingChallenge;
+import inc.guessourfriend.SupportingClasses.OutgoingChallenge;
 
 public class NetworkRequestHelper {
 
@@ -398,11 +400,40 @@ public class NetworkRequestHelper {
     }
 
     //GET user/outgoing_challenges
-    public static void getOutgoingChallenges() {
+    public static void getOutgoingChallenges(OnTaskCompleted listener) {
+        final OnTaskCompleted theListener = listener;
         new NetworkRequestRunner("GET", ROOT_URL + "/user/outgoing_challenges", getAuthToken()) {
             @Override
-            protected void onPostExecute(JSONObject result) {
-                //TODO: Implement
+            protected void onPostExecute(JSONObject jsonResult) {
+                //Create the challenge list
+                OutgoingChallengeListModel result = new OutgoingChallengeListModel();
+
+                //Attempt to parse the json
+                try {
+                    JSONArray jsonArray = jsonResult.getJSONArray("results");
+
+                    //Loop through all the challenges
+                    for (int i=0; i < jsonArray.length(); i++) {
+                        //Parse this challenge's properties
+
+                        JSONObject challenge = jsonArray.getJSONObject(i);
+                        /*   Extra Fields : TODO: Discuss with Brian to simply this
+                        long challengeId = challenge.getLong("challenge_id");
+                        long challengeeId = challenge.getLong("challengee_id");
+                        String firstName = challenge.getString("first_name");
+                        String lastName = challenge.getString("last_name");
+                        */
+                        long fbId = challenge.getLong("fb_id");
+
+                        //Create and add a challenge
+                        OutgoingChallenge curr = new OutgoingChallenge(fbId);
+                        result.outgoingChallengeList.add(curr);
+                    }
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+                theListener.onTaskCompleted("getOutgoingChallenges", result);
             }
         }.execute();
     }

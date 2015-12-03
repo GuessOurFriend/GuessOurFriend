@@ -5,22 +5,22 @@ package inc.guessourfriend.SupportingClasses;
  */
 public class OutgoingChallenge {
 
-    public long challengeeID;
+    public long fbID;
     public String sentMessage;
     public boolean wasDeclined;
 
     public OutgoingChallenge() {
 
-        this.challengeeID = -1;
+        this.fbID = -1;
     }
 
-    public OutgoingChallenge(long challengeeID) {
+    public OutgoingChallenge(long fbID) {
 
-        this.challengeeID = challengeeID;
+        this.fbID = fbID;
     }
 
     public long getChallengeeID() {
-        return challengeeID;
+        return fbID;
     }
 
     public String getSentMessage() {

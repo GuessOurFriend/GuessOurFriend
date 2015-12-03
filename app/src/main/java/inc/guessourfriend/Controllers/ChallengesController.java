@@ -99,6 +99,8 @@ public class ChallengesController extends SlideNavigationController implements O
             mAdapter.clear();
             mAdapter.addAll(model.incomingChallengeListModel.getIncomingChallengeList());
             mAdapter.notifyDataSetChanged();
+
+
         }
     }
 }
