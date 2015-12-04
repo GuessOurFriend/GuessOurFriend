@@ -33,6 +33,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     AtomicInteger msgId = new AtomicInteger();
     private Game game = new Game();
     private int lastQuestionId = 7;
+    String[] profilePictureUrls = new String[20];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,8 @@ public class MiddleOfGameController extends SlideNavigationController implements
 
             ProfilePictureView opponent = (ProfilePictureView) findViewById(R.id.opponent_mystery_friend);
             opponent.setProfileId(Long.toString(game.opponentID));
+            createprofilePictureUrls();
+            setUpMutualFriendsList(profilePictureUrls);
         }
     }
 
@@ -124,6 +127,21 @@ public class MiddleOfGameController extends SlideNavigationController implements
             }
         }, new IntentFilter(intentReceivedKey));
     }
+
+    private void createprofilePictureUrls() {
+       // Get the image URL's from names in the opponentpool field in the game object
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < model.fbProfileModel.friendList.size(); j++) {
+                //if (game.opponentPool.mutualFriendList != null) {
+                    if (model.fbProfileModel.friendList.get(j).firstName.equalsIgnoreCase("Steve")){ //== game.opponentPool.mutualFriendList.get(i).firstName) {
+                        profilePictureUrls[i] = model.fbProfileModel.friendList.get(j).profilePicture;
+                        break;
+                    }
+
+            }
+        }
+    }
+
 
     private void setUpMutualFriendsList(String[] profilePictureUrls) {
         //Set up the view

@@ -12,6 +12,9 @@ public class MutualFriend {
     public boolean isMysteryFriend;
     public boolean hasBeenGuessed;
     public String fullName;
+    public String firstName;
+    public String lastName;
+
     public String profilePicture;
     public boolean isGrayedOut;
 

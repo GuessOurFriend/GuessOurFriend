@@ -14,6 +14,7 @@ import inc.guessourfriend.Models.OutgoingChallengeListModel;
 import inc.guessourfriend.SQLiteDB.DatabaseHelper;
 import inc.guessourfriend.SupportingClasses.Game;
 import inc.guessourfriend.SupportingClasses.IncomingChallenge;
+import inc.guessourfriend.SupportingClasses.MutualFriend;
 import inc.guessourfriend.SupportingClasses.OutgoingChallenge;
 
 public class NetworkRequestHelper {
@@ -184,6 +185,7 @@ public class NetworkRequestHelper {
         }.execute();
     }
 
+    //TODO: Check with Brian, if we can get the imageURLS along with friendlist in getGameBooard
     //GET /game_board
     public static void getGameBoard(final OnTaskCompleted theListener, final long gameId) {
         new NetworkRequestRunner("GET", ROOT_URL + "/game_board?game_id=" + gameId, getAuthToken()) {
@@ -217,6 +219,10 @@ public class NetworkRequestHelper {
                         JSONObject curr = incomingFriendsList.getJSONObject(i);
                         String firstName = curr.getString("first_name");
                         String lastName = curr.getString("last_name");
+                        MutualFriend toadd = new MutualFriend();
+                        toadd.firstName = "Steve";
+                        toadd.lastName = lastName;
+                        //gameResult.opponentPool.mutualFriendList.add(toadd);
                     }
 
                 } catch (JSONException e) {
@@ -452,7 +458,7 @@ public class NetworkRequestHelper {
                         //Parse this challenge's properties
 
                         JSONObject challenge = jsonArray.getJSONObject(i);
-                        /*   Extra Fields : TODO: Discuss with Brian to simply this
+                        /*   Extra Fields : TODO: Discuss with Brian to simplify this
                         long challengeId = challenge.getLong("challenge_id");
                         long challengeeId = challenge.getLong("challengee_id");
                         String firstName = challenge.getString("first_name");
