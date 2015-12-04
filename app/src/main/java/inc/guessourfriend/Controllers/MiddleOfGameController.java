@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.facebook.login.widget.ProfilePictureView;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import inc.guessourfriend.Application.Model;
@@ -25,6 +26,8 @@ import inc.guessourfriend.NetworkCommunication.OnTaskCompleted;
 import inc.guessourfriend.R;
 import inc.guessourfriend.SupportingClasses.Game;
 import inc.guessourfriend.SupportingClasses.ImageAdapter;
+import inc.guessourfriend.SupportingClasses.MutualFriend;
+import inc.guessourfriend.SupportingClasses.MutualFriendList;
 
 public class MiddleOfGameController extends SlideNavigationController implements OnTaskCompleted {
     private Model model;
@@ -61,12 +64,13 @@ public class MiddleOfGameController extends SlideNavigationController implements
             game.opponentFirstName = extrasBundle.getString("opponentFirstName");
             game.opponentLastName = extrasBundle.getString("opponentLastName");
             game.setStateOfGame(Game.MIDDLE_OF_GAME);
+            game.opponentPool = new MutualFriendList();
+            game.opponentPool.mutualFriendList = new ArrayList<MutualFriend>();
             NetworkRequestHelper.getGameBoard(MiddleOfGameController.this, game.myID);
 
             ProfilePictureView opponent = (ProfilePictureView) findViewById(R.id.opponent_mystery_friend);
             opponent.setProfileId(Long.toString(game.opponentID));
-            createprofilePictureUrls();
-            setUpMutualFriendsList(profilePictureUrls);
+
         }
     }
 
@@ -133,7 +137,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < model.fbProfileModel.friendList.size(); j++) {
                 //if (game.opponentPool.mutualFriendList != null) {
-                    if (model.fbProfileModel.friendList.get(j).firstName.equalsIgnoreCase("Steve")){ //== game.opponentPool.mutualFriendList.get(i).firstName) {
+                    if (model.fbProfileModel.friendList.get(j).firstName.equalsIgnoreCase(game.opponentPool.mutualFriendList.get(i).firstName)) {
                         profilePictureUrls[i] = model.fbProfileModel.friendList.get(j).profilePicture;
                         break;
                     }
@@ -162,6 +166,8 @@ public class MiddleOfGameController extends SlideNavigationController implements
             fullGame.opponentFirstName = game.opponentFirstName;
             fullGame.opponentLastName = game.opponentLastName;
             game = fullGame;
+            createprofilePictureUrls();
+            setUpMutualFriendsList(profilePictureUrls);
 
         } else if (taskName.equals("getFriendPool")) {
 

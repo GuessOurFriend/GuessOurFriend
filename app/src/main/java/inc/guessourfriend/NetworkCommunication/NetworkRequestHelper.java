@@ -15,6 +15,7 @@ import inc.guessourfriend.SQLiteDB.DatabaseHelper;
 import inc.guessourfriend.SupportingClasses.Game;
 import inc.guessourfriend.SupportingClasses.IncomingChallenge;
 import inc.guessourfriend.SupportingClasses.MutualFriend;
+import inc.guessourfriend.SupportingClasses.MutualFriendList;
 import inc.guessourfriend.SupportingClasses.OutgoingChallenge;
 
 public class NetworkRequestHelper {
@@ -192,6 +193,9 @@ public class NetworkRequestHelper {
             @Override
             protected void onPostExecute(JSONObject jsonResult) {
                 Game gameResult = new Game();
+                gameResult.opponentPool = new MutualFriendList();
+                MutualFriendList testpool = new MutualFriendList();
+                testpool.mutualFriendList = new ArrayList<MutualFriend>();
 
                 JSONObject json = jsonResult;
                 Log.v("Stupid json: ", jsonResult.toString());
@@ -215,20 +219,22 @@ public class NetworkRequestHelper {
                     }
 
                     //TODO: Set up the friend pool
-                    for (int i=0; i < incomingFriendsList.length(); i++) {
-                        JSONObject curr = incomingFriendsList.getJSONObject(i);
+                    //for (int i=0; i < incomingFriendsList.length(); i++) {
+                    for (int i=0; i < 20; i++) {
+                        /*JSONObject curr = incomingFriendsList.getJSONObject(i);
                         String firstName = curr.getString("first_name");
-                        String lastName = curr.getString("last_name");
+                        String lastName = curr.getString("last_name");*/
                         MutualFriend toadd = new MutualFriend();
                         toadd.firstName = "Steve";
-                        toadd.lastName = lastName;
+                        //toadd.lastName = lastName;
+                        testpool.mutualFriendList.add(toadd);
                         //gameResult.opponentPool.mutualFriendList.add(toadd);
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+                gameResult.opponentPool=testpool;
                 theListener.onTaskCompleted("getGameBoard", gameResult);
                 //theListener.onTaskCompleted("getQuestions", result);
                 //theListener.onTaskCompleted("getFriendPool", result);
