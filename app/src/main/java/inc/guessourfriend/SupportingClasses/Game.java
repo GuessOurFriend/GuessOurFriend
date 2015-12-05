@@ -24,7 +24,7 @@ public class Game {
         this.myPool =null;
         this.opponentPool =null;
         this.isMyTurn = false;
-        this.stateOfGame = -1;
+        this.stateOfGame = START_OF_GAME;
         this.numberOfQuestions =-1;
     }
     

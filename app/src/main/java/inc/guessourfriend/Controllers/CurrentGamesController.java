@@ -58,12 +58,27 @@ public class CurrentGamesController extends SlideNavigationController implements
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Game selectedGame = gameList.get(position);
-                    Intent myIntent = new Intent(CurrentGamesController.this, MiddleOfGameController.class);
-                    myIntent.putExtra("gameId", selectedGame.myID);
-                    myIntent.putExtra("opponentID", selectedGame.opponentID);
-                    myIntent.putExtra("opponentFirstName", selectedGame.opponentFirstName);
-                    myIntent.putExtra("opponentLastName", selectedGame.opponentLastName);
-                    startActivity(myIntent);
+                    if (selectedGame.stateOfGame == Game.START_OF_GAME) {
+                        Intent myIntent = new Intent(CurrentGamesController.this, StartOfGameController.class);
+                        myIntent.putExtra("gameId", selectedGame.myID);
+                        myIntent.putExtra("opponentID", selectedGame.opponentID);
+                        myIntent.putExtra("opponentFirstName", selectedGame.opponentFirstName);
+                        myIntent.putExtra("opponentLastName", selectedGame.opponentLastName);
+                        startActivity(myIntent);
+                    } else if (selectedGame.stateOfGame == Game.MIDDLE_OF_GAME) {
+                        Intent myIntent = new Intent(CurrentGamesController.this, MiddleOfGameController.class);
+                        myIntent.putExtra("gameId", selectedGame.myID);
+                        myIntent.putExtra("opponentID", selectedGame.opponentID);
+                        myIntent.putExtra("opponentFirstName", selectedGame.opponentFirstName);
+                        myIntent.putExtra("opponentLastName", selectedGame.opponentLastName);
+                        startActivity(myIntent);
+                    }
+//                    Intent myIntent = new Intent(CurrentGamesController.this, MiddleOfGameController.class);
+//                    myIntent.putExtra("gameId", selectedGame.myID);
+//                    myIntent.putExtra("opponentID", selectedGame.opponentID);
+//                    myIntent.putExtra("opponentFirstName", selectedGame.opponentFirstName);
+//                    myIntent.putExtra("opponentLastName", selectedGame.opponentLastName);
+//                    startActivity(myIntent);
                 }
             });
         }
