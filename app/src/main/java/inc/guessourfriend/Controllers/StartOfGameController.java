@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
 import inc.guessourfriend.SupportingClasses.Game;
 import inc.guessourfriend.SupportingClasses.ImageAdapter;
 import inc.guessourfriend.Application.Model;
@@ -101,6 +102,15 @@ public class StartOfGameController extends SlideNavigationController {
         }
     }
 
+    private long[] getImagefbids() {
+        long[] imagefbids = new long[game.myPool.getMutualFriendList().size()];
+        for (int i = 0; i < game.myPool.getMutualFriendList().size(); i++) {
+            imagefbids[i] = game.myPool.getMutualFriendList().get(i).facebookID;
+        }
+        return imagefbids;
+    }
+
+
     private String[] getImageURLs() {
         String[] imageURLs = new String[game.myPool.getMutualFriendList().size()];
         for (int i = 0; i < game.myPool.getMutualFriendList().size(); i++) {
@@ -169,6 +179,8 @@ public class StartOfGameController extends SlideNavigationController {
                             final GridView gridView = (GridView) findViewById(R.id.gridview);
 
                             //Set up an adapter to hold all the profile pictures
+
+                            NetworkRequestHelper.postfriendpools(getImagefbids(),currentlySelected.facebookID);
                             ImageAdapter imageAdapter = new ImageAdapter(StartOfGameController.this, getImageURLs());
                             gridView.setAdapter(imageAdapter);
 

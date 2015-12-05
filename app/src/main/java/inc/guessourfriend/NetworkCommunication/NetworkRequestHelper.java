@@ -187,6 +187,7 @@ public class NetworkRequestHelper {
     }
 
     //TODO: Check with Brian, if we can get the imageURLS along with friendlist in getGameBooard
+    //TODO: Also the query currently returns a null object
     //GET /game_board
     public static void getGameBoard(final OnTaskCompleted theListener, final long gameId) {
         new NetworkRequestRunner("GET", ROOT_URL + "/game_board?game_id=" + gameId, getAuthToken()) {
@@ -559,4 +560,19 @@ public class NetworkRequestHelper {
             }
         }.execute();
     }
+
+    //POST /friend_pools
+    public static void postfriendpools(long [] ImageIDs, long mysteryID){
+
+        JSONObject friendIDJSONObject = new JSONObject();
+        try {
+            friendIDJSONObject.put("friend_pool", ImageIDs);
+            friendIDJSONObject.put("mystery_friend", mysteryID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new NetworkRequestRunner("POST", ROOT_URL + "/friend_pools", getAuthToken()).execute(friendIDJSONObject);
+    }
+
 }
