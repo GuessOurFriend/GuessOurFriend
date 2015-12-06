@@ -180,7 +180,7 @@ public class StartOfGameController extends SlideNavigationController {
 
                             //Set up an adapter to hold all the profile pictures
 
-                            NetworkRequestHelper.postfriendpools(getImagefbids(),currentlySelected.facebookID);
+                            //NetworkRequestHelper.postfriendpools(getImagefbids(),currentlySelected.facebookID);
                             ImageAdapter imageAdapter = new ImageAdapter(StartOfGameController.this, getImageURLs());
                             gridView.setAdapter(imageAdapter);
 
