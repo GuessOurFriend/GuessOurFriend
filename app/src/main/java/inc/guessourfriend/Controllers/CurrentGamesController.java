@@ -72,13 +72,14 @@ public class CurrentGamesController extends SlideNavigationController implements
                         myIntent.putExtra("opponentFirstName", selectedGame.opponentFirstName);
                         myIntent.putExtra("opponentLastName", selectedGame.opponentLastName);
                         startActivity(myIntent);
+                    } else if (selectedGame.stateOfGame == Game.END_OF_GAME) {
+                        Intent myIntent = new Intent(CurrentGamesController.this, EndOfGameController.class);
+                        myIntent.putExtra("gameId", selectedGame.myID);
+                        myIntent.putExtra("opponentID", selectedGame.opponentID);
+                        myIntent.putExtra("opponentFirstName", selectedGame.opponentFirstName);
+                        myIntent.putExtra("opponentLastName", selectedGame.opponentLastName);
+                        startActivity(myIntent);
                     }
-//                    Intent myIntent = new Intent(CurrentGamesController.this, MiddleOfGameController.class);
-//                    myIntent.putExtra("gameId", selectedGame.myID);
-//                    myIntent.putExtra("opponentID", selectedGame.opponentID);
-//                    myIntent.putExtra("opponentFirstName", selectedGame.opponentFirstName);
-//                    myIntent.putExtra("opponentLastName", selectedGame.opponentLastName);
-//                    startActivity(myIntent);
                 }
             });
         }

@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.List;
 
 import inc.guessourfriend.Models.IncomingChallengeListModel;
@@ -60,7 +62,8 @@ public class ChallengesController extends SlideNavigationController implements O
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 //Accept the challenge
-                                NetworkRequestHelper.deleteChallengeFromChallengee(itemValue.challengeId, itemValue.challengerId, true);
+                                NetworkRequestHelper.deleteChallengeFromChallengee(ChallengesController.this,
+                                        itemValue.challengeId, itemValue.challengerId, true);
 
                                 Toast.makeText(getApplicationContext(),
                                         "Position:" + position + " ListItem: " + itemValue, Toast.LENGTH_SHORT).show();
@@ -68,16 +71,13 @@ public class ChallengesController extends SlideNavigationController implements O
                                 //TODO: Switch directly to StartOfGameController instead?
                                 mAdapter.remove(itemValue);
                                 mAdapter.notifyDataSetChanged();
-
-                                Intent intent = new Intent(ChallengesController.this, StartOfGameController.class);
-                                intent.putExtra("opponentID", itemValue.fbId);
-                                startActivity(intent);
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 //Decline the challenge (and remove it from the model's list and view's list)
-                                NetworkRequestHelper.deleteChallengeFromChallengee(itemValue.challengeId, itemValue.challengerId, false);
+                                NetworkRequestHelper.deleteChallengeFromChallengee(ChallengesController.this,
+                                        itemValue.challengeId, itemValue.challengerId, false);
                                 model.incomingChallengeListModel.IncomingChallengeList.remove(itemValue);
                                 mAdapter.remove(itemValue);
                                 mAdapter.notifyDataSetChanged();
@@ -99,8 +99,14 @@ public class ChallengesController extends SlideNavigationController implements O
             mAdapter.clear();
             mAdapter.addAll(model.incomingChallengeListModel.getIncomingChallengeList());
             mAdapter.notifyDataSetChanged();
-
-
+        }else if(taskName.equalsIgnoreCase("challenge accepted")){
+            HashMap<String, Long> gameData = (HashMap<String, Long>) result;
+            Intent intent = new Intent(ChallengesController.this, StartOfGameController.class);
+            intent.putExtra("opponentID", gameData.get("challengeeID"));
+            intent.putExtra("gameID", gameData.get("gameID"));
+            startActivity(intent);
+        }else{
+            Log.v("Challenges error", "onTaskCompleted");
         }
     }
 }
