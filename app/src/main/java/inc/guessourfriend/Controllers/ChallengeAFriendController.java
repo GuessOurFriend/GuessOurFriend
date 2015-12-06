@@ -80,6 +80,11 @@ public class ChallengeAFriendController extends SlideNavigationController implem
                                 long challengeeId = model.fbProfileModel.friendList.get(itemPosition).facebookID;
                                 friend.toggleChallenged();
                                 viewHolder.getCheckBox().setChecked(friend.isChallenged());
+                                if(friend.isChallenged){
+                                    viewHolder.getCheckBox().setButtonDrawable(R.drawable.checked);
+                                }else{
+                                    viewHolder.getCheckBox().setButtonDrawable(R.drawable.unchecked);
+                                }
                                 if (Challengedstatus == false) {
                                     model.outgoingChallengeListModel.addOutgoingChallenge(
                                             new OutgoingChallenge(challengeeId));
@@ -210,8 +215,8 @@ public class ChallengeAFriendController extends SlideNavigationController implem
                                     //Get the facebook id of the row we clicked
                                     long challengeeId = model.fbProfileModel.friendList.get(itemPosition).facebookID;
                                     friend.setChallenged(cb.isChecked());
-
                                     if (Challengedstatus == false) {
+                                        checkBox.setButtonDrawable(R.drawable.checked);
                                         model.outgoingChallengeListModel.addOutgoingChallenge(
                                                 new OutgoingChallenge(challengeeId));
 
@@ -221,6 +226,7 @@ public class ChallengeAFriendController extends SlideNavigationController implem
                                         Toast.makeText(getApplicationContext(),
                                                 "Challenged: " + challengeeId, Toast.LENGTH_SHORT).show();
                                     } else {
+                                        checkBox.setButtonDrawable(R.drawable.unchecked);
                                         model.outgoingChallengeListModel.deleteOutgoingChallenge(
                                                 new OutgoingChallenge(challengeeId));
 
@@ -253,6 +259,7 @@ public class ChallengeAFriendController extends SlideNavigationController implem
             // convertView.setEnabled and .setClickable are super weird and you need to pass in
             //      the opposite boolean into it for it to work
             if(friend.isChallenged){
+                checkBox.setButtonDrawable(R.drawable.checked);
                 checkBox.setChecked(true);
                 checkBox.setEnabled(true);
                 checkBox.setClickable(true);
@@ -265,6 +272,7 @@ public class ChallengeAFriendController extends SlideNavigationController implem
                 convertView.setEnabled(true);
                 convertView.setClickable(true);
             }else{
+                checkBox.setButtonDrawable(R.drawable.unchecked);
                 checkBox.setChecked(false);
                 checkBox.setEnabled(true);
                 checkBox.setClickable(true);
