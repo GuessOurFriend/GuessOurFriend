@@ -12,18 +12,19 @@
         android:layout_height="wrap_content"
         android:id="@+id/bug_title"
         android:hint="Title"
-        android:minLines="1"
-        android:maxLines="100"
+        android:singleLine="true"
         />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/bug_title"
+        android:gravity="top"
         android:id="@+id/bug_content"
         android:hint="Describe the bug..."
+        android:inputType="textMultiLine"
         android:minLines="10"
-        android:maxLines="100"/>
+        android:maxLines="20"/>
 
     <Button
         android:layout_width="wrap_content"

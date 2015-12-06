@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
@@ -34,6 +35,9 @@ public class ReportABugController extends SlideNavigationController {
                 String bugTitleString = bugTitle.getText().toString();
                 String bugContentString = bugContent.getText().toString();
                 NetworkRequestHelper.sendBugReport(bugTitleString, bugContentString);
+                Toast.makeText(getApplicationContext(), "Thank you for your feedback!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ReportABugController.this, OptionsController.class);
+                startActivity(intent);
             }
         });
 

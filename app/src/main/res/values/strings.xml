@@ -16,6 +16,7 @@
     <string name="title_activity_start_of_game_controller">StartOfGameController</string>
     <string name="title_activity_middle_of_game_controller">MiddleOfGameController</string>
     <string name="title_activity_end_of_game_controller">EndOfGameController</string>
+    <string name="title_activity_report_a_bug_controller">ReportABugController</string>
 
     <string name="title_section1">Challenge a Friend</string>
     <string name="title_section2">Matchmaking</string>
