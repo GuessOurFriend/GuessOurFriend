@@ -1,17 +1,22 @@
 package inc.guessourfriend.Controllers;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.login.widget.ProfilePictureView;
@@ -154,6 +159,91 @@ public class MiddleOfGameController extends SlideNavigationController implements
         //Set up an adapter to hold all the profile pictures
         ImageAdapter imageAdapter = new ImageAdapter(MiddleOfGameController.this, profilePictureUrls);
         gridView.setAdapter(imageAdapter);
+
+        //Set up the click handler for each of the images
+        //TODO: Consider click for gray out and long click for guess
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                //Get the ImageView
+                final ImageView selectedImage = (ImageView) v;
+                selectedImage.setCropToPadding(true);
+
+                //TODO: Figure out if this is opponentPool or myPool that we want
+                final MutualFriend selectedFriend = game.opponentPool.mutualFriendList.get(position);
+
+                //Create a dialog for the user to decide what to do
+                AlertDialog.Builder adb = new AlertDialog.Builder(MiddleOfGameController.this);
+
+                //Show different dialogs based on whether or not it is the user's turn
+                if (game.isMyTurn) {
+                    //Let the user guess the mystery friend, gray out, or exit
+                    adb.setTitle("Gray Out Or Select A Friend");
+                    adb.setMessage("Would you like to gray out or guess " +
+                            selectedFriend.firstName + " " +
+                            selectedFriend.lastName + "?");
+                    //Keep Gray Out as the "positive" so it is always in the same position
+                    adb.setPositiveButton("Gray Out", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //Highlight/Unhighlight the friend that was clicked
+                            if (selectedFriend.isGrayedOut) {
+                                selectedImage.setColorFilter(Color.parseColor("#00000000"));
+
+                                //TODO: Also send to server?
+                                selectedFriend.isGrayedOut = false;
+                            } else {
+                                selectedImage.setColorFilter(Color.parseColor("#88000000"));
+
+                                //TODO: Also send to server?
+                                selectedFriend.isGrayedOut = true;
+                            }
+                        }
+                    });
+                    adb.setNegativeButton("Guess", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //TODO: Uncomment
+                            //NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.myID, selectedFriend.facebookID);
+                        }
+                    });
+                    adb.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //Do Nothing
+                        }
+                    });
+
+                } else {
+                    //Let the user gray out or exit (they can't guess a friend if it's not their turn)
+                    adb.setTitle("Gray Out A Friend");
+                    adb.setMessage("Would you like to gray out " +
+                            selectedFriend.firstName + " " +
+                            selectedFriend.lastName + "?");
+                    adb.setPositiveButton("Gray Out", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //Highlight/Unhighlight the friend that was clicked
+                            if (selectedFriend.isGrayedOut) {
+                                selectedImage.setColorFilter(Color.parseColor("#00000000"));
+
+                                //TODO: Also send to server?
+                                selectedFriend.isGrayedOut = false;
+                            } else {
+                                selectedImage.setColorFilter(Color.parseColor("#88000000"));
+
+                                //TODO: Also send to server?
+                                selectedFriend.isGrayedOut = true;
+                            }
+                        }
+                    });
+                    adb.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //Do Nothing
+                        }
+                    });
+                }
+
+                //Display the dialog
+                AlertDialog alertDialog = adb.create();
+                alertDialog.show();
+            }
+        });
     }
 
     public void onTaskCompleted(String taskName, Object resultModel){
