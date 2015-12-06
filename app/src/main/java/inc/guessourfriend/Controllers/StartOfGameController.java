@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
+import inc.guessourfriend.NetworkCommunication.OnTaskCompleted;
 import inc.guessourfriend.SupportingClasses.Game;
 import inc.guessourfriend.SupportingClasses.ImageAdapter;
 import inc.guessourfriend.Application.Model;
@@ -36,7 +37,7 @@ import inc.guessourfriend.R;
 /**
  * Created by Laura on 11/14/2015.
  */
-public class StartOfGameController extends SlideNavigationController {
+public class StartOfGameController extends SlideNavigationController implements OnTaskCompleted {
 
     private Model model;
     private List<MutualFriend> famousPeople;
@@ -56,7 +57,7 @@ public class StartOfGameController extends SlideNavigationController {
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
 
-        //Get the opponentID from the view we just came from (Challenges)
+        //Get the opponentID from the view we just came from (Challenges or CurrentGames)
         Intent intentExtras = getIntent();
         Bundle extrasBundle = intentExtras.getExtras();
         if (!extrasBundle.isEmpty()) {
@@ -101,29 +102,34 @@ public class StartOfGameController extends SlideNavigationController {
                     }
                 });
 
-                //Go and set up the new game
-                createNewGame();
+                if (extrasBundle.getBoolean("cameFromChallenges")) {
+                    //No need to check if a pool exists, go and set one up
+                    generateMutualFriendPool();
+                } else {
+                    //Get the game board to see if a pool is set up
+                    NetworkRequestHelper.getGameBoard(StartOfGameController.this, game.myID);
+                }
             }
         }
     }
 
     private long[] getMutualFriendIds() {
-        long[] ids = new long[game.myPool.getMutualFriendList().size()];
-        for (int i = 0; i < game.myPool.getMutualFriendList().size(); i++) {
-            ids[i] = game.myPool.getMutualFriendList().get(i).facebookID;
+        long[] ids = new long[game.opponentPool.getMutualFriendList().size()];
+        for (int i = 0; i < game.opponentPool.getMutualFriendList().size(); i++) {
+            ids[i] = game.opponentPool.getMutualFriendList().get(i).facebookID;
         }
         return ids;
     }
 
     private String[] getImageURLs() {
-        String[] imageURLs = new String[game.myPool.getMutualFriendList().size()];
-        for (int i = 0; i < game.myPool.getMutualFriendList().size(); i++) {
-            imageURLs[i] = game.myPool.getMutualFriendList().get(i).profilePicture;
+        String[] imageURLs = new String[game.opponentPool.getMutualFriendList().size()];
+        for (int i = 0; i < game.opponentPool.getMutualFriendList().size(); i++) {
+            imageURLs[i] = game.opponentPool.getMutualFriendList().get(i).profilePicture;
         }
         return imageURLs;
     }
 
-    private void createNewGame() {
+    private void generateMutualFriendPool() {
         //Make the call to Facebook to get the mutual friends with this person
         Bundle myBundle = new Bundle();
         myBundle.putString("fields", "context.fields(mutual_friends{id,name,picture})");
@@ -135,8 +141,8 @@ public class StartOfGameController extends SlideNavigationController {
                     public void onCompleted(GraphResponse response) {
                         //Set up a temp collection for all the friends
                         List<MutualFriend> allMutualFriends = new ArrayList<MutualFriend>();
-                        game.myPool = new MutualFriendList();
-                        game.myPool.mutualFriendList = new ArrayList<MutualFriend>();
+                        game.opponentPool = new MutualFriendList();
+                        game.opponentPool.mutualFriendList = new ArrayList<MutualFriend>();
 
                         if (response.getError() != null) {
                             System.out.println("MutualFriend Error" + response.getError().toString());
@@ -170,57 +176,119 @@ public class StartOfGameController extends SlideNavigationController {
                             //Add up to 20 mutual friends and fill the rest with famous people
                             if (allMutualFriends.size() < 20) {
                                 int numMutualFriends = allMutualFriends.size();
-                                game.myPool.mutualFriendList.addAll(allMutualFriends);
-                                game.myPool.mutualFriendList.addAll(getFamousPeople(20 - numMutualFriends));
+                                game.opponentPool.mutualFriendList.addAll(allMutualFriends);
+                                game.opponentPool.mutualFriendList.addAll(getFamousPeople(20 - numMutualFriends));
                             } else {
                                 Collections.shuffle(allMutualFriends);
                                 for (int i = 0; i < 20; i++) {
-                                    game.myPool.mutualFriendList.add(allMutualFriends.get(i));
+                                    game.opponentPool.mutualFriendList.add(allMutualFriends.get(i));
                                 }
                             }
 
                             //Post the friend pools to the server
                             NetworkRequestHelper.postFriendPools(game.myID, getMutualFriendIds());
 
-                            //Set up the view
-                            final GridView gridView = (GridView) findViewById(R.id.gridview);
-
-                            //Set up an adapter to hold all the profile pictures
-                            ImageAdapter imageAdapter = new ImageAdapter(StartOfGameController.this, getImageURLs());
-                            gridView.setAdapter(imageAdapter);
-
-                            //Set up the click handler for each of the images
-                            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                                    //Get the ImageView
-                                    ImageView selectedImage = (ImageView) v;
-                                    selectedImage.setCropToPadding(true);
-
-                                    //Highlight/Unhighlight the friend that was clicked
-                                    if (highlightedFriendPos == position) {
-                                        selectedImage.setColorFilter(Color.parseColor("#00000000"));
-                                        //selectedImage.setBackgroundColor(Color.parseColor("#80ffffff"));
-                                        highlightedFriendPos = -1;
-                                        highlightedFriend = null;
-                                    } else {
-                                        if (highlightedFriend != null) {
-                                            //Unhighlight the old highlighted friend
-                                            ((ImageView) gridView.getChildAt(highlightedFriendPos)).setColorFilter(Color.parseColor("#00000000"));
-                                            //gridView.getChildAt(position).setBackgroundColor(Color.parseColor("#80ffffff"));
-                                        }
-                                        highlightedFriendPos = position;
-                                        highlightedFriend = game.myPool.mutualFriendList.get(position);
-                                        selectedImage.setColorFilter(Color.parseColor("#55ffff00"));
-                                        //selectedImage.setBackgroundColor(Color.parseColor("#ffff00"));
-                                    }
-                                }
-                            });
+                            //Set up the choosing of a mystery friend
+                            setUpChoosingMysteryFriend();
                         }
                     }
                 }
         );
         request.setParameters(myBundle);
         request.executeAsync();
+    }
+
+    private void refillMutualFriendPool() {
+        //Make the call to Facebook to get the mutual friends with this person
+        Bundle myBundle = new Bundle();
+        myBundle.putString("fields", "context.fields(mutual_friends{id,name,picture})");
+        GraphRequest request = GraphRequest.newGraphPathRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + game.opponentID,
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse response) {
+                        if (response.getError() != null) {
+                            System.out.println("MutualFriend Error" + response.getError().toString());
+                        } else {
+                            System.out.println("MutualFriend Success");
+                            JSONObject json = response.getJSONObject();
+                            try {
+                                //Get the list of mutual friends from the JSON
+                                //TODO: Handle paging?
+                                JSONArray mutualFriends = json.getJSONObject("context").getJSONObject("mutual_friends").getJSONArray("data");
+
+                                //Loop through the list of mutual friends
+                                for (int i = 0; i < mutualFriends.length(); i++) {
+                                    JSONObject friend = mutualFriends.getJSONObject(i);
+                                    long facebookID = Long.parseLong(friend.getString("id"));
+
+                                    for (MutualFriend poolFriend : game.opponentPool.mutualFriendList) {
+                                        if (poolFriend.facebookID == facebookID) {
+                                            String fullName = friend.getString("name");
+                                            String profilePicture = friend.getJSONObject("picture").getJSONObject("data").getString("url");
+
+                                            poolFriend.fullName = fullName;
+                                            poolFriend.profilePicture = profilePicture;
+                                        }
+                                    }
+                                }
+
+                                //Loop through the famous people too
+                                getFamousPeopleList();
+                                for (MutualFriend famousFriend : famousPeople) {
+                                    for (MutualFriend poolFriend : game.opponentPool.mutualFriendList) {
+                                        if (poolFriend.facebookID == famousFriend.facebookID) {
+                                            poolFriend.fullName = famousFriend.fullName;
+                                            poolFriend.profilePicture = famousFriend.profilePicture;
+                                        }
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            //Set up the choosing of a mystery friend
+                            setUpChoosingMysteryFriend();
+                        }
+                    }
+                }
+        );
+        request.setParameters(myBundle);
+        request.executeAsync();
+    }
+
+    private void setUpChoosingMysteryFriend() {
+        //Set up the view
+        final GridView gridView = (GridView) findViewById(R.id.gridview);
+
+        //Set up an adapter to hold all the profile pictures
+        ImageAdapter imageAdapter = new ImageAdapter(StartOfGameController.this, getImageURLs());
+        gridView.setAdapter(imageAdapter);
+
+        //Set up the click handler for each of the images
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                //Get the ImageView
+                ImageView selectedImage = (ImageView) v;
+                selectedImage.setCropToPadding(true);
+
+                //Highlight/Unhighlight the friend that was clicked
+                if (highlightedFriendPos == position) {
+                    selectedImage.setColorFilter(Color.parseColor("#00000000"));
+                    highlightedFriendPos = -1;
+                    highlightedFriend = null;
+                } else {
+                    if (highlightedFriend != null) {
+                        //Unhighlight the old highlighted friend
+                        ((ImageView) gridView.getChildAt(highlightedFriendPos)).setColorFilter(Color.parseColor("#00000000"));
+                    }
+                    highlightedFriendPos = position;
+                    highlightedFriend = game.opponentPool.mutualFriendList.get(position);
+                    selectedImage.setColorFilter(Color.parseColor("#55ffff00"));
+                }
+            }
+        });
     }
 
     private List<MutualFriend> getFamousPeople(int numNeeded) {
@@ -260,6 +328,23 @@ public class StartOfGameController extends SlideNavigationController {
             famousPeople.add(new MutualFriend(currentId--, "Will Smith", "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Will_Smith_2012.jpg/220px-Will_Smith_2012.jpg", false));
             famousPeople.add(new MutualFriend(currentId--, "Britney Spears", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Britney_Spears_2013_%28Straighten_Crop%29.jpg/220px-Britney_Spears_2013_%28Straighten_Crop%29.jpg", false));
 
+        }
+    }
+
+    @Override
+    public void onTaskCompleted(String taskName, Object model) {
+        if(taskName.equals("getGameBoard")) {
+            //Update the game to be the one from the server
+            Game fullGame = (Game) model;
+            fullGame.opponentID = game.opponentID;
+            game = fullGame;
+
+            //Check whether or not we already have a pool
+            if (game.opponentPool.mutualFriendList.size() > 0) {
+                refillMutualFriendPool();
+            } else {
+                generateMutualFriendPool();
+            }
         }
     }
 }

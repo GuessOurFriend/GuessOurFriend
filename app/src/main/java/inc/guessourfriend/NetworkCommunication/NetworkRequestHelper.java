@@ -197,9 +197,11 @@ public class NetworkRequestHelper {
             @Override
             protected void onPostExecute(JSONObject jsonResult) {
                 Game gameResult = new Game();
+                gameResult.myID = gameId;
                 gameResult.opponentPool = new MutualFriendList();
-                MutualFriendList testpool = new MutualFriendList();
-                testpool.mutualFriendList = new ArrayList<MutualFriend>();
+                gameResult.opponentPool.mutualFriendList = new ArrayList<MutualFriend>();
+                gameResult.myPool = new MutualFriendList();
+                gameResult.myPool.mutualFriendList = new ArrayList<MutualFriend>();
 
                 JSONObject json = jsonResult;
                 Log.v("Stupid json: ", jsonResult.toString());
@@ -214,31 +216,33 @@ public class NetworkRequestHelper {
                     JSONArray incomingFriendsList = friendsList.getJSONArray("incoming_list");
                     //Long mysteryFriend = (Long) resultObject.get("mystery_friend"); //TODO: Ignore null
 
-                    //Set up the game
-                    gameResult.myID = gameId;
-
                     //TODO: Set up the questions
                     for (int i=0; i < incomingQuestions.length(); i++) {
 
                     }
 
-                    //TODO: Set up the friend pool
-                    //for (int i=0; i < incomingFriendsList.length(); i++) {
-                    for (int i=0; i < 20; i++) {
-                        /*JSONObject curr = incomingFriendsList.getJSONObject(i);
-                        String firstName = curr.getString("first_name");
-                        String lastName = curr.getString("last_name");*/
-                        MutualFriend toadd = new MutualFriend();
-                        toadd.firstName = "Steve";
-                        //toadd.lastName = lastName;
-                        testpool.mutualFriendList.add(toadd);
-                        //gameResult.opponentPool.mutualFriendList.add(toadd);
+                    for (int i=0; i < incomingFriendsList.length(); i++) {
+                        JSONObject curr = incomingFriendsList.getJSONObject(i);
+                        Long fbId = Long.parseLong(curr.getString("fb_id"));
+
+                        MutualFriend temp = new MutualFriend();
+                        temp.facebookID = fbId;
+                        gameResult.myPool.mutualFriendList.add(temp);
+                    }
+
+                    for (int i=0; i < outgoingFriendsList.length(); i++) {
+                        JSONObject curr = outgoingFriendsList.getJSONObject(i);
+                        Long fbId = Long.parseLong(curr.getString("fb_id"));
+
+                        MutualFriend temp = new MutualFriend();
+                        temp.facebookID = fbId;
+                        gameResult.opponentPool.mutualFriendList.add(temp);
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                gameResult.opponentPool=testpool;
+
                 theListener.onTaskCompleted("getGameBoard", gameResult);
                 //theListener.onTaskCompleted("getQuestions", result);
                 //theListener.onTaskCompleted("getFriendPool", result);
