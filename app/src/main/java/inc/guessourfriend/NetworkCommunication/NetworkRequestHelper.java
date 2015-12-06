@@ -612,17 +612,35 @@ public class NetworkRequestHelper {
     }
 
     //POST /friend_pools
-    public static void postfriendpools(long [] ImageIDs, long mysteryID){
-
-        JSONObject friendIDJSONObject = new JSONObject();
+    public static void postFriendPools(long gameId, long[] friendIds){
+        JSONObject data = new JSONObject();
         try {
-            friendIDJSONObject.put("friend_pool", ImageIDs);
-            friendIDJSONObject.put("mystery_friend", mysteryID);
+            data.put("game_id", gameId);
+            JSONArray jsonFriendIds = new JSONArray();
+            for (long fbId : friendIds) {
+                JSONObject temp = new JSONObject();
+                temp.put("fb_id", fbId);
+                jsonFriendIds.put(temp);
+            }
+            data.put("friend_pool", jsonFriendIds);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("POST", ROOT_URL + "/friend_pools", getAuthToken()).execute(friendIDJSONObject);
+        new NetworkRequestRunner("POST", ROOT_URL + "/friend_pools", getAuthToken()).execute(data);
+    }
+
+    //POST /friend_pools/set_mystery_friend
+    public static void setMysteryFriend(long gameId, long mysteryFriendId){
+        JSONObject data = new JSONObject();
+        try {
+            data.put("game_id", gameId);
+            data.put("mystery_friend", mysteryFriendId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new NetworkRequestRunner("POST", ROOT_URL + "/friend_pools/set_mystery_friend", getAuthToken()).execute(data);
     }
 
 }
