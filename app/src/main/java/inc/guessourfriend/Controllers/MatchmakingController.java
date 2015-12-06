@@ -1,6 +1,8 @@
 package inc.guessourfriend.Controllers;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +39,7 @@ public class MatchmakingController extends SlideNavigationController implements 
         setTitle(listArray[position]);
     }
 
+    // TODO : Delete this method
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -45,42 +48,19 @@ public class MatchmakingController extends SlideNavigationController implements 
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
-
-        return super.onOptionsItemSelected(item);
+    protected void onResume() {
+        super.onResume();
+        updateButtonBeforeServerQuery();
+        NetworkRequestHelper.checkIfAlreadyInMatchmaking(this);
     }
 
     public void onMatchmakingButtonClick(View view) {
         Button button = (Button) findViewById(R.id.find_a_game_button);
         if(button.getText().toString().equalsIgnoreCase("Enter Matchmaking Queue")){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Button button = (Button) findViewById(R.id.find_a_game_button);
-                    button.setText("Entering the matchmaking queue");
-                    // Disable the button until we get a response from the server
-                    button.setEnabled(false);
-                }
-            });
+            updateButtonForEnteringMatchmaking();
             NetworkRequestHelper.enterMatchmaking(this);
         }else{
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Button button = (Button) findViewById(R.id.find_a_game_button);
-                    button.setText("Leaving the matchmaking queue...");
-                    button.setEnabled(false);
-                }
-            });
+            updateButtonForLeavingMatchmaking();
             NetworkRequestHelper.leaveMatchmaking(this);
         }
     }
@@ -92,39 +72,88 @@ public class MatchmakingController extends SlideNavigationController implements 
             if(!model.currentGameListModel.getCurrentGameList().contains(game)){
                 model.currentGameListModel.getCurrentGameList().add(game);
             }
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Button button = (Button) findViewById(R.id.find_a_game_button);
-                    button.setText("Enter Matchmaking Queue");
-                    button.setEnabled(true);
-                }
-            });
+            updateButtonForClickToEnter();
             //TODO: Send this user to StartOfGameController
-
-        }else if(taskName.equalsIgnoreCase("entered matchmaking queue")){
-            // user has entered matchmaking queue
-            //Enable the button and change the text appropriately
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Button button = (Button) findViewById(R.id.find_a_game_button);
-                    button.setText("Click to leave Matchmaking Queue");
-                    button.setEnabled(true);
-                }
-            });
-            // FIXME: How do we get notified of a game in this case?
-
+            //Intent intent = new Intent(this, StartOfGameController.class);
+            //intent.putExtra("opponentID", itemValue.fbId);
+            //startActivity(intent);
+        }else if(taskName.equalsIgnoreCase("entered matchmaking queue") ||
+                taskName.equalsIgnoreCase("already in matchmaking")){
+            updateButtonForClickToLeave();
+        }else if(taskName.equalsIgnoreCase("not in matchmaking")){
+            updateButtonForClickToEnter();
+        }else if(taskName.equalsIgnoreCase("left the matchmaking queue")){
+            updateButtonForClickToEnter();
         }else{
-            // user left the matchmaking queue
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Button button = (Button) findViewById(R.id.find_a_game_button);
-                    button.setText("Enter Matchmaking Queue");
-                    button.setEnabled(true);
-                }
-            });
+            updateButtonForError();
+            Log.v("Matchmaking error: ", "matchmaking onTaskCompleted");
         }
+    }
+
+    private void updateButtonForError(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Button button = (Button) findViewById(R.id.find_a_game_button);
+                button.setText("Error :(");
+                button.setEnabled(false);
+            }
+        });
+    }
+
+    private void updateButtonBeforeServerQuery(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Button button = (Button) findViewById(R.id.find_a_game_button);
+                button.setText("...");
+                button.setEnabled(false);
+            }
+        });
+    }
+
+    private void updateButtonForLeavingMatchmaking(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Button button = (Button) findViewById(R.id.find_a_game_button);
+                button.setText("Leaving the matchmaking queue...");
+                button.setEnabled(false);
+            }
+        });
+    }
+
+    private void updateButtonForEnteringMatchmaking(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Button button = (Button) findViewById(R.id.find_a_game_button);
+                button.setText("Entering the matchmaking queue");
+                // Disable the button until we get a response from the server
+                button.setEnabled(false);
+            }
+        });
+    }
+
+    private void updateButtonForClickToEnter(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Button button = (Button) findViewById(R.id.find_a_game_button);
+                button.setText("Enter Matchmaking Queue");
+                button.setEnabled(true);
+            }
+        });
+    }
+
+    private void updateButtonForClickToLeave(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Button button = (Button) findViewById(R.id.find_a_game_button);
+                button.setText("Click to leave Matchmaking Queue");
+                button.setEnabled(true);
+            }
+        });
     }
 }
