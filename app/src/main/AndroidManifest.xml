@@ -94,6 +94,10 @@
             android:name=".Controllers.TestController"
             android:label="@string/title_activity_main" >
         </activity>
+        <activity
+            android:name=".Controllers.ReportABugController"
+            android:label="@string/title_activity_report_a_bug_controller" >
+        </activity>
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
