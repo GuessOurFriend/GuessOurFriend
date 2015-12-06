@@ -508,6 +508,7 @@ public class NetworkRequestHelper {
                 String message = "";
                 String noFriendAvailableMessage = "There are no available friends in the " +
                         "matchmaking pool. You have been placed in the pool.";
+                String alreadyInMatchmaking = "You are already in the matchmaking pool.";
                 try{
                     if (result.has("errors")) {
                         Log.v("Matchmaking error: ", result.getString("errors"));
@@ -520,6 +521,8 @@ public class NetworkRequestHelper {
 
                 if(message.equals(noFriendAvailableMessage)){
                     theListener.onTaskCompleted("entered matchmaking queue", null);
+                }else if(message.equals(alreadyInMatchmaking)){
+                    theListener.onTaskCompleted("already in matchmaking", null);
                 }else{
                     JSONObject gameJSONObject = null;
                     Game game = new Game();
@@ -544,8 +547,8 @@ public class NetworkRequestHelper {
         new NetworkRequestRunner("PUT", ROOT_URL + "/game/remove_from_match_making", getAuthToken()){
             @Override
             protected void onPostExecute(JSONObject result) {
-                JSONObject result2 = result; // FIXME: result is returning nothing - talk to Brian about fixing this.
-                String success = "Successfully removed yourself from the match making pool";
+                JSONObject result2 = result;
+                String success = "Successfully removed yourself from the matchmaking pool.";
                 try{
                     if (result.has("errors")) {
                         Log.v("Matchmaking error: ", result.getString("errors"));
@@ -553,6 +556,31 @@ public class NetworkRequestHelper {
                     }
                     if(result.getString("message").equals(success)){
                         theListener.onTaskCompleted("left the matchmaking queue", null);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute();
+    }
+
+    // GET /game/check_match_making
+    public static void checkIfAlreadyInMatchmaking(OnTaskCompleted listener){
+        final OnTaskCompleted theListener = listener;
+        new NetworkRequestRunner("GET", ROOT_URL + "/game/check_match_making", getAuthToken()){
+            @Override
+            protected void onPostExecute(JSONObject result) {
+                JSONObject result2 = result;
+                String alreadyInMatchmaking = "true";
+                try{
+                    if (result.has("errors")) {
+                        Log.v("inMatchmaking error: ", result.getString("errors"));
+                        return;
+                    }
+                    if(result.getString("results").equals(alreadyInMatchmaking)){
+                        theListener.onTaskCompleted("already in matchmaking", null);
+                    }else{
+                        theListener.onTaskCompleted("not in matchmaking", null);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
