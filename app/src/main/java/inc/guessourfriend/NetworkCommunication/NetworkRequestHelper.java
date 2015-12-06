@@ -349,6 +349,28 @@ public class NetworkRequestHelper {
         }.execute(data);
     }
 
+    public static void greyFriend(long fbId) {
+        JSONObject data = new JSONObject();
+        try {
+            data.put("fb_id", fbId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new NetworkRequestRunner("POST", ROOT_URL + "/friend_pool/grey", getAuthToken()).execute(data);
+    }
+
+    public static void ungreyFriend(long fbId) {
+        JSONObject data = new JSONObject();
+        try {
+            data.put("fb_id", fbId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new NetworkRequestRunner("POST", ROOT_URL + "/friend_pool/ungrey", getAuthToken()).execute(data);
+    }
+
     //////////////////////////////////////////////////
     //Challenges
     //////////////////////////////////////////////////

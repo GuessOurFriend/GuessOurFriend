@@ -187,21 +187,18 @@ public class MiddleOfGameController extends SlideNavigationController implements
                             //Highlight/Unhighlight the friend that was clicked
                             if (selectedFriend.isGrayedOut) {
                                 selectedImage.setColorFilter(Color.parseColor("#00000000"));
-
-                                //TODO: Also send to server?
                                 selectedFriend.isGrayedOut = false;
+                                NetworkRequestHelper.ungreyFriend(selectedFriend.facebookID);
                             } else {
                                 selectedImage.setColorFilter(Color.parseColor("#88000000"));
-
-                                //TODO: Also send to server?
                                 selectedFriend.isGrayedOut = true;
+                                NetworkRequestHelper.greyFriend(selectedFriend.facebookID);
                             }
                         }
                     });
                     adb.setNegativeButton("Guess", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            //TODO: Uncomment
-                            //NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.myID, selectedFriend.facebookID);
+                            NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.myID, selectedFriend.facebookID);
                         }
                     });
                     adb.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -221,14 +218,12 @@ public class MiddleOfGameController extends SlideNavigationController implements
                             //Highlight/Unhighlight the friend that was clicked
                             if (selectedFriend.isGrayedOut) {
                                 selectedImage.setColorFilter(Color.parseColor("#00000000"));
-
-                                //TODO: Also send to server?
                                 selectedFriend.isGrayedOut = false;
+                                NetworkRequestHelper.ungreyFriend(selectedFriend.facebookID);
                             } else {
                                 selectedImage.setColorFilter(Color.parseColor("#88000000"));
-
-                                //TODO: Also send to server?
                                 selectedFriend.isGrayedOut = true;
+                                NetworkRequestHelper.greyFriend(selectedFriend.facebookID);
                             }
                         }
                     });
