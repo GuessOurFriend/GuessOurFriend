@@ -114,6 +114,18 @@ public class StartOfGameController extends SlideNavigationController implements 
         }
     }
 
+    private void setOpponentName () {
+        for (int i = 0; i < model.fbProfileModel.friendList.size(); i++) {
+          if(model.fbProfileModel.friendList.get(i).facebookID == game.opponentID){
+              game.opponentFirstName = model.fbProfileModel.friendList.get(i).firstName;
+              game.opponentLastName = model.fbProfileModel.friendList.get(i).lastName;
+              break;
+          }
+
+        }
+    }
+
+
     private long[] getMutualFriendIds() {
         long[] ids = new long[game.opponentPool.getMutualFriendList().size()];
         for (int i = 0; i < game.opponentPool.getMutualFriendList().size(); i++) {
