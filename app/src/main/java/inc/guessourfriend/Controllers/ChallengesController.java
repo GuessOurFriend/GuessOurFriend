@@ -102,7 +102,7 @@ public class ChallengesController extends SlideNavigationController implements O
         }else if(taskName.equalsIgnoreCase("challenge accepted")){
             HashMap<String, Long> gameData = (HashMap<String, Long>) result;
             Intent intent = new Intent(ChallengesController.this, StartOfGameController.class);
-            intent.putExtra("gameID", gameData.get("gameID"));
+            intent.putExtra("gameId", gameData.get("gameID"));
             intent.putExtra("opponentID", gameData.get("challengeeID"));
             intent.putExtra("cameFromChallenges", true);
             startActivity(intent);
