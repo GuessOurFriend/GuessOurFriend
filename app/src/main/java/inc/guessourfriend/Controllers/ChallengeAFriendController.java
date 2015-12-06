@@ -262,7 +262,7 @@ public class ChallengeAFriendController extends SlideNavigationController implem
                 convertView.setEnabled(false);
                 convertView.setClickable(false);
             }else if(friend.isInGameWithMe || friend.hasChallengedMe) {
-                checkBox.setPressed(true);
+                checkBox.setButtonDrawable(R.drawable.pressed);
                 checkBox.setEnabled(false);
                 //checkBox.setClickable(true);
                 convertView.setEnabled(true);
