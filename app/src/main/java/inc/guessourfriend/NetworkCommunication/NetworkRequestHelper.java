@@ -656,7 +656,8 @@ public class NetworkRequestHelper {
     }
 
     //POST /friend_pools/set_mystery_friend
-    public static void setMysteryFriend(long gameId, long mysteryFriendId){
+    public static void setMysteryFriend(OnTaskCompleted listener, long gameId, long mysteryFriendId){
+        final OnTaskCompleted theListener = listener;
         JSONObject data = new JSONObject();
         try {
             data.put("game_id", gameId);
@@ -665,7 +666,29 @@ public class NetworkRequestHelper {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("POST", ROOT_URL + "/friend_pools/set_mystery_friend", getAuthToken()).execute(data);
+        new NetworkRequestRunner("POST", ROOT_URL + "/friend_pools/set_mystery_friend", getAuthToken()){
+            @Override
+            protected void onPostExecute(JSONObject result) {
+                JSONObject result2 = result;
+                String alreadyInMatchmaking = "true";
+                try{
+                    if (result.has("errors")) {
+                        Log.v("Error_setmysteryfriend ", result.getString("errors"));
+                        return;
+                    }
+                    JSONObject game = result.getJSONObject("game");
+                    Long mysteryFriend1 = Long.parseLong(game.getString("mystery_friend1"));
+                    Long mysteryFriend2 = Long.parseLong(game.getString("mystery_friend2"));
+                    if(mysteryFriend1 == -1 || mysteryFriend2 == -1){
+                        theListener.onTaskCompleted("waiting for other player to choose mystery friend", null);
+                    }else{
+                        theListener.onTaskCompleted("both players have chosen a friend mystery friend", null);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute(data);
     }
 
 }

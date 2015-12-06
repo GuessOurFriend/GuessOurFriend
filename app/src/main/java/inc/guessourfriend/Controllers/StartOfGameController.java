@@ -81,12 +81,9 @@ public class StartOfGameController extends SlideNavigationController implements 
                                             Toast.makeText(getApplicationContext(),
                                                     currentlySelected.fullName + " selected", Toast.LENGTH_SHORT).show();
                                             currentlySelected.isMysteryFriend = true;
-                                            NetworkRequestHelper.setMysteryFriend(game.ID, currentlySelected.facebookID);
-                                            //TODO change value in db
-
+                                            NetworkRequestHelper.setMysteryFriend(StartOfGameController.this,
+                                                    game.ID, currentlySelected.facebookID);
                                             game.setStateOfGame(Game.MIDDLE_OF_GAME);
-                                            Intent intent = new Intent(StartOfGameController.this, MiddleOfGameController.class);
-                                            //startActivity(intent);
                                         }
                                     })
                                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -201,6 +198,8 @@ public class StartOfGameController extends SlideNavigationController implements 
                             //Post the friend pools to the server
                             NetworkRequestHelper.postFriendPools(game.ID, getMutualFriendIds());
 
+                            setOpponentName();
+
                             //Set up the choosing of a mystery friend
                             setUpChoosingMysteryFriend();
                         }
@@ -262,14 +261,7 @@ public class StartOfGameController extends SlideNavigationController implements 
                             }
 
                             if (game.mysteryFriendId != -1) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        //Display the overlay
-                                        RelativeLayout overlay = (RelativeLayout) findViewById(R.id.otherPlayersTurnOverlay);
-                                        overlay.setVisibility(View.VISIBLE);
-                                    }
-                                });
+                                setUpOverlayForWaitingOnOtherPlayer();
                             }
 
                             //Set up the choosing of a mystery friend
@@ -281,6 +273,18 @@ public class StartOfGameController extends SlideNavigationController implements 
         );
         request.setParameters(myBundle);
         request.executeAsync();
+    }
+
+    private void setUpOverlayForWaitingOnOtherPlayer(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //Display the overlay
+                RelativeLayout overlay = (RelativeLayout)
+                        findViewById(R.id.waitingForOtherPlayerToPickMysteryFriendOverlay);
+                overlay.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void setUpChoosingMysteryFriend() {
@@ -370,6 +374,15 @@ public class StartOfGameController extends SlideNavigationController implements 
             } else {
                 generateMutualFriendPool();
             }
+        }else if(taskName.equals("waiting for other player to choose mystery friend")){
+            setUpOverlayForWaitingOnOtherPlayer();
+        }else if(taskName.equals("both players have chosen a friend mystery friend")){
+            Intent intent = new Intent(StartOfGameController.this, MiddleOfGameController.class);
+            intent.putExtra("gameId", game.ID);
+            intent.putExtra("opponentID", game.opponentID);
+            intent.putExtra("opponentFirstName", game.opponentFirstName);
+            intent.putExtra("opponentLastName", game.opponentLastName);
+            startActivity(intent);
         }
     }
 }

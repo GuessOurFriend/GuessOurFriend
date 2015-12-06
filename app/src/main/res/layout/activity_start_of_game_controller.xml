@@ -33,7 +33,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/otherPlayersTurnOverlay"
+        android:id="@+id/waitingForOtherPlayerToPickMysteryFriendOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible"
@@ -44,7 +44,7 @@
             android:layout_above="@+id/overlay_line1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Other"
+            android:text="Waiting for other "
             android:textColor="#FFFFFF"
             android:textSize="48dp"
             android:layout_centerHorizontal="true"/>
@@ -52,7 +52,7 @@
             android:id="@+id/overlay_line1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Player's"
+            android:text="player to pick their"
             android:textColor="#FFFFFF"
             android:textSize="48dp"
             android:layout_centerHorizontal="true"
@@ -62,7 +62,7 @@
             android:layout_below="@+id/overlay_line1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Turn"
+            android:text="mystery friend"
             android:textColor="#FFFFFF"
             android:textSize="48dp"
             android:layout_centerHorizontal="true"/>
