@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -248,7 +249,19 @@ public class StartOfGameController extends SlideNavigationController implements 
                                 e.printStackTrace();
                             }
 
+                            if (game.mysteryFriendId != -1) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //Display the overlay
+                                        RelativeLayout overlay = (RelativeLayout) findViewById(R.id.otherPlayersTurnOverlay);
+                                        overlay.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                            }
+
                             //Set up the choosing of a mystery friend
+                            //NOTE: Set up for aesthetics if the mystery friend is already selected
                             setUpChoosingMysteryFriend();
                         }
                     }

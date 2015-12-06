@@ -8,6 +8,7 @@ public class Game {
     public long opponentID;
     public String opponentFirstName;
     public String opponentLastName;
+    public long mysteryFriendId;
     public MutualFriendList myPool;
     public MutualFriendList opponentPool;
     public boolean isMyTurn;
@@ -19,15 +20,16 @@ public class Game {
 
     public Game(){
         super();
-        this.myID =-1;
-        this.opponentID =-1;
-        this.myPool =null;
-        this.opponentPool =null;
+        this.myID = -1;
+        this.opponentID = -1;
+        this.mysteryFriendId = -1;
+        this.myPool = null;
+        this.opponentPool = null;
         this.isMyTurn = false;
         this.stateOfGame = START_OF_GAME;
-        this.numberOfQuestions =-1;
+        this.numberOfQuestions = -1;
     }
-    
+
     public void setIsMyTurn(boolean isMyTurn) {
         this.isMyTurn = isMyTurn;
     }

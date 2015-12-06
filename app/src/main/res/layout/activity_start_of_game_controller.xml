@@ -1,32 +1,72 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/choose_mystery_friend_textview"
-        android:text="Select Mystery Friend"
-        android:textSize="24sp"
-        android:layout_margin="10dp"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/choose_mystery_friend_button"
-        android:text="Choose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/choose_mystery_friend_textview"/>
-    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/gridview"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/choose_mystery_friend_textview"
+            android:text="Select Mystery Friend"
+            android:textSize="24sp"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/choose_mystery_friend_button"
+            android:text="Choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/choose_mystery_friend_textview"/>
+        <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/gridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="4"
+            android:verticalSpacing="5dp"
+            android:horizontalSpacing="5dp"
+            android:stretchMode="columnWidth"
+            android:layout_below="@+id/choose_mystery_friend_textview"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/otherPlayersTurnOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="4"
-        android:verticalSpacing="5dp"
-        android:horizontalSpacing="5dp"
-        android:stretchMode="columnWidth"
-        android:layout_below="@+id/choose_mystery_friend_textview"/>
+        android:visibility="invisible"
+        android:background="#AA000000">
 
-</RelativeLayout>
-    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:layout_width="match_parent" android:layout_height="match_parent">-->
+        <TextView
+            android:id="@+id/overlay_line0"
+            android:layout_above="@+id/overlay_line1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other"
+            android:textColor="#FFFFFF"
+            android:textSize="48dp"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:id="@+id/overlay_line1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Player's"
+            android:textColor="#FFFFFF"
+            android:textSize="48dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+        <TextView
+            android:id="@+id/overlay_line2"
+            android:layout_below="@+id/overlay_line1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Turn"
+            android:textColor="#FFFFFF"
+            android:textSize="48dp"
+            android:layout_centerHorizontal="true"/>
 
+    </RelativeLayout>
 
-    <!--</RelativeLayout>-->
+</FrameLayout>

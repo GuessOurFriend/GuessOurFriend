@@ -214,7 +214,11 @@ public class NetworkRequestHelper {
                     JSONObject friendsList = resultObject.getJSONObject("friend_list");
                     JSONArray outgoingFriendsList = friendsList.getJSONArray("outgoing_list");
                     JSONArray incomingFriendsList = friendsList.getJSONArray("incoming_list");
-                    //Long mysteryFriend = (Long) resultObject.get("mystery_friend"); //TODO: Ignore null
+
+                    if (!resultObject.isNull("mystery_friend")) {
+                        JSONObject mysteryFriend = resultObject.getJSONObject("mystery_friend");
+                        gameResult.mysteryFriendId = Long.parseLong(mysteryFriend.getString("fb_id"));
+                    }
 
                     //TODO: Set up the questions
                     for (int i=0; i < incomingQuestions.length(); i++) {
