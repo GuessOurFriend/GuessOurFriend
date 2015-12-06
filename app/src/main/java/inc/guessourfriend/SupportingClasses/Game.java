@@ -4,7 +4,7 @@ package inc.guessourfriend.SupportingClasses;
  * Created by Laura on 11/1/2015.
  */
 public class Game {
-    public long myID;
+    public long ID;
     public long opponentID;
     public String opponentFirstName;
     public String opponentLastName;
@@ -20,7 +20,7 @@ public class Game {
 
     public Game(){
         super();
-        this.myID = -1;
+        this.ID = -1;
         this.opponentID = -1;
         this.mysteryFriendId = -1;
         this.myPool = null;
@@ -43,7 +43,7 @@ public class Game {
     }
 
     public long getMyId() {
-        return myID;
+        return ID;
     }
 
     public long getOpponentId() {

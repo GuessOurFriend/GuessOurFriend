@@ -158,7 +158,7 @@ public class NetworkRequestHelper {
                     for (int i=0; i < incomingGames.length(); i++) {
                         JSONObject curr = incomingGames.getJSONObject(i);
                         Game temp = new Game();
-                        temp.myID = Long.parseLong(curr.getString("game_id"));
+                        temp.ID = Long.parseLong(curr.getString("game_id"));
                         temp.opponentID = Long.parseLong(curr.getString("fb_id"));
                         temp.opponentFirstName = curr.getString("first_name");
                         temp.opponentLastName = curr.getString("last_name");
@@ -169,7 +169,7 @@ public class NetworkRequestHelper {
                     for (int i=0; i < outgoingGames.length(); i++) {
                         JSONObject curr = outgoingGames.getJSONObject(i);
                         Game temp = new Game();
-                        temp.myID = Long.parseLong(curr.getString("game_id"));
+                        temp.ID = Long.parseLong(curr.getString("game_id"));
                         temp.opponentID = Long.parseLong(curr.getString("fb_id"));
                         temp.opponentFirstName = curr.getString("first_name");
                         temp.opponentLastName = curr.getString("last_name");
@@ -195,7 +195,7 @@ public class NetworkRequestHelper {
             @Override
             protected void onPostExecute(JSONObject jsonResult) {
                 Game gameResult = new Game();
-                gameResult.myID = gameId;
+                gameResult.ID = gameId;
                 gameResult.opponentPool = new MutualFriendList();
                 gameResult.opponentPool.mutualFriendList = new ArrayList<MutualFriend>();
                 gameResult.myPool = new MutualFriendList();
@@ -577,10 +577,8 @@ public class NetworkRequestHelper {
                     Game game = new Game();
                     try{
                         gameJSONObject = result.getJSONObject("game");
-                        game.myID = Long.parseLong(gameJSONObject.getString("game_id"));
-                        game.opponentID = Long.parseLong(gameJSONObject.getString("fb_id"));
-                        game.opponentFirstName = gameJSONObject.getString("first_name");
-                        game.opponentLastName = gameJSONObject.getString("last_name");
+                        game.ID = Long.parseLong(gameJSONObject.getString("id"));
+                        game.opponentID = Long.parseLong(gameJSONObject.getString("player1id"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

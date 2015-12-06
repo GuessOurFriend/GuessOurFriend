@@ -64,14 +64,14 @@ public class MiddleOfGameController extends SlideNavigationController implements
         Intent intentExtras = getIntent();
         Bundle extrasBundle = intentExtras.getExtras();
         if (!extrasBundle.isEmpty()) {
-            game.myID = extrasBundle.getLong("gameId");
+            game.ID = extrasBundle.getLong("gameId");
             game.opponentID = extrasBundle.getLong("opponentID");
             game.opponentFirstName = extrasBundle.getString("opponentFirstName");
             game.opponentLastName = extrasBundle.getString("opponentLastName");
             game.setStateOfGame(Game.MIDDLE_OF_GAME);
             game.opponentPool = new MutualFriendList();
             game.opponentPool.mutualFriendList = new ArrayList<MutualFriend>();
-            NetworkRequestHelper.getGameBoard(MiddleOfGameController.this, game.myID);
+            NetworkRequestHelper.getGameBoard(MiddleOfGameController.this, game.ID);
 
             ProfilePictureView opponent = (ProfilePictureView) findViewById(R.id.opponent_mystery_friend);
             opponent.setProfileId(Long.toString(game.opponentID));
@@ -80,7 +80,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     }
 
     private void answerQuestion(int answer) {
-        NetworkRequestHelper.answerQuestion(MiddleOfGameController.this, game.myID, lastQuestionId, answer);
+        NetworkRequestHelper.answerQuestion(MiddleOfGameController.this, game.ID, lastQuestionId, answer);
     }
 
     public void yesButtonClick(View view) {
@@ -97,12 +97,12 @@ public class MiddleOfGameController extends SlideNavigationController implements
 
     //TODO: Remove debug button
     public void getGameBoardButtonClicked(View view) {
-        NetworkRequestHelper.getGameBoard(MiddleOfGameController.this, game.myID);
+        NetworkRequestHelper.getGameBoard(MiddleOfGameController.this, game.ID);
     }
 
     //TODO: Remove debug button
     public void passMyGuessButtonClicked(View view) {
-        NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.myID, -1);
+        NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.ID, -1);
     }
 
     //Make clicking send on the keyboard send the message
@@ -112,7 +112,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    NetworkRequestHelper.sendQuestion(MiddleOfGameController.this, game.myID, theMessage.getText().toString());
+                    NetworkRequestHelper.sendQuestion(MiddleOfGameController.this, game.ID, theMessage.getText().toString());
                     // Check if no view has focus:
                     View view = getCurrentFocus();
                     if (view != null) {
@@ -198,7 +198,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                     });
                     adb.setNegativeButton("Guess", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.myID, selectedFriend.facebookID);
+                            NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.ID, selectedFriend.facebookID);
                         }
                     });
                     adb.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -246,7 +246,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
             Game fullGame = (Game) resultModel;
 
             //TODO: Make server return this info too?
-            fullGame.myID = game.myID;
+            fullGame.ID = game.ID;
             fullGame.opponentID = game.opponentID;
             fullGame.opponentFirstName = game.opponentFirstName;
             fullGame.opponentLastName = game.opponentLastName;

@@ -64,7 +64,7 @@ public class StartOfGameController extends SlideNavigationController implements 
         if (!extrasBundle.isEmpty()) {
             boolean hasID = extrasBundle.containsKey("opponentID");
             if (hasID) {
-                game.myID = extrasBundle.getLong("gameId");
+                game.ID = extrasBundle.getLong("gameId");
                 game.opponentID = extrasBundle.getLong("opponentID");
 
                 //Set up the select mystery friend button
@@ -81,7 +81,7 @@ public class StartOfGameController extends SlideNavigationController implements 
                                             Toast.makeText(getApplicationContext(),
                                                     currentlySelected.fullName + " selected", Toast.LENGTH_SHORT).show();
                                             currentlySelected.isMysteryFriend = true;
-                                            NetworkRequestHelper.setMysteryFriend(game.myID, currentlySelected.facebookID);
+                                            NetworkRequestHelper.setMysteryFriend(game.ID, currentlySelected.facebookID);
                                             //TODO change value in db
 
                                             game.setStateOfGame(Game.MIDDLE_OF_GAME);
@@ -108,7 +108,7 @@ public class StartOfGameController extends SlideNavigationController implements 
                     generateMutualFriendPool();
                 } else {
                     //Get the game board to see if a pool is set up
-                    NetworkRequestHelper.getGameBoard(StartOfGameController.this, game.myID);
+                    NetworkRequestHelper.getGameBoard(StartOfGameController.this, game.ID);
                 }
             }
         }
@@ -187,7 +187,7 @@ public class StartOfGameController extends SlideNavigationController implements 
                             }
 
                             //Post the friend pools to the server
-                            NetworkRequestHelper.postFriendPools(game.myID, getMutualFriendIds());
+                            NetworkRequestHelper.postFriendPools(game.ID, getMutualFriendIds());
 
                             //Set up the choosing of a mystery friend
                             setUpChoosingMysteryFriend();

@@ -62,7 +62,7 @@ public class CurrentGamesController extends SlideNavigationController implements
                     Game selectedGame = gameList.get(position);
                     if (selectedGame.stateOfGame == Game.START_OF_GAME) {
                         Intent myIntent = new Intent(CurrentGamesController.this, StartOfGameController.class);
-                        myIntent.putExtra("gameId", selectedGame.myID);
+                        myIntent.putExtra("gameId", selectedGame.ID);
                         myIntent.putExtra("opponentID", selectedGame.opponentID);
                         myIntent.putExtra("opponentFirstName", selectedGame.opponentFirstName);
                         myIntent.putExtra("opponentLastName", selectedGame.opponentLastName);
@@ -70,14 +70,14 @@ public class CurrentGamesController extends SlideNavigationController implements
                         startActivity(myIntent);
                     } else if (selectedGame.stateOfGame == Game.MIDDLE_OF_GAME) {
                         Intent myIntent = new Intent(CurrentGamesController.this, MiddleOfGameController.class);
-                        myIntent.putExtra("gameId", selectedGame.myID);
+                        myIntent.putExtra("gameId", selectedGame.ID);
                         myIntent.putExtra("opponentID", selectedGame.opponentID);
                         myIntent.putExtra("opponentFirstName", selectedGame.opponentFirstName);
                         myIntent.putExtra("opponentLastName", selectedGame.opponentLastName);
                         startActivity(myIntent);
                     } else if (selectedGame.stateOfGame == Game.END_OF_GAME) {
                         Intent myIntent = new Intent(CurrentGamesController.this, EndOfGameController.class);
-                        myIntent.putExtra("gameId", selectedGame.myID);
+                        myIntent.putExtra("gameId", selectedGame.ID);
                         myIntent.putExtra("opponentID", selectedGame.opponentID);
                         myIntent.putExtra("opponentFirstName", selectedGame.opponentFirstName);
                         myIntent.putExtra("opponentLastName", selectedGame.opponentLastName);

@@ -73,10 +73,10 @@ public class MatchmakingController extends SlideNavigationController implements 
                 model.currentGameListModel.getCurrentGameList().add(game);
             }
             updateButtonForClickToEnter();
-            //TODO: Send this user to StartOfGameController
-            //Intent intent = new Intent(this, StartOfGameController.class);
-            //intent.putExtra("opponentID", itemValue.fbId);
-            //startActivity(intent);
+            Intent intent = new Intent(this, StartOfGameController.class);
+            intent.putExtra("gameId", game.ID);
+            intent.putExtra("opponentID", game.getOpponentId());
+            startActivity(intent);
         }else if(taskName.equalsIgnoreCase("entered matchmaking queue") ||
                 taskName.equalsIgnoreCase("already in matchmaking")){
             updateButtonForClickToLeave();
