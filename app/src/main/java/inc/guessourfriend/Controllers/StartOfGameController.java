@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 
@@ -49,6 +50,7 @@ public class StartOfGameController extends SlideNavigationController {
         super.onCreate(savedInstanceState);
         // get the models
         model = (Model) getApplicationContext();
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
         // set up slide navigation
         getLayoutInflater().inflate(R.layout.activity_start_of_game_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
@@ -180,7 +182,7 @@ public class StartOfGameController extends SlideNavigationController {
 
                             //Set up an adapter to hold all the profile pictures
 
-                            //NetworkRequestHelper.postfriendpools(getImagefbids(),currentlySelected.facebookID);
+                            NetworkRequestHelper.postfriendpools(getImagefbids(),currentlySelected.facebookID);
                             ImageAdapter imageAdapter = new ImageAdapter(StartOfGameController.this, getImageURLs());
                             gridView.setAdapter(imageAdapter);
 
