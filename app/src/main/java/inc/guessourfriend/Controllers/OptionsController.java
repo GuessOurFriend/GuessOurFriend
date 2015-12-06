@@ -28,6 +28,14 @@ public class OptionsController extends SlideNavigationController {
             }
         });
 
+        reportbugb.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(OptionsController.this, ReportABugController.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
 
