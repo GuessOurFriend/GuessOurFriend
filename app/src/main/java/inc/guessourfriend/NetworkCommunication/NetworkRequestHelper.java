@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.Models.IncomingChallengeListModel;
@@ -163,6 +164,7 @@ public class NetworkRequestHelper {
                         temp.opponentID = Long.parseLong(curr.getString("fb_id"));
                         temp.opponentFirstName = curr.getString("first_name");
                         temp.opponentLastName = curr.getString("last_name");
+                        temp.stateOfGame = curr.getInt("state");
                         result.add(temp);
                     }
 
@@ -173,6 +175,7 @@ public class NetworkRequestHelper {
                         temp.opponentID = Long.parseLong(curr.getString("fb_id"));
                         temp.opponentFirstName = curr.getString("first_name");
                         temp.opponentLastName = curr.getString("last_name");
+                        temp.stateOfGame = curr.getInt("state");
                         result.add(temp);
                     }
 
@@ -408,7 +411,9 @@ public class NetworkRequestHelper {
     }
 
     //DELETE challenge/respond_as_challengee
-    public static void deleteChallengeFromChallengee(long challengeId, long challengerId, boolean accept) {
+    public static void deleteChallengeFromChallengee(OnTaskCompleted listener, long challengeId, long challengerId, boolean accept) {
+        final OnTaskCompleted theListener = listener;
+        final boolean acceptedTheChallenge = accept;
         JSONObject data = new JSONObject();
         try {
             data.put("challenge_id", challengeId);
@@ -418,7 +423,23 @@ public class NetworkRequestHelper {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("DELETE", ROOT_URL + "/challenge/respond_as_challengee", getAuthToken()).execute(data);
+        new NetworkRequestRunner("DELETE", ROOT_URL + "/challenge/respond_as_challengee", getAuthToken()){
+            @Override
+            protected void onPostExecute(JSONObject result) {
+                if(acceptedTheChallenge) {
+                    HashMap<String, Long> gameData = new HashMap<String, Long>();
+                    try {
+                        Long gameID = Long.parseLong(result.getString("id"));
+                        Long challengeeID = Long.parseLong(result.getString("player2id"));
+                        gameData.put("gameID", gameID);
+                        gameData.put("challengeeID", challengeeID);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    theListener.onTaskCompleted("challenge accepted", gameData);
+                }
+            }
+        }.execute(data);
     }
 
     //DELETE challenge/respond_as_challenger

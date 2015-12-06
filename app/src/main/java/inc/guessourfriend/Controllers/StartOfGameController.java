@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -79,6 +80,7 @@ public class StartOfGameController extends SlideNavigationController {
                                                     currentlySelected.fullName + " selected", Toast.LENGTH_SHORT).show();
                                             currentlySelected.isMysteryFriend = true;
                                             //TODO change value in db
+
                                             game.setStateOfGame(Game.MIDDLE_OF_GAME);
                                             Intent intent = new Intent(StartOfGameController.this, MiddleOfGameController.class);
                                             //startActivity(intent);
@@ -125,6 +127,7 @@ public class StartOfGameController extends SlideNavigationController {
         //Make the call to Facebook to get the mutual friends with this person
         Bundle myBundle = new Bundle();
         myBundle.putString("fields", "context.fields(mutual_friends{id,name,picture})");
+        Log.v("OpponentID = ", Long.toString(game.opponentID));
         GraphRequest request = GraphRequest.newGraphPathRequest(
                 AccessToken.getCurrentAccessToken(),
                 "/" + game.opponentID,
