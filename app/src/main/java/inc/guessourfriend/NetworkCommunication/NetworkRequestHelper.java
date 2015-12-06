@@ -148,9 +148,7 @@ public class NetworkRequestHelper {
             @Override
             protected void onPostExecute(JSONObject jsonResult) {
                 ArrayList<Game> result = new ArrayList<Game>();
-
                 System.out.println(jsonResult);
-
                 try{
                     JSONObject jsonResults = jsonResult.getJSONObject("results");
                     JSONArray incomingGames = jsonResults.getJSONArray("incoming_games");

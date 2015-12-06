@@ -11,6 +11,8 @@ public class Friend implements Comparable<Friend>{
     public String profilePicture;
     public boolean isBlacklisted;
     public boolean isChallenged;
+    public boolean isInGameWithMe;
+    public boolean hasChallengedMe;
     private long matchesWon;
     private long matchesLost;
     private long points;
@@ -32,6 +34,9 @@ public class Friend implements Comparable<Friend>{
         this.firstName = "";
         this.lastName = "";
         this.profilePicture = "";
+        this.isChallenged = false;
+        this.isInGameWithMe = false;
+        this.hasChallengedMe = false;
         this.matchesLost = 0;
         this.matchesWon =0;
         this.points =0;

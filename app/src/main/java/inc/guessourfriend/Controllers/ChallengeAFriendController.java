@@ -20,10 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import inc.guessourfriend.Application.Model;
+import inc.guessourfriend.Models.FBProfileModel;
+import inc.guessourfriend.Models.IncomingChallengeListModel;
 import inc.guessourfriend.Models.OutgoingChallengeListModel;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
 import inc.guessourfriend.NetworkCommunication.OnTaskCompleted;
 import inc.guessourfriend.SupportingClasses.Friend;
+import inc.guessourfriend.SupportingClasses.Game;
 import inc.guessourfriend.SupportingClasses.IncomingChallenge;
 import inc.guessourfriend.SupportingClasses.OutgoingChallenge;
 import inc.guessourfriend.R;
@@ -115,6 +118,8 @@ public class ChallengeAFriendController extends SlideNavigationController implem
         });
 
         listAdapter = new FriendArrayAdapter(this, model.fbProfileModel.friendList);
+        NetworkRequestHelper.getAllGames(ChallengeAFriendController.this);
+        NetworkRequestHelper.getIncomingChallenges(ChallengeAFriendController.this);
         NetworkRequestHelper.getOutgoingChallenges(ChallengeAFriendController.this);
         mainListView.setAdapter(listAdapter);
     }
@@ -159,6 +164,7 @@ public class ChallengeAFriendController extends SlideNavigationController implem
             // The child views in each row.
             final CheckBox checkBox ;
             TextView textView ;
+            FriendViewHolder viewHolder;
 
             // Create a new row view
             if ( convertView == null ) {
@@ -175,14 +181,14 @@ public class ChallengeAFriendController extends SlideNavigationController implem
             // Reuse existing row view
             else {
                 // Because we use a ViewHolder, we avoid having to call findViewById().
-                FriendViewHolder viewHolder = (FriendViewHolder) convertView.getTag();
+                viewHolder = (FriendViewHolder) convertView.getTag();
                 checkBox = viewHolder.getCheckBox() ;
                 textView = viewHolder.getTextView() ;
             }
 
-            checkBox.setOnClickListener( new View.OnClickListener() {
+            checkBox.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    final CheckBox cb = (CheckBox) v ;
+                    final CheckBox cb = (CheckBox) v;
                     final Friend friend = (Friend) cb.getTag();
                     //friend.setChallenged(cb.isChecked());
 
@@ -208,7 +214,7 @@ public class ChallengeAFriendController extends SlideNavigationController implem
                                     long challengeeId = model.fbProfileModel.friendList.get(itemPosition).facebookID;
                                     friend.setChallenged(cb.isChecked());
 
-                                    if(Challengedstatus == false) {
+                                    if (Challengedstatus == false) {
                                         model.outgoingChallengeListModel.addOutgoingChallenge(
                                                 new OutgoingChallenge(challengeeId));
 
@@ -217,8 +223,7 @@ public class ChallengeAFriendController extends SlideNavigationController implem
 
                                         Toast.makeText(getApplicationContext(),
                                                 "Challenged: " + challengeeId, Toast.LENGTH_SHORT).show();
-                                    }
-                                    else{
+                                    } else {
                                         model.outgoingChallengeListModel.deleteOutgoingChallenge(
                                                 new OutgoingChallenge(challengeeId));
 
@@ -244,32 +249,83 @@ public class ChallengeAFriendController extends SlideNavigationController implem
                 }
             });
 
-            checkBox.setTag( friend );
-            checkBox.setChecked( friend.isChallenged());
-            textView.setText( friend.firstName + " " + friend.lastName);
 
+
+            checkBox.setTag(friend);
+            textView.setText(friend.firstName + " " + friend.lastName);
+            // convertView.setEnabled and .setClickable are super weird and you need to pass in
+            //      the opposite boolean into it for it to work
+            if(friend.isChallenged){
+                checkBox.setChecked(true);
+                checkBox.setEnabled(true);
+                //checkBox.setClickable(true);
+                convertView.setEnabled(false);
+                convertView.setClickable(false);
+            }else if(friend.isInGameWithMe || friend.hasChallengedMe) {
+                checkBox.setPressed(true);
+                checkBox.setEnabled(false);
+                //checkBox.setClickable(true);
+                convertView.setEnabled(true);
+                convertView.setClickable(true);
+            }else{
+                checkBox.setChecked(false);
+                checkBox.setEnabled(true);
+                //checkBox.setClickable(true);
+                convertView.setEnabled(false);
+                convertView.setClickable(false);
+            }
             return convertView;
         }
-
     }
 
-    public void onTaskCompleted(String taskName, Object result){
-        if(taskName.equalsIgnoreCase("getOutgoingChallenges")){
+    // listview - setClickable(true) setClickable(false)
+    // checkbox - checkBox.setEnabled(false)
+
+    public void onTaskCompleted(String taskName, Object result) {
+        if(taskName.equalsIgnoreCase("gamesLoaded")){
+            model.currentGameListModel.setCurrentGameList((List<Game>) result);
+            List<Game> gameList = model.currentGameListModel.getCurrentGameList();
+            //Update the model's list and view's list with the result
+            for (int i = 0; i < model.fbProfileModel.friendList.size(); i++) {
+                model.fbProfileModel.friendList.get(i).isInGameWithMe = false;
+                for (int j = 0; j < gameList.size(); j++) {
+                    if (model.fbProfileModel.friendList.get(i).facebookID == gameList.get(j).opponentID) {
+                        model.fbProfileModel.friendList.get(i).isInGameWithMe = true;
+                        break;
+                    }
+                }
+            }
+            listAdapter.notifyDataSetChanged();
+        }else if(taskName.equalsIgnoreCase("getIncomingChallenges")){
+            //Update the model's list and view's list with the result
+            model.incomingChallengeListModel = (IncomingChallengeListModel) result;
+            List <IncomingChallenge> iclist = new ArrayList<IncomingChallenge>();
+            iclist = model.incomingChallengeListModel.getIncomingChallengeList();
+            for (int i = 0; i < model.fbProfileModel.friendList.size(); i++) {
+                model.fbProfileModel.friendList.get(i).hasChallengedMe = false;
+                for (int j = 0; j < iclist.size(); j++) {
+                    if (model.fbProfileModel.friendList.get(i).facebookID == iclist.get(j).fbId) {
+                        model.fbProfileModel.friendList.get(i).hasChallengedMe = true;
+                        break;
+                    }
+                }
+            }
+            listAdapter.notifyDataSetChanged();
+        }else if(taskName.equalsIgnoreCase("getOutgoingChallenges")){
             //Update the model's list and view's list with the result
             model.outgoingChallengeListModel = (OutgoingChallengeListModel) result;
             ArrayList <OutgoingChallenge> oclist = new ArrayList<OutgoingChallenge>();
             oclist = model.outgoingChallengeListModel.getOutgoingChallengeList();
-
-            for (int i = 0; i < oclist.size(); i++) {
-                    for (int j = 0; j < model.fbProfileModel.friendList.size(); j++) {
-                        if (model.fbProfileModel.friendList.get(j).facebookID == oclist.get(i).fbID) {
-                            model.fbProfileModel.friendList.get(j).isChallenged = true;
-                        }
+            for (int i = 0; i < model.fbProfileModel.friendList.size(); i++) {
+                model.fbProfileModel.friendList.get(i).isChallenged = false;
+                for (int j = 0; j < oclist.size(); j++) {
+                    if (model.fbProfileModel.friendList.get(i).facebookID == oclist.get(j).fbID) {
+                        model.fbProfileModel.friendList.get(i).isChallenged = true;
+                        break;
                     }
+                }
             }
-
             listAdapter.notifyDataSetChanged();
-
         }
     }
 

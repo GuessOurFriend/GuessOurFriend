@@ -17,7 +17,10 @@ public class CurrentGameListModel {
     }
 
     public List<Game> getCurrentGameList() {
-        return currentGameList;
+        return this.currentGameList;
+    }
+    public void setCurrentGameList(List<Game> gameList){
+        this.currentGameList = gameList;
     }
     //private void populateCurrentGameList() {
     //    //TODO: get current games from database

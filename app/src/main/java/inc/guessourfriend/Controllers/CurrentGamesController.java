@@ -41,9 +41,11 @@ public class CurrentGamesController extends SlideNavigationController implements
     }
 
     @Override
-    public void onTaskCompleted(String taskName, Object model) {
+    public void onTaskCompleted(String taskName, Object result) {
         if (taskName.equals("gamesLoaded")) {
-            gameList = (List<Game>) model;
+            gameList = (ArrayList<Game>) result;
+            model.currentGameListModel.setCurrentGameList((ArrayList<Game>) result);
+            gameList = model.currentGameListModel.getCurrentGameList();
 
             String[] friendNames = new String[gameList.size()];
             for (int i=0; i<gameList.size(); i++) {
