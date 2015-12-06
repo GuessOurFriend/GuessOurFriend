@@ -14,7 +14,7 @@
     <item android:state_pressed="true"
 
 
-        android:drawable="@drawable/pressed" />
+        android:drawable="@drawable/checked" />
 
 
     <item android:drawable="@drawable/unchecked" />

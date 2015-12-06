@@ -4,14 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import inc.guessourfriend.Application.Model;
-import inc.guessourfriend.Models.FBProfileModel;
 import inc.guessourfriend.Models.IncomingChallengeListModel;
 import inc.guessourfriend.Models.OutgoingChallengeListModel;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
@@ -258,19 +255,19 @@ public class ChallengeAFriendController extends SlideNavigationController implem
             if(friend.isChallenged){
                 checkBox.setChecked(true);
                 checkBox.setEnabled(true);
-                //checkBox.setClickable(true);
+                checkBox.setClickable(true);
                 convertView.setEnabled(false);
                 convertView.setClickable(false);
             }else if(friend.isInGameWithMe || friend.hasChallengedMe) {
-                checkBox.setButtonDrawable(R.drawable.pressed);
+                checkBox.setButtonDrawable(R.drawable.unavailable);
                 checkBox.setEnabled(false);
-                //checkBox.setClickable(true);
+                checkBox.setClickable(false);
                 convertView.setEnabled(true);
                 convertView.setClickable(true);
             }else{
                 checkBox.setChecked(false);
                 checkBox.setEnabled(true);
-                //checkBox.setClickable(true);
+                checkBox.setClickable(true);
                 convertView.setEnabled(false);
                 convertView.setClickable(false);
             }
