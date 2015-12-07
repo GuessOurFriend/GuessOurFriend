@@ -29,10 +29,10 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pass Guess"
+            android:text="Report Bug"
             android:textSize="10dp"
-            android:id="@+id/passMyGuessButton"
-            android:onClick="passMyGuessButtonClicked"
+            android:id="@+id/report_bug_button"
+            android:onClick="reportBug"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/opponent_mystery_friend" />
 
@@ -47,10 +47,10 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Get Board"
+            android:text="Leave Game"
             android:textSize="10dp"
-            android:id="@+id/getGameBoardButton"
-            android:onClick="getGameBoardButtonClicked"
+            android:id="@+id/leave_game_button"
+            android:onClick="leaveGame"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/opponent_mystery_friend" />
 
@@ -117,6 +117,16 @@
             android:id="@+id/idkButton"
             android:onClick="idkButtonClick"
             android:text="Not Sure"
+            android:layout_weight="1"/>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:id="@+id/passMyGuessButton"
+            android:onClick="passMyGuessButtonClicked"
+            android:text="Pass Guess"
             android:layout_weight="1"/>
     </LinearLayout>
 

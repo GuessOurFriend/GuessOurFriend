@@ -316,6 +316,23 @@ public class NetworkRequestHelper {
         }.execute();
     }
 
+    //GET /game/reveal
+    public static void getOpponentMysteryId(final OnTaskCompleted theListener, final long gameId) {
+        new NetworkRequestRunner("GET", ROOT_URL + "/game/reveal?game_id=" + gameId, getAuthToken()) {
+            @Override
+            protected void onPostExecute(JSONObject jsonResult) {
+                Long fbId = -1L;
+                try {
+                    fbId = Long.parseLong(jsonResult.getString("mystery_friend"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.v("Opponent mystery id: ", jsonResult.toString());
+                theListener.onTaskCompleted("opponentMysteryId", fbId);
+            }
+        }.execute();
+    }
+
     //POST /questions
     public static void sendQuestion(OnTaskCompleted listener, long gameId, String question) {
         final OnTaskCompleted theListener = listener;
@@ -339,7 +356,7 @@ public class NetworkRequestHelper {
                 }
                 if(actualResult.equals(success)){
                     theListener.onTaskCompleted("questionSent", null);
-                }else{
+                } else {
                     Log.v("questionSent error: ", actualResult);
                 }
             }
@@ -453,6 +470,18 @@ public class NetworkRequestHelper {
         }
 
         new NetworkRequestRunner("PUT", ROOT_URL + "/friend_pool/ungrey", getAuthToken()).execute(data);
+    }
+
+    //PUT /game/player_quit
+    public static void quitGame(long gameId) {
+        JSONObject data = new JSONObject();
+        try {
+            data.put("game_id", gameId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new NetworkRequestRunner("PUT", ROOT_URL + "/game/player_quit", getAuthToken()).execute(data);
     }
 
     //////////////////////////////////////////////////
