@@ -79,16 +79,29 @@ public class NetworkRequestRunner extends AsyncTask<JSONObject, String, JSONObje
             }
 
             //TODO: Handle .getResponseCode() not being 200?
-            //if (urlConnection.getResponseCode() != HttpURLConnection.HTTP_OK) { }
+            if (urlConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                System.out.println("Response Code: " + urlConnection.getResponseCode());
+                System.out.println("Response Message: " + urlConnection.getResponseMessage());
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            StringBuilder builder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                builder.append(line + "\n");
+                BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
+                StringBuilder builder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line + "\n");
+                }
+                reader.close();
+                stringResult = builder.toString();
+                System.err.println(stringResult);
+            } else {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                StringBuilder builder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line + "\n");
+                }
+                reader.close();
+                stringResult = builder.toString();
             }
-            reader.close();
-            stringResult = builder.toString();
         } catch (IOException ex) {
             ex.printStackTrace();
             //TODO: Handle this error more appropriately
