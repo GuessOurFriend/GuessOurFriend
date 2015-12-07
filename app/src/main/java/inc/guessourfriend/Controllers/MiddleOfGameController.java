@@ -155,7 +155,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                 TextView theirTurn = (TextView) findViewById(R.id.their_turn_text);
                 LinearLayout buttonPanel = (LinearLayout) findViewById(R.id.button_panel);
                 LinearLayout passButtonPanel = (LinearLayout) findViewById(R.id.pass_button_panel);
-                EditText message = (EditText) findViewById(R.id.theMessage);
+                LinearLayout message = (LinearLayout) findViewById(R.id.sendMessage);
                 if (!(game.typeOfTurn == Game.TypeOfTurn.NotYourTurn))
                 {
                     yourTurn.setVisibility(View.VISIBLE);
