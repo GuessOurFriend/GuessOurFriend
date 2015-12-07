@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.login.widget.ProfilePictureView;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,16 +43,32 @@ public class MiddleOfGameController extends SlideNavigationController implements
     private Model model;
     private List<MutualFriend> famousPeople;
     private String intentReceivedKey = "messageReceived";
-    private GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
     private Game game = new Game();
     private int lastQuestionId;
 
+    //For GCM Messages
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String body = intent.getStringExtra(intentReceivedKey);
+            System.out.println("Body: " + body);
+
+            JSONObject jsonObjectBody = new JSONObject();
+            try {
+                jsonObjectBody = new JSONObject(body);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            EditText conversation = (EditText) findViewById(R.id.conversation);
+            conversation.append(body + "\n");
+        }
+    };
+    private IntentFilter mIntentFilter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
         super.onCreate(savedInstanceState);
         // get the models
         model = (Model) getApplicationContext();
@@ -61,9 +76,9 @@ public class MiddleOfGameController extends SlideNavigationController implements
         getLayoutInflater().inflate(R.layout.activity_middle_of_game_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
+
         //Set up GCM messaging
-        gcm = GoogleCloudMessaging.getInstance(this);
-        setUpIntentListeners();
+        mIntentFilter = new IntentFilter(intentReceivedKey);
 
         //Set up the sending of messages
         setUpEnterAndSendTheMessage();
@@ -155,30 +170,6 @@ public class MiddleOfGameController extends SlideNavigationController implements
             }
         });
         yourTurn();
-    }
-
-    //Set up the recieving of GCM messages to add to the conversation
-    private void setUpIntentListeners(){
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                String body = intent.getStringExtra(intentReceivedKey);
-
-
-
-                JSONObject jsonObjectBody = new JSONObject();
-                try {
-                    jsonObjectBody = new JSONObject(body);
-                } catch (JSONException e){
-                    e.printStackTrace();
-                }
-                Log.v("body", jsonObjectBody.toString());
-
-                EditText conversation = (EditText) findViewById(R.id.conversation);
-                conversation.append("" + "\n");
-            }
-        }, new IntentFilter(intentReceivedKey));
     }
 
     private void createprofilePictureUrls() {
@@ -363,6 +354,18 @@ public class MiddleOfGameController extends SlideNavigationController implements
             famousPeople.add(new MutualFriend(-20, "Will", "Smith", "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Will_Smith_2012.jpg/220px-Will_Smith_2012.jpg", false));
             famousPeople.add(new MutualFriend(-21, "Britney", "Spears", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Britney_Spears_2013_%28Straighten_Crop%29.jpg/220px-Britney_Spears_2013_%28Straighten_Crop%29.jpg", false));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(mReceiver, mIntentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mReceiver);
     }
 
     public void onTaskCompleted(String taskName, Object resultModel){
