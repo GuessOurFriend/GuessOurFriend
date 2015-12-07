@@ -809,6 +809,18 @@ public class NetworkRequestHelper {
         new NetworkRequestRunner("PUT", ROOT_URL + "/game/set_done", getAuthToken()).execute(data);
     }
 
+    //PUT game/set_rematch
+    public static void sendRematch(long gameId) {
+
+        JSONObject data = new JSONObject();
+        try {
+            data.put("game_id", gameId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        new NetworkRequestRunner("PUT", ROOT_URL + "/game/set_rematch", getAuthToken()).execute(data);
+    }
+
 
 
 
