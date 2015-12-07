@@ -375,7 +375,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                 ImageView popUpImage = (ImageView) dialogLayout.findViewById(R.id.mutual_friend_image);
                 popUpImage.setImageDrawable(selectedImage.getDrawable());
                 TextView popUpName = (TextView) dialogLayout.findViewById(R.id.mutual_friend_name);
-                MutualFriend popUpFriend = game.myPool.mutualFriendList.get(position);
+                final MutualFriend popUpFriend = game.myPool.mutualFriendList.get(position);
                 popUpName.setText(popUpFriend.getFullName());
                 builder.setView(dialogLayout);
 
@@ -389,7 +389,8 @@ public class MiddleOfGameController extends SlideNavigationController implements
                         .setPositiveButton("Guess This Friend", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                //do stuff
+                                NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this,game.ID,popUpFriend.facebookID);
+
                             }
                         });
 
@@ -458,6 +459,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                         Intent intent = new Intent(MiddleOfGameController.this, EndOfGameController.class);
                         intent.putExtra("game", game);
                         intent.putExtra("howGameEnded", "left");
+
                         startActivity(intent);
                     }
                 });
@@ -513,8 +515,13 @@ public class MiddleOfGameController extends SlideNavigationController implements
         } else if (taskName.equalsIgnoreCase("passedUpMyGuess")) {
             Log.v("Successfully: ", "passed up my guess");
         } else if (taskName.equalsIgnoreCase("myGuessWasWrong")) {
+            Log.v("Your guess was wrong: ", "Guess wrong");
 
         } else if(taskName.equalsIgnoreCase("iWon")) {
+
+            Intent intent = new Intent(MiddleOfGameController.this, EndOfGameController.class);
+            intent.putExtra("game", game);
+            intent.putExtra("howGameEnded", "Won");
 
         } else{
 

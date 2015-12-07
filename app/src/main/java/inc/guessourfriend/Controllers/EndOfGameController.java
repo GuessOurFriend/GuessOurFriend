@@ -36,6 +36,7 @@ public class EndOfGameController extends SlideNavigationController implements On
     //      when we get to integration testing
     private Friend myMysteryFriend;
     private Friend theirMysteryFriend;
+    String howGameEnded;
 
     public void onDone(View view){
         // start the current games activity by using "openActivity(int position) - do it this way
@@ -181,7 +182,6 @@ public class EndOfGameController extends SlideNavigationController implements On
 
 
         Intent intent = getIntent();
-        String howGameEnded;
         if (savedInstanceState == null) {
             Bundle extras = intent.getExtras();
             if(extras == null) {
@@ -195,15 +195,7 @@ public class EndOfGameController extends SlideNavigationController implements On
 
         game = (Game) intent.getParcelableExtra("game");
         NetworkRequestHelper.getOpponentMysteryId(EndOfGameController.this, game.ID);
-        if (howGameEnded.equalsIgnoreCase("left") || howGameEnded.equalsIgnoreCase("lost")) {
-            loser = model.fbProfileModel.facebookID;
-            winner = game.opponentID;
-            displayForLoser();
-        } else if (howGameEnded.equalsIgnoreCase("won")) {
-            loser = game.opponentID;
-            winner = model.fbProfileModel.facebookID;
-            displayForWinner();
-        }
+
 
         // Simulating a loss
         //winner = fbProfile.getFriendList().get(1).getFacebookID();
@@ -231,6 +223,16 @@ public class EndOfGameController extends SlideNavigationController implements On
         if (taskName.equals("opponentMysteryId")) {
             Long id = (Long) resultModel;
             opponentMysteryId = id;
+
+            if (howGameEnded.equalsIgnoreCase("left") || howGameEnded.equalsIgnoreCase("lost")) {
+                loser = model.fbProfileModel.facebookID;
+                winner = game.opponentID;
+                displayForLoser();
+            } else if (howGameEnded.equalsIgnoreCase("won")) {
+                loser = game.opponentID;
+                winner = model.fbProfileModel.facebookID;
+                displayForWinner();
+            }
         }
     }
 }

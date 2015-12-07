@@ -77,10 +77,8 @@ public class CurrentGamesController extends SlideNavigationController implements
                         startActivity(myIntent);
                     } else if (selectedGame.stateOfGame == Game.END_OF_GAME) {
                         Intent myIntent = new Intent(CurrentGamesController.this, EndOfGameController.class);
-                        myIntent.putExtra("gameId", selectedGame.ID);
-                        myIntent.putExtra("opponentID", selectedGame.opponentID);
-                        myIntent.putExtra("opponentFirstName", selectedGame.opponentFirstName);
-                        myIntent.putExtra("opponentLastName", selectedGame.opponentLastName);
+                        myIntent.putExtra("game", selectedGame);
+                        myIntent.putExtra("howGameEnded", "Won");
                         startActivity(myIntent);
                     }
                 }
