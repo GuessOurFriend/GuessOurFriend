@@ -45,11 +45,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:gravity="center_horizontal"
         android:text="@string/win_mystery_text1"
         android:id="@+id/mystery_text1"
-        android:layout_alignTop="@+id/rematch_button"
-        android:layout_alignLeft="@+id/guessed_profile_picture"
-        android:layout_alignStart="@+id/guessed_profile_picture" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/mystery_text2"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"/>
+        android:visibility="invisible"/>
 
     <ImageView
         android:id="@+id/unguessed_profile_picture_iv"
@@ -98,7 +98,7 @@
         android:layout_alignRight="@+id/unguessed_profile_picture"
         android:layout_alignLeft="@+id/unguessed_profile_picture"
         android:src="@drawable/mr_ic_audio_vol"
-        android:visibility="gone"/>
+        android:visibility="invisible"/>
 
     <com.facebook.login.widget.ProfilePictureView
         android:id="@+id/guessed_profile_picture"
@@ -107,7 +107,7 @@
         android:layout_below="@+id/win_lose_text"
         android:layout_alignLeft="@+id/unguessed_profile_picture"
         android:layout_alignStart="@+id/unguessed_profile_picture"
-        android:visibility="gone"/>
+        android:visibility="invisible"/>
 
     <ImageView
         android:id="@+id/guessed_profile_picture_iv"
@@ -118,7 +118,7 @@
         android:layout_alignRight="@+id/guessed_profile_picture"
         android:layout_alignLeft="@+id/guessed_profile_picture"
         android:src="@drawable/mr_ic_audio_vol"
-        android:visibility="gone"/>
+        android:visibility="invisible"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -128,7 +128,8 @@
         android:id="@+id/mystery_text2"
         android:layout_below="@+id/guessed_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="24dp"
+        android:visibility="invisible"/>
 
     <TextView
         android:layout_width="wrap_content"

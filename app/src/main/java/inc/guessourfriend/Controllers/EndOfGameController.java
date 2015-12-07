@@ -3,10 +3,13 @@ package inc.guessourfriend.Controllers;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.login.widget.ProfilePictureView;
@@ -62,6 +65,10 @@ public class EndOfGameController extends SlideNavigationController implements On
                 }
             }
             ImageView guessedView = (ImageView) findViewById(R.id.guessed_profile_picture_iv);
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) guessedView.getLayoutParams();
+            lp.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+            lp.addRule(RelativeLayout.ALIGN_TOP, R.id.guessed_profile_picture);
+            guessedView.setLayoutParams(lp);
             String imageUrl = guessedFriend.profilePicture;
             new ImageAdapter.DownloadImageTask(guessedView).execute(imageUrl);
             guessedView.setVisibility(View.VISIBLE);
@@ -74,13 +81,6 @@ public class EndOfGameController extends SlideNavigationController implements On
             guessedView.setVisibility(View.VISIBLE);
         }
 
-//        Friend guessedFriend = model.fbProfileModel.friendList.get(1); ////
-//        ProfilePictureView guessedView = (ProfilePictureView) findViewById(R.id.guessed_profile_picture);
-//        guessedView.setProfileId(Long.toString(guessedFriend.facebookID));
-//        TextView guessedNameTextView = (TextView) findViewById(R.id.guessed_name);
-//        guessedNameTextView.setText(guessedFriend.firstName);
-
-
         //unguessed
         if (opponentMysteryId < 0  && opponentMysteryId != -1) {
             MutualFriend unguessedFriend= null;
@@ -91,6 +91,10 @@ public class EndOfGameController extends SlideNavigationController implements On
                 }
             }
             ImageView unguessedView = (ImageView) findViewById(R.id.unguessed_profile_picture_iv);
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) unguessedView.getLayoutParams();
+            lp.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+            lp.addRule(RelativeLayout.ALIGN_TOP, R.id.unguessed_profile_picture);
+            unguessedView.setLayoutParams(lp);
             String imageUrl = unguessedFriend.profilePicture;
             new ImageAdapter.DownloadImageTask(unguessedView).execute(imageUrl);
             unguessedView.setVisibility(View.VISIBLE);
@@ -102,17 +106,13 @@ public class EndOfGameController extends SlideNavigationController implements On
             unguessedNameTextView.setText(unguessedFriend.firstName);
             unguessedView.setVisibility(View.VISIBLE);
         }
-//        Friend unguessedFriend = model.fbProfileModel.getFriendById(game.mysteryFriendId);
-//        ProfilePictureView unguessedView = (ProfilePictureView) findViewById(R.id.unguessed_profile_picture);
-//        unguessedView.setProfileId(Long.toString(unguessedFriend.facebookID));
-//        TextView unguessedNameTextView = (TextView) findViewById(R.id.unguessed_name);
-//        unguessedNameTextView.setText(unguessedFriend.firstName);
 
         TextView opponentNameTextView = (TextView) findViewById(R.id.opponent_name);
         opponentNameTextView.setText(game.opponentFirstName);
     }
 
     private void displayForLoser(){
+        ProfilePictureView fbView = (ProfilePictureView)findViewById(R.id.guessed_profile_picture);
         TextView win_or_lose = (TextView) findViewById(R.id.win_lose_text);
         win_or_lose.setText(R.string.loss_mystery_text0);
         TextView text1 = (TextView) findViewById(R.id.mystery_text1);
@@ -128,6 +128,10 @@ public class EndOfGameController extends SlideNavigationController implements On
                 }
             }
             ImageView guessedView = (ImageView) findViewById(R.id.guessed_profile_picture_iv);
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) guessedView.getLayoutParams();
+            lp.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+            lp.addRule(RelativeLayout.ALIGN_TOP, R.id.guessed_profile_picture);
+            guessedView.setLayoutParams(lp);
             String imageUrl = guessedFriend.profilePicture;
             new ImageAdapter.DownloadImageTask(guessedView).execute(imageUrl);
             guessedView.setVisibility(View.VISIBLE);
@@ -150,6 +154,10 @@ public class EndOfGameController extends SlideNavigationController implements On
                 }
             }
             ImageView unguessedView = (ImageView) findViewById(R.id.unguessed_profile_picture_iv);
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) unguessedView.getLayoutParams();
+            lp.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+            lp.addRule(RelativeLayout.ALIGN_TOP, R.id.unguessed_profile_picture);
+            unguessedView.setLayoutParams(lp);
             String imageUrl = unguessedFriend.profilePicture;
             new ImageAdapter.DownloadImageTask(unguessedView).execute(imageUrl);
             unguessedView.setVisibility(View.VISIBLE);
@@ -161,11 +169,6 @@ public class EndOfGameController extends SlideNavigationController implements On
             unguessedNameTextView.setText(unguessedFriend.firstName);
             unguessedView.setVisibility(View.VISIBLE);
         }
-//        Friend unguessedFriend = model.fbProfileModel.friendList.get(1); /////
-//        ProfilePictureView unguessedView = (ProfilePictureView) findViewById(R.id.unguessed_profile_picture);
-//        unguessedView.setProfileId(Long.toString(unguessedFriend.facebookID));
-//        TextView unguessedNameTextView = (TextView) findViewById(R.id.unguessed_name);
-//        unguessedNameTextView.setText(unguessedFriend.firstName);
 
         TextView opponentNameTextView = (TextView) findViewById(R.id.opponent_name);
         opponentNameTextView.setText(game.opponentFirstName);
@@ -180,7 +183,6 @@ public class EndOfGameController extends SlideNavigationController implements On
         getLayoutInflater().inflate(R.layout.activity_end_of_game_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
-
 
         Intent intent = getIntent();
         if (savedInstanceState == null) {
@@ -226,7 +228,6 @@ public class EndOfGameController extends SlideNavigationController implements On
         if (taskName.equals("opponentMysteryId")) {
             Long id = (Long) resultModel;
             opponentMysteryId = id;
-
             if (howGameEnded.equalsIgnoreCase("left") || howGameEnded.equalsIgnoreCase("lost")) {
                 loser = model.fbProfileModel.facebookID;
                 winner = game.opponentID;
