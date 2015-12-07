@@ -104,15 +104,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     public void passMyGuessButtonClicked(View view) {
         NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.ID, -1);
     }
-public void yourTurn() {
-    TextView textView = (TextView) findViewById(R.id.your_turn_text);
-    Game game = new Game();
-    boolean turn = game.getIsMyTurn();
-    if (turn == true) {
-    textView.setVisibility(View.VISIBLE);
-    } else {
-        textView.setVisibility(View.GONE);
-    }
+
 }
     //Make clicking send on the keyboard send the message
     private void setUpEnterAndSendTheMessage(){
