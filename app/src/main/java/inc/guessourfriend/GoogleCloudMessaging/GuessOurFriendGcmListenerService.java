@@ -46,9 +46,7 @@ public class GuessOurFriendGcmListenerService extends GcmListenerService {
 
     @Override
     public void onMessageSent(String msgId) {
-        // TODO: add the game ID to "messageReceived" in order to differentiate each game's messages
-        Intent intent = new Intent(intentSentMessageSuccessKey, null, this, MiddleOfGameController.class);
-        sendBroadcast(intent);
+
     }
 
     @Override

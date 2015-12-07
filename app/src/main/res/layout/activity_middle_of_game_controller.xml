@@ -137,13 +137,6 @@
             android:imeOptions="actionSend"
             android:singleLine="true"
             android:enabled="true" />
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="20"
-            android:layout_height="match_parent"
-            android:layout_alignTop="@+id/theMessage"
-            android:layout_alignBottom="@+id/theMessage"
-            android:text="Send"/>
     </LinearLayout>
 
 

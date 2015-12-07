@@ -122,7 +122,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
 
     //TODO: Remove debug button
     public void getGameBoardButtonClicked(View view) {
-        NetworkRequestHelper.getGameBoard(MiddleOfGameController.this, game.ID);
+        NetworkRequestHelper.getGameObject(MiddleOfGameController.this, game.ID);
     }
 
     //TODO: Remove debug button
@@ -348,8 +348,6 @@ public class MiddleOfGameController extends SlideNavigationController implements
     public void onTaskCompleted(String taskName, Object resultModel){
         if(taskName.equals("getGameBoard")) {
             Game fullGame = (Game) resultModel;
-
-            //TODO: Make server return this info too?
             fullGame.ID = game.ID;
             fullGame.opponentID = game.opponentID;
             fullGame.opponentFirstName = game.opponentFirstName;
@@ -357,10 +355,6 @@ public class MiddleOfGameController extends SlideNavigationController implements
             game = fullGame;
             createprofilePictureUrls();
             setUpMutualFriendsList(profilePictureUrls);
-
-        } else if (taskName.equals("getFriendPool")) {
-
-            //TODO: Get the list of friends
 
         } else if (taskName.equals("getQuestions")) {
 
@@ -371,11 +365,11 @@ public class MiddleOfGameController extends SlideNavigationController implements
             EditText conversation = (EditText) findViewById(R.id.conversation);
             conversation.append(theMessage.getText() + "\n");
             theMessage.setText("");
-        } else if(taskName.equalsIgnoreCase("questionAnswered")) {
+        } else if (taskName.equalsIgnoreCase("questionAnswered")) {
 
-        } else if(taskName.equalsIgnoreCase("passedUpMyGuess")) {
+        } else if (taskName.equalsIgnoreCase("passedUpMyGuess")) {
             Log.v("Successfully: ", "passed up my guess");
-        } else if(taskName.equalsIgnoreCase("myGuessWasWrong")) {
+        } else if (taskName.equalsIgnoreCase("myGuessWasWrong")) {
 
         } else if(taskName.equalsIgnoreCase("iWon")) {
 
