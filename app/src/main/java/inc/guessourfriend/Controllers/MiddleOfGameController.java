@@ -188,6 +188,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     //TODO: Remove debug button
     public void passMyGuessButtonClicked(View view) {
         NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.ID, -1);
+        game.isMyTurn = false;
         updateTurnTextViews();
     }
 
