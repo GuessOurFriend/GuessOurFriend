@@ -81,8 +81,6 @@ public class StartOfGameController extends SlideNavigationController implements 
                                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             currentlySelected = highlightedFriend;
-                                            Toast.makeText(getApplicationContext(),
-                                                    currentlySelected.getFullName() + " selected", Toast.LENGTH_SHORT).show();
                                             currentlySelected.isMysteryFriend = true;
                                             NetworkRequestHelper.setMysteryFriend(StartOfGameController.this,
                                                     game.ID, currentlySelected.facebookID);

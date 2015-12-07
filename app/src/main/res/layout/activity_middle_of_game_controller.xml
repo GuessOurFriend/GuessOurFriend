@@ -162,7 +162,7 @@
             android:ems="10"
             android:id="@+id/theMessage"
             android:hint="Type your message here"
-            android:layout_above="@+id/button_panel"
+            android:background="?android:colorBackground"
             android:imeOptions="actionSend"
             android:singleLine="true"
             android:enabled="true" />

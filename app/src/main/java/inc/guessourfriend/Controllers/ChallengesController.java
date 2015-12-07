@@ -9,10 +9,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.HashMap;
-import java.util.List;
 
 import inc.guessourfriend.Models.IncomingChallengeListModel;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
@@ -64,11 +62,6 @@ public class ChallengesController extends SlideNavigationController implements O
                                 //Accept the challenge
                                 NetworkRequestHelper.deleteChallengeFromChallengee(ChallengesController.this,
                                         itemValue.challengeId, itemValue.challengerId, true);
-
-                                Toast.makeText(getApplicationContext(),
-                                        "Position:" + position + " ListItem: " + itemValue, Toast.LENGTH_SHORT).show();
-
-                                //TODO: Switch directly to StartOfGameController instead?
                                 mAdapter.remove(itemValue);
                                 mAdapter.notifyDataSetChanged();
                             }
@@ -88,8 +81,6 @@ public class ChallengesController extends SlideNavigationController implements O
                 alertDialog.show();
             }
         });
-
-
     }
 
     public void onTaskCompleted(String taskName, Object result){

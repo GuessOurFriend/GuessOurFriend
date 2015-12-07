@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import inc.guessourfriend.R;
 
@@ -194,8 +193,6 @@ public class SlideNavigationController extends AppCompatActivity {
                 startActivity(new Intent(this, ChallengeAFriendController.class));
                 break;
         }
-
-        Toast.makeText(this, "Selected Item Position::" + position, Toast.LENGTH_LONG).show();
     }
 
     @Override

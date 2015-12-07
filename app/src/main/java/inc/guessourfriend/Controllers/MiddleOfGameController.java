@@ -94,10 +94,9 @@ public class MiddleOfGameController extends SlideNavigationController implements
                             game.setStateOfGame(Game.END_OF_GAME);
                             //TODO: Go to EndOfGameController
                         }else if(title.equals("Incorrect guess")) {
-                            //User guessed incorrectly, you get two guesses
-                            game.typeOfTurn = Game.TypeOfTurn.TurnToAskQuestion;
+                            //User guessed incorrectly, other player gets two guesses
+                            game.typeOfTurn = Game.TypeOfTurn.NotYourTurn;
                             updateTurnTextViews();
-                            //TODO: Handle letting them have two guesses
                         }
                     }
                     // Format:

@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,9 +90,6 @@ public class ChallengeAFriendController extends SlideNavigationController implem
 
                                     //Send the request to the server
                                     NetworkRequestHelper.sendChallenge(Long.toString(challengeeId));
-
-                                    Toast.makeText(getApplicationContext(),
-                                            "Challenged: " + challengeeId, Toast.LENGTH_SHORT).show();
                                 } else {
                                     model.outgoingChallengeListModel.deleteOutgoingChallenge(
                                             new OutgoingChallenge(challengeeId));
@@ -101,9 +97,6 @@ public class ChallengeAFriendController extends SlideNavigationController implem
                                     //Send the request to the server
                                     // dummy challenge id for now TODO: Complete it later
                                     NetworkRequestHelper.deleteChallengeFromChallenger(challengeeId);
-
-                                    Toast.makeText(getApplicationContext(),
-                                            "Deleted: " + challengeeId, Toast.LENGTH_SHORT).show();
 
                                 }
                             }
@@ -222,9 +215,6 @@ public class ChallengeAFriendController extends SlideNavigationController implem
 
                                         //Send the request to the server
                                         NetworkRequestHelper.sendChallenge(Long.toString(challengeeId));
-
-                                        Toast.makeText(getApplicationContext(),
-                                                "Challenged: " + challengeeId, Toast.LENGTH_SHORT).show();
                                     } else {
                                         checkBox.setButtonDrawable(R.drawable.unchecked);
                                         model.outgoingChallengeListModel.deleteOutgoingChallenge(
@@ -233,10 +223,6 @@ public class ChallengeAFriendController extends SlideNavigationController implem
                                         //Send the request to the server
                                         // dummy challenge id for now TODO: Complete it later
                                         NetworkRequestHelper.deleteChallengeFromChallenger(challengeeId);
-
-                                        Toast.makeText(getApplicationContext(),
-                                                "Deleted: " + challengeeId, Toast.LENGTH_SHORT).show();
-
                                     }
                                 }
                             })
