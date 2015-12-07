@@ -51,6 +51,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         @Override
         public void onReceive(Context context, Intent intent) {
             EditText conversation = (EditText) findViewById(R.id.conversation);
+            String title = intent.getStringExtra("title");
             String body = intent.getStringExtra(intentReceivedKey);
             System.out.println("Body: " + body);
 
@@ -70,17 +71,26 @@ public class MiddleOfGameController extends SlideNavigationController implements
                                 game.lastQuestionId = Integer.parseInt(jsonObjectBody.getString("id"));
                                 String question = jsonObjectBody.getString("content");
                                 conversation.append(question + "\n");
+                                game.isMyTurn = true;
+                                updateTurnTextViews();
                             } else {
                                 // You need to ask the next question
                                 int intAnswer = Integer.parseInt(jsonObjectBody.getString("answer"));
                                 String answer = NetworkRequestHelper.intAnswerToString(intAnswer);
                                 conversation.append(answer + "\n");
                             }
-                        }else if(jsonObjectBody.has("pass_message")){
+                        }else if(title.equals("It is your turn")){
                             // The other user just passed on their guess
-                        }else if(jsonObjectBody.has("guess_message")){
-                            // The other user just guessed and failed, you now get two questions
-                            //      to ask
+                            game.isMyTurn = true;
+                            updateTurnTextViews();
+                        }else if(title.equals("Correct guess")){
+                            game.setStateOfGame(Game.END_OF_GAME);
+                            //TODO: Go to EndOfGameController
+                        }else if(title.equals("Incorrect guess")) {
+                            //User guessed incorrectly, you get two guesses
+                            game.isMyTurn = true;
+                            updateTurnTextViews();
+                            //TODO: Handle letting them have two guesses
                         }
                     }
                     // Format:
@@ -130,18 +140,23 @@ public class MiddleOfGameController extends SlideNavigationController implements
 
     public void updateTurnTextViews()
     {
-        TextView yourTurn = (TextView) findViewById(R.id.your_turn_text);
-        TextView theirTurn = (TextView) findViewById(R.id.their_turn_text);
-        if (game.getIsMyTurn())
-        {
-            yourTurn.setVisibility(View.VISIBLE);
-            theirTurn.setVisibility(View.GONE);
-        }
-        else
-        {
-            yourTurn.setVisibility(View.GONE);
-            theirTurn.setVisibility(View.VISIBLE);
-        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TextView yourTurn = (TextView) findViewById(R.id.your_turn_text);
+                TextView theirTurn = (TextView) findViewById(R.id.their_turn_text);
+                if (game.getIsMyTurn())
+                {
+                    yourTurn.setVisibility(View.VISIBLE);
+                    theirTurn.setVisibility(View.GONE);
+                }
+                else
+                {
+                    yourTurn.setVisibility(View.GONE);
+                    theirTurn.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void answerQuestion(int intAnswer) {

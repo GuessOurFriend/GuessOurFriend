@@ -41,6 +41,9 @@ public class GuessOurFriendGcmListenerService extends GcmListenerService {
         // TODO:        figure out what format this is in by asking Brian
         // TODO: Current game state: question asked, question answered, now we need to guess a friend or pass up our opportunity to guess
         Intent intent = new Intent(intentReceivedKey);
+        if (data.containsKey("title")) {
+            intent.putExtra("title", body);
+        }
         intent.putExtra(intentReceivedKey, body);
         sendBroadcast(intent);
     }
