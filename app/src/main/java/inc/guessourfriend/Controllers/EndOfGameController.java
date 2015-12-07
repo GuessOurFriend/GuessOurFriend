@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.facebook.login.widget.ProfilePictureView;
 
+import java.util.HashMap;
 import java.util.List;
 
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
@@ -201,14 +202,14 @@ public class EndOfGameController extends SlideNavigationController implements On
         Button button = (Button) findViewById(R.id.done_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                NetworkRequestHelper.sendDone(game.ID);
+                NetworkRequestHelper.sendDone(EndOfGameController.this,game.ID);
             }
         });
 
         Button button2 = (Button) findViewById(R.id.rematch_button);
         button2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                NetworkRequestHelper.sendRematch(game.ID);
+                NetworkRequestHelper.sendRematch(EndOfGameController.this,game.ID);
             }
         });
 
@@ -236,5 +237,31 @@ public class EndOfGameController extends SlideNavigationController implements On
                 displayForWinner();
             }
         }
+
+        else if (taskName.equals("Game state after end")) {
+            Long stateid = (Long) resultModel;
+            if (stateid == -1 || stateid == 2) {
+                Intent myIntent = new Intent(EndOfGameController.this, CurrentGamesController.class);
+                startActivity(myIntent);
+            }
+        }
+        else if (taskName.equals("Game state after rematch")){
+
+                HashMap<String, String> returnData = (HashMap<String, String>) resultModel;
+
+                Intent myIntent = new Intent(EndOfGameController.this, StartOfGameController.class);
+                Long gameid = Long.parseLong(returnData.get("game_id"));
+                Long opponentid = Long.parseLong(returnData.get("opponent_id"));
+                myIntent.putExtra("gameId",gameid);
+                myIntent.putExtra("opponentID",opponentid );
+                myIntent.putExtra("opponentFirstName",returnData.get("opponent_first_name") );
+                myIntent.putExtra("opponentLastName",returnData.get("opponent_last_name") );
+                myIntent.putExtra("cameFromChallenges", false);
+                startActivity(myIntent);
+
+
+        }
+
+
     }
 }

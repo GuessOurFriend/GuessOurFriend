@@ -798,27 +798,79 @@ public class NetworkRequestHelper {
 
 
     //PUT game/set_done
-    public static void sendDone(long gameId) {
-
+    public static void sendDone(OnTaskCompleted listener, long gameId) {
+        final OnTaskCompleted theListener = listener;
         JSONObject data = new JSONObject();
         try {
             data.put("game_id", gameId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        new NetworkRequestRunner("PUT", ROOT_URL + "/game/set_done", getAuthToken()).execute(data);
+        new NetworkRequestRunner("PUT", ROOT_URL + "/game/set_done", getAuthToken()){
+            protected void onPostExecute(JSONObject result) {
+                JSONObject result2 = result;
+                try {
+                    if (result.has("errors")) {
+                        Log.v("Error_setDone", result.getString("errors"));
+                        return;
+                    }
+                    Long state = Long.parseLong(result2.getString("state"));
+
+                    theListener.onTaskCompleted("Game state after end",state);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }.execute(data);
     }
 
     //PUT game/set_rematch
-    public static void sendRematch(long gameId) {
-
+    public static void sendRematch(OnTaskCompleted listener,long gameId) {
+        final OnTaskCompleted theListener = listener;
         JSONObject data = new JSONObject();
         try {
             data.put("game_id", gameId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        new NetworkRequestRunner("PUT", ROOT_URL + "/game/set_rematch", getAuthToken()).execute(data);
+        new NetworkRequestRunner("PUT", ROOT_URL + "/game/set_rematch", getAuthToken()){
+            protected void onPostExecute(JSONObject result) {
+                JSONObject result2 = result;
+                try {
+                    if (result.has("errors")) {
+                        Log.v("Error_setDone", result.getString("errors"));
+                        return;
+                    }
+                    Long state = Long.parseLong(result2.getString("state"));
+
+                    if (state != 1){
+                    theListener.onTaskCompleted("Game state after end",state);}
+                    else if (state == 1){
+                        HashMap<String, String> returnData = new HashMap<String, String>();
+                        try {
+                            Long gameID = Long.parseLong(result2.getString("game_id"));
+                            Long opponentID = Long.parseLong(result2.getString("opponent_id"));
+                            String opponent_first_name = result2.getString("opponent_first_name");
+                            String opponent_last_name = result2.getString("opponent_last_name");
+
+                            returnData.put("game_id", gameID.toString());
+                            returnData.put("opponent_id", opponentID.toString());
+                            returnData.put("opponent_first_name", opponent_first_name);
+                            returnData.put("opponent_last_name", opponent_last_name);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        theListener.onTaskCompleted("Game state after rematch",state);
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute(data);
     }
 
 
