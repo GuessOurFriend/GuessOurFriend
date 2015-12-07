@@ -125,32 +125,32 @@ public class MiddleOfGameController extends SlideNavigationController implements
 
             ProfilePictureView opponent = (ProfilePictureView) findViewById(R.id.opponent_mystery_friend);
             opponent.setProfileId(Long.toString(game.opponentID));
-
         }
-        yourTurn();
     }
-    public void yourTurn()
+
+    public void updateTurnTextViews()
     {
-        TextView textView = (TextView) findViewById(R.id.your_turn_text);
-        TextView textView1= (TextView) findViewById(R.id.their_turn_text);
-        Game game = new Game();
-        boolean turn = game.getIsMyTurn();
-        if (turn == false)
+        TextView yourTurn = (TextView) findViewById(R.id.your_turn_text);
+        TextView theirTurn = (TextView) findViewById(R.id.their_turn_text);
+        if (game.getIsMyTurn())
         {
-            textView.setVisibility(View.GONE);
-            textView1.setVisibility(View.VISIBLE);
+            yourTurn.setVisibility(View.VISIBLE);
+            theirTurn.setVisibility(View.GONE);
         }
         else
         {
-            textView.setVisibility(View.VISIBLE);
-            textView1.setVisibility(View.GONE);
+            yourTurn.setVisibility(View.GONE);
+            theirTurn.setVisibility(View.VISIBLE);
         }
+    }
 
-        }
-
-    private void answerQuestion(int answer) {
-        NetworkRequestHelper.answerQuestion(MiddleOfGameController.this, game.ID, game.lastQuestionId, answer);
-        yourTurn();
+    private void answerQuestion(int intAnswer) {
+        NetworkRequestHelper.answerQuestion(MiddleOfGameController.this, game.ID, game.lastQuestionId, intAnswer);
+        String answer = NetworkRequestHelper.intAnswerToString(intAnswer);
+        EditText conversation = (EditText) findViewById(R.id.conversation);
+        conversation.append(answer + "\n");
+        game.isMyTurn = false;
+        updateTurnTextViews();
     }
 
     public void yesButtonClick(View view) {
@@ -173,7 +173,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     //TODO: Remove debug button
     public void passMyGuessButtonClicked(View view) {
         NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.ID, -1);
-        yourTurn();
+        updateTurnTextViews();
     }
 
 
@@ -196,7 +196,8 @@ public class MiddleOfGameController extends SlideNavigationController implements
                 return false;
             }
         });
-        yourTurn();
+        game.isMyTurn = false;
+        updateTurnTextViews();
     }
 
     private void createprofilePictureUrls() {
@@ -413,7 +414,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
             createprofilePictureUrls();
             setUpMutualFriendsList();
             loadConversationHistory();
-
+            updateTurnTextViews();
         } else if (taskName.equals("getQuestions")) {
 
             //TODO: Load previous questions
