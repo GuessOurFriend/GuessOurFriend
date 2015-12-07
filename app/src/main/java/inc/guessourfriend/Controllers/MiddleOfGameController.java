@@ -58,7 +58,6 @@ public class MiddleOfGameController extends SlideNavigationController implements
         getLayoutInflater().inflate(R.layout.activity_middle_of_game_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
         setTitle(listArray[position]);
-
         //Set up GCM messaging
         gcm = GoogleCloudMessaging.getInstance(this);
         setUpIntentListeners();
