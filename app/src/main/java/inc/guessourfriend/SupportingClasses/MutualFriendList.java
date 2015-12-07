@@ -58,11 +58,12 @@ public class MutualFriendList {
                                 for (int i = 0; i < mutualFriends.length(); i++) {
                                     JSONObject friend = mutualFriends.getJSONObject(i);
                                     long facebookID = Long.parseLong(friend.getString("id"));
-                                    String fullName = friend.getString("name");
+                                    String firstName = friend.getString("first_name");
+                                    String lastName = friend.getString("last_name");
                                     String profilePicture = friend.getJSONObject("picture").getJSONObject("data").getString("url");
 
                                     //Insert this friend into the list
-                                    MutualFriend newFriend = new MutualFriend(facebookID, fullName, profilePicture, false);
+                                    MutualFriend newFriend = new MutualFriend(facebookID, firstName, lastName, profilePicture, false);
                                     mutualFriendList.add(newFriend);
                                 }
                             } catch (JSONException e) {

@@ -31,6 +31,7 @@ import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.NetworkCommunication.NetworkRequestHelper;
 import inc.guessourfriend.NetworkCommunication.OnTaskCompleted;
 import inc.guessourfriend.R;
+import inc.guessourfriend.SupportingClasses.Friend;
 import inc.guessourfriend.SupportingClasses.Game;
 import inc.guessourfriend.SupportingClasses.ImageAdapter;
 import inc.guessourfriend.SupportingClasses.MutualFriend;
@@ -44,7 +45,6 @@ public class MiddleOfGameController extends SlideNavigationController implements
     AtomicInteger msgId = new AtomicInteger();
     private Game game = new Game();
     private int lastQuestionId = 7;
-    String[] profilePictureUrls = new String[20];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,19 +171,25 @@ public class MiddleOfGameController extends SlideNavigationController implements
 
         // Get the image URL's from names in the opponentpool field in the game object
         for (int i = 0; i < 20; i++) {
-            if (game.opponentPool.mutualFriendList.get(i).facebookID > 0) {
+            MutualFriend currPoolFriend = game.opponentPool.mutualFriendList.get(i);
+            if (currPoolFriend.facebookID > 0) {
                 //It's a real id, find it in our facebook friends list
                 for (int j = 0; j < model.fbProfileModel.friendList.size(); j++) {
-                    if (model.fbProfileModel.friendList.get(j).facebookID == game.opponentPool.mutualFriendList.get(i).facebookID) {
-                        profilePictureUrls[i] = model.fbProfileModel.friendList.get(j).profilePicture;
+                    Friend currFriend = model.fbProfileModel.friendList.get(j);
+                    if (currFriend.facebookID == currPoolFriend.facebookID) {
+                        currPoolFriend.profilePicture = currFriend.profilePicture;
+                        currPoolFriend.firstName = currFriend.firstName;
+                        currPoolFriend.lastName = currFriend.lastName;
                         break;
                     }
                 }
             } else {
                 //It's a famous person id, find it in the famous people list
                 for (int j = 0; j < famousPeople.size(); j++) {
-                    if (famousPeople.get(j).facebookID == game.opponentPool.mutualFriendList.get(i).facebookID) {
-                        profilePictureUrls[i] = famousPeople.get(j).profilePicture;
+                    if (famousPeople.get(j).facebookID == currPoolFriend.facebookID) {
+                        currPoolFriend.profilePicture = famousPeople.get(j).profilePicture;
+                        currPoolFriend.firstName = famousPeople.get(j).firstName;
+                        currPoolFriend.lastName = famousPeople.get(j).lastName;
                         break;
                     }
                 }
@@ -192,12 +198,12 @@ public class MiddleOfGameController extends SlideNavigationController implements
     }
 
 
-    private void setUpMutualFriendsList(String[] profilePictureUrls) {
+    private void setUpMutualFriendsList() {
         //Set up the view
         final GridView gridView = (GridView) findViewById(R.id.middle_of_game_gridview);
 
         //Set up an adapter to hold all the profile pictures
-        ImageAdapter imageAdapter = new ImageAdapter(MiddleOfGameController.this, profilePictureUrls);
+        ImageAdapter imageAdapter = new ImageAdapter(MiddleOfGameController.this, game.opponentPool.mutualFriendList);
         gridView.setAdapter(imageAdapter);
 
         //Set up the click handler for each of the images
@@ -219,8 +225,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                     //Let the user guess the mystery friend, gray out, or exit
                     adb.setTitle("Gray Out Or Select A Friend");
                     adb.setMessage("Would you like to gray out or guess " +
-                            selectedFriend.firstName + " " +
-                            selectedFriend.lastName + "?");
+                            selectedFriend.getFullName() + "?");
                     //Keep Gray Out as the "positive" so it is always in the same position
                     adb.setPositiveButton("Gray Out", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -251,8 +256,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                     //Let the user gray out or exit (they can't guess a friend if it's not their turn)
                     adb.setTitle("Gray Out A Friend");
                     adb.setMessage("Would you like to gray out " +
-                            selectedFriend.firstName + " " +
-                            selectedFriend.lastName + "?");
+                            selectedFriend.getFullName() + "?");
                     adb.setPositiveButton("Gray Out", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             //Highlight/Unhighlight the friend that was clicked
@@ -295,7 +299,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                 popUpImage.setImageDrawable(selectedImage.getDrawable());
                 TextView popUpName = (TextView) dialogLayout.findViewById(R.id.mutual_friend_name);
                 MutualFriend popUpFriend = game.opponentPool.mutualFriendList.get(position);
-                popUpName.setText(popUpFriend.fullName);
+                popUpName.setText(popUpFriend.getFullName());
                 builder.setView(dialogLayout);
 
                 builder.setTitle("Guess " + popUpName.getText() + "?")
@@ -322,26 +326,26 @@ public class MiddleOfGameController extends SlideNavigationController implements
     private void getFamousPeopleList() {
         if (famousPeople == null) {
             famousPeople = new ArrayList<MutualFriend>();
-            famousPeople.add(new MutualFriend(-2, "Kim Kardashian", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Kim_Kardashian_West%2C_Parramatta_Westfield_Sydney_Australia.jpg/200px-Kim_Kardashian_West%2C_Parramatta_Westfield_Sydney_Australia.jpg", false));
-            famousPeople.add(new MutualFriend(-3, "Barack Obama", "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/President_Barack_Obama.jpg/220px-President_Barack_Obama.jpg", false));
-            famousPeople.add(new MutualFriend(-4, "Albert Einstein", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Albert_Einstein_Head.jpg/220px-Albert_Einstein_Head.jpg", false));
-            famousPeople.add(new MutualFriend(-5, "Beyonce", "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Beyonce_Knowles_with_necklaces.jpg/220px-Beyonce_Knowles_with_necklaces.jpg", false));
-            famousPeople.add(new MutualFriend(-6, "Harry Potter", "https://upload.wikimedia.org/wikipedia/en/thumb/4/44/HarryPotter5poster.jpg/225px-HarryPotter5poster.jpg", false));
-            famousPeople.add(new MutualFriend(-7, "Hillary Clinton", "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Hillary_Clinton_official_Secretary_of_State_portrait_crop.jpg/220px-Hillary_Clinton_official_Secretary_of_State_portrait_crop.jpg", false));
-            famousPeople.add(new MutualFriend(-8, "Nicki Minaj", "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Nicki_Minaj_de_gala_en_las_BET_Awards_2013.png/220px-Nicki_Minaj_de_gala_en_las_BET_Awards_2013.png", false));
-            famousPeople.add(new MutualFriend(-9, "SpongeBob SquarePants", "https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/Spongebob-squarepants.png/175px-Spongebob-squarepants.png", false));
-            famousPeople.add(new MutualFriend(-10, "Patrick Star", "https://upload.wikimedia.org/wikipedia/en/thumb/7/7e/Patrick_Star.png/220px-Patrick_Star.png", false));
-            famousPeople.add(new MutualFriend(-11, "Bernie Sanders", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Bernie_Sanders.jpg/220px-Bernie_Sanders.jpg", false));
-            famousPeople.add(new MutualFriend(-12, "Rihanna", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Rihanna_2012_%28Cropped%29.jpg/170px-Rihanna_2012_%28Cropped%29.jpg", false));
-            famousPeople.add(new MutualFriend(-13, "Abraham Lincoln", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Abraham_Lincoln_November_1863.jpg/220px-Abraham_Lincoln_November_1863.jpg", false));
-            famousPeople.add(new MutualFriend(-14, "John F. Kennedy", "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/John_F._Kennedy%2C_White_House_color_photo_portrait.jpg/225px-John_F._Kennedy%2C_White_House_color_photo_portrait.jpg", false));
-            famousPeople.add(new MutualFriend(-15, "Bill Clinton", "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/44_Bill_Clinton_3x4.jpg/220px-44_Bill_Clinton_3x4.jpg", false));
-            famousPeople.add(new MutualFriend(-16, "Oprah Winfrey", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Oprah_Winfrey_at_2011_TCA.jpg/220px-Oprah_Winfrey_at_2011_TCA.jpg", false));
-            famousPeople.add(new MutualFriend(-17, "Donald Trump", "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Donald_August_19_%28cropped%29.jpg/220px-Donald_August_19_%28cropped%29.jpg", false));
-            famousPeople.add(new MutualFriend(-18, "Justin Timberlake", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Justin_Timberlake_Cannes_2013.jpg/220px-Justin_Timberlake_Cannes_2013.jpg", false));
-            famousPeople.add(new MutualFriend(-19, "Tom Hanks", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Tom_Hanks_2014.jpg/220px-Tom_Hanks_2014.jpg", false));
-            famousPeople.add(new MutualFriend(-20, "Will Smith", "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Will_Smith_2012.jpg/220px-Will_Smith_2012.jpg", false));
-            famousPeople.add(new MutualFriend(-21, "Britney Spears", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Britney_Spears_2013_%28Straighten_Crop%29.jpg/220px-Britney_Spears_2013_%28Straighten_Crop%29.jpg", false));
+            famousPeople.add(new MutualFriend(-2, "Kim", "Kardashian", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Kim_Kardashian_West%2C_Parramatta_Westfield_Sydney_Australia.jpg/200px-Kim_Kardashian_West%2C_Parramatta_Westfield_Sydney_Australia.jpg", false));
+            famousPeople.add(new MutualFriend(-3, "Barack", "Obama", "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/President_Barack_Obama.jpg/220px-President_Barack_Obama.jpg", false));
+            famousPeople.add(new MutualFriend(-4, "Albert", "Einstein", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Albert_Einstein_Head.jpg/220px-Albert_Einstein_Head.jpg", false));
+            famousPeople.add(new MutualFriend(-5, "Beyonce", "", "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Beyonce_Knowles_with_necklaces.jpg/220px-Beyonce_Knowles_with_necklaces.jpg", false));
+            famousPeople.add(new MutualFriend(-6, "Harry", "Potter", "https://upload.wikimedia.org/wikipedia/en/thumb/4/44/HarryPotter5poster.jpg/225px-HarryPotter5poster.jpg", false));
+            famousPeople.add(new MutualFriend(-7, "Hillary", "Clinton", "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Hillary_Clinton_official_Secretary_of_State_portrait_crop.jpg/220px-Hillary_Clinton_official_Secretary_of_State_portrait_crop.jpg", false));
+            famousPeople.add(new MutualFriend(-8, "Nicki", "Minaj", "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Nicki_Minaj_de_gala_en_las_BET_Awards_2013.png/220px-Nicki_Minaj_de_gala_en_las_BET_Awards_2013.png", false));
+            famousPeople.add(new MutualFriend(-9, "SpongeBob", "SquarePants", "https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/Spongebob-squarepants.png/175px-Spongebob-squarepants.png", false));
+            famousPeople.add(new MutualFriend(-10, "Patrick", "Star", "https://upload.wikimedia.org/wikipedia/en/thumb/7/7e/Patrick_Star.png/220px-Patrick_Star.png", false));
+            famousPeople.add(new MutualFriend(-11, "Bernie", "Sanders", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Bernie_Sanders.jpg/220px-Bernie_Sanders.jpg", false));
+            famousPeople.add(new MutualFriend(-12, "Rihanna", "", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Rihanna_2012_%28Cropped%29.jpg/170px-Rihanna_2012_%28Cropped%29.jpg", false));
+            famousPeople.add(new MutualFriend(-13, "Abraham", "Lincoln", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Abraham_Lincoln_November_1863.jpg/220px-Abraham_Lincoln_November_1863.jpg", false));
+            famousPeople.add(new MutualFriend(-14, "John F.", "Kennedy", "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/John_F._Kennedy%2C_White_House_color_photo_portrait.jpg/225px-John_F._Kennedy%2C_White_House_color_photo_portrait.jpg", false));
+            famousPeople.add(new MutualFriend(-15, "Bill", "Clinton", "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/44_Bill_Clinton_3x4.jpg/220px-44_Bill_Clinton_3x4.jpg", false));
+            famousPeople.add(new MutualFriend(-16, "Oprah", "Winfrey", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Oprah_Winfrey_at_2011_TCA.jpg/220px-Oprah_Winfrey_at_2011_TCA.jpg", false));
+            famousPeople.add(new MutualFriend(-17, "Donald", "Trump", "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Donald_August_19_%28cropped%29.jpg/220px-Donald_August_19_%28cropped%29.jpg", false));
+            famousPeople.add(new MutualFriend(-18, "Justin", "Timberlake", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Justin_Timberlake_Cannes_2013.jpg/220px-Justin_Timberlake_Cannes_2013.jpg", false));
+            famousPeople.add(new MutualFriend(-19, "Tom", "Hanks", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Tom_Hanks_2014.jpg/220px-Tom_Hanks_2014.jpg", false));
+            famousPeople.add(new MutualFriend(-20, "Will", "Smith", "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Will_Smith_2012.jpg/220px-Will_Smith_2012.jpg", false));
+            famousPeople.add(new MutualFriend(-21, "Britney", "Spears", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Britney_Spears_2013_%28Straighten_Crop%29.jpg/220px-Britney_Spears_2013_%28Straighten_Crop%29.jpg", false));
         }
     }
 
@@ -356,7 +360,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
             fullGame.opponentLastName = game.opponentLastName;
             game = fullGame;
             createprofilePictureUrls();
-            setUpMutualFriendsList(profilePictureUrls);
+            setUpMutualFriendsList();
 
         } else if (taskName.equals("getFriendPool")) {
 

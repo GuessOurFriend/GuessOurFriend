@@ -11,7 +11,6 @@ public class MutualFriend {
     public long facebookID;
     public boolean isMysteryFriend;
     public boolean hasBeenGuessed;
-    public String fullName;
     public String firstName;
     public String lastName;
 
@@ -19,17 +18,15 @@ public class MutualFriend {
     public boolean isGrayedOut;
 
     public MutualFriend() {
-
         this.facebookID = -1;
-        this.fullName = "";
         this.profilePicture = "";
         this.isMysteryFriend = false;
     }
 
-    public MutualFriend(long facebookID, String fullName, String profilePicture, boolean isMysteryFriend) {
-
+    public MutualFriend(long facebookID, String firstName, String lastName, String profilePicture, boolean isMysteryFriend) {
         this.facebookID = facebookID;
-        this.fullName = fullName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.profilePicture = profilePicture;
         this.isMysteryFriend = isMysteryFriend;
     }
@@ -53,11 +50,8 @@ public class MutualFriend {
         this.hasBeenGuessed = hasBeenGuessed;
     }
 
-    public String getName() {
-
-        Friend friend = DatabaseHelper.getCurrentUsersFBProfile(Model.getAppContext())
-                .getFriendById(facebookID);
-        return friend.firstName;
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
     public String getProfilePic() {

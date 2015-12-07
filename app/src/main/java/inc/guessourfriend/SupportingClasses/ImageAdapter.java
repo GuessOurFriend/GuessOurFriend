@@ -16,25 +16,29 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * Created by Laura on 11/14/2015.
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private String[] imageURLs;
-//    private Bitmap[] mThumbIds;
+    private String[] imageURLs = null;
+    private List<MutualFriend> poolFriends = null;
 
     public ImageAdapter(Context c, String[] imageURLs) {
         mContext = c;
         this.imageURLs = imageURLs;
-//        mThumbIds = urlsToBitmaps(imageURLs);
+    }
+
+    public ImageAdapter(Context c, List<MutualFriend> poolFriends) {
+        mContext = c;
+        this.poolFriends = poolFriends;
     }
 
     @Override
     public int getCount() {
-//        return mThumbIds.length;
-        return imageURLs.length;
+        return (imageURLs != null) ? imageURLs.length : poolFriends.size();
     }
 
     @Override
@@ -62,24 +66,17 @@ public class ImageAdapter extends BaseAdapter {
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
             imageView.setBackgroundColor(Color.parseColor("#80ffffff"));
+            if (poolFriends != null && poolFriends.get(position).isGrayedOut) {
+                imageView.setColorFilter(Color.parseColor("#88000000"));
+            }
         } else {
             imageView = (ImageView) convertView;
         }
 
-
-//        imageView.setImageResource(mThumbIds[position]);
-//        imageView.setImageBitmap(mThumbIds[position]);
-        new DownloadImageTask(imageView).execute(imageURLs[position]);
+        String imageUrl = (imageURLs != null) ? imageURLs[position] : poolFriends.get(position).profilePicture;
+        new DownloadImageTask(imageView).execute(imageUrl);
         return imageView;
     }
-
-//    public Bitmap[] urlsToBitmaps(String[] urlList) {
-//        Bitmap[] bitmaps = new Bitmap[urlList.length];
-//        for (int i = 0; i < urlList.length; i++) {
-//            Bitmap addBitmap = new DownloadImageTask()
-//        }
-//        return null;
-//    }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
@@ -90,19 +87,18 @@ public class ImageAdapter extends BaseAdapter {
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
+            Bitmap mIcon = null;
             try {
                 InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
+                mIcon = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
             }
-            return mIcon11;
+            return mIcon;
         }
 
         protected void onPostExecute(Bitmap result) {
             bmImage.setImageBitmap(result);
         }
     }
-
 }

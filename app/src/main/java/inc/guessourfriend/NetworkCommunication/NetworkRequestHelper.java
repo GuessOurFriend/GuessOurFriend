@@ -226,18 +226,22 @@ public class NetworkRequestHelper {
                     for (int i=0; i < incomingFriendsList.length(); i++) {
                         JSONObject curr = incomingFriendsList.getJSONObject(i);
                         Long fbId = Long.parseLong(curr.getString("fb_id"));
+                        boolean isGrayedOut = curr.getBoolean("grey");
 
                         MutualFriend temp = new MutualFriend();
                         temp.facebookID = fbId;
+                        temp.isGrayedOut = isGrayedOut;
                         gameResult.myPool.mutualFriendList.add(temp);
                     }
 
                     for (int i=0; i < outgoingFriendsList.length(); i++) {
                         JSONObject curr = outgoingFriendsList.getJSONObject(i);
                         Long fbId = Long.parseLong(curr.getString("fb_id"));
+                        boolean isGrayedOut = curr.getBoolean("grey");
 
                         MutualFriend temp = new MutualFriend();
                         temp.facebookID = fbId;
+                        temp.isGrayedOut = isGrayedOut;
                         gameResult.opponentPool.mutualFriendList.add(temp);
                     }
 
