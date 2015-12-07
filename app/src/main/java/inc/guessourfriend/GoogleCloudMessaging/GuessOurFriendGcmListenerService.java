@@ -33,15 +33,19 @@ public class GuessOurFriendGcmListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         Bundle theData = data;
-        Log.v("the bundle", data.toString());
+
+        String body = data.getString("body");
+        Log.v("The bundle", data.toString());
+
+
 
         // TODO: add the game ID to intentReceivedKey in order to differentiate each game's messages
-        Intent intent = new Intent(intentReceivedKey, null, this, MiddleOfGameController.class);
+        Intent intent = new Intent(intentReceivedKey);
         intent.setType("text/plain");
         // TODO: the Bundle of data that return is a JSON Object which we don't know the key for
         // TODO:        figure out what format this is in by asking Brian
         // TODO: Current game state: question asked, question answered, now we need to guess a friend or pass up our opportunity to guess
-        intent.putExtra(intentReceivedKey, data.getString("body"));
+        intent.putExtra(intentReceivedKey, body);
         sendBroadcast(intent);
     }
 

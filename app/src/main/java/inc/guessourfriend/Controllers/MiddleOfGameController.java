@@ -163,8 +163,10 @@ public class MiddleOfGameController extends SlideNavigationController implements
             @Override
             public void onReceive(Context context, Intent intent) {
 
-                EditText conversation = (EditText) findViewById(R.id.conversation);
                 String body = intent.getStringExtra(intentReceivedKey);
+
+
+
                 JSONObject jsonObjectBody = new JSONObject();
                 try {
                     jsonObjectBody = new JSONObject(body);
@@ -172,6 +174,8 @@ public class MiddleOfGameController extends SlideNavigationController implements
                     e.printStackTrace();
                 }
                 Log.v("body", jsonObjectBody.toString());
+
+                EditText conversation = (EditText) findViewById(R.id.conversation);
                 conversation.append("" + "\n");
             }
         }, new IntentFilter(intentReceivedKey));
