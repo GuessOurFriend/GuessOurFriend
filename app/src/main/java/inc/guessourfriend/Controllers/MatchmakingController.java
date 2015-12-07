@@ -28,15 +28,7 @@ import inc.guessourfriend.SupportingClasses.Game;
 public class MatchmakingController extends SlideNavigationController implements OnTaskCompleted {
 
     private Model model;
-    public void yourTurn() {
-        TextView textView = (TextView) findViewById(R.id.text_matchmaking);
-        Game game = new Game();
-        boolean turn = game.getIsMyTurn();
-        if (turn == false) {
-            textView.setVisibility(View.GONE);
-        } else {
-            textView.setVisibility(View.VISIBLE);
-        }}
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
