@@ -57,6 +57,15 @@ public class MiddleOfGameController extends SlideNavigationController implements
             JSONObject jsonObjectBody = new JSONObject();
             try {
                 jsonObjectBody = new JSONObject(body);
+
+                //Check that this is question/answer response
+                if(jsonObjectBody.has("game_id") && jsonObjectBody.has("id")) {
+                    long gameId = Long.parseLong(jsonObjectBody.getString("game_id"));
+                    if (gameId == game.ID) {
+                        lastQuestionId = Integer.parseInt(jsonObjectBody.getString("id"));
+                    }
+                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
