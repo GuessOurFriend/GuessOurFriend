@@ -862,7 +862,7 @@ public class NetworkRequestHelper {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        theListener.onTaskCompleted("Game state after rematch",state);
+                        theListener.onTaskCompleted("Game state after rematch",returnData);
                     }
 
 
