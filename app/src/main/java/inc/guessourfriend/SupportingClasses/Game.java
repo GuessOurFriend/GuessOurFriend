@@ -16,7 +16,6 @@ public class Game implements Parcelable {
     public long mysteryFriendId;
     public MutualFriendList myPool;
     public MutualFriendList opponentPool;
-    public boolean isMyTurn;
     public int stateOfGame;
     public int numberOfQuestions;
     public ArrayList<String> conversation;
@@ -25,6 +24,27 @@ public class Game implements Parcelable {
     public static final int MIDDLE_OF_GAME = 1;
     public static final int END_OF_GAME = 2;
 
+    public enum TypeOfTurn {
+        NotYourTurn,
+        TurnToAskQuestion,
+        TurnToAnswerQuestion,
+        TurnToGuess;
+
+        public static TypeOfTurn fromInt(int type) {
+            switch (type) {
+                case 0:
+                    return TurnToAskQuestion;
+                case 1:
+                    return TurnToAnswerQuestion;
+                case 2:
+                    return TurnToGuess;
+                default:
+                    return NotYourTurn;
+            }
+        }
+    }
+    public TypeOfTurn typeOfTurn = TypeOfTurn.NotYourTurn;
+
     public Game(){
         super();
         this.ID = -1;
@@ -32,13 +52,9 @@ public class Game implements Parcelable {
         this.mysteryFriendId = -1;
         this.myPool = null;
         this.opponentPool = null;
-        this.isMyTurn = false;
+        this.typeOfTurn = TypeOfTurn.NotYourTurn;
         this.stateOfGame = START_OF_GAME;
         this.numberOfQuestions = -1;
-    }
-
-    public void setIsMyTurn(boolean isMyTurn) {
-        this.isMyTurn = isMyTurn;
     }
 
     public void setNumberOfQuestions(int numberOfQuestions) {
@@ -63,10 +79,6 @@ public class Game implements Parcelable {
 
     public MutualFriendList getOpponentPool() {
         return opponentPool;
-    }
-
-    public boolean getIsMyTurn() {
-        return isMyTurn;
     }
 
     public int getNumberOfQuestions() {

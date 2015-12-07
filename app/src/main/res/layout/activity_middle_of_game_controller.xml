@@ -124,7 +124,13 @@
             android:onClick="idkButtonClick"
             android:text="Not Sure"
             android:layout_weight="1"/>
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pass_button_panel"
+        android:layout_alignParentBottom="true">
         <Button
             android:layout_width="0dp"
             android:layout_height="fill_parent"
@@ -137,8 +143,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/button_panel"
         android:id="@+id/sendMessage"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
         <EditText
             android:layout_width="0dp"
@@ -153,8 +159,5 @@
             android:singleLine="true"
             android:enabled="true" />
     </LinearLayout>
-
-
-
 
 </RelativeLayout>

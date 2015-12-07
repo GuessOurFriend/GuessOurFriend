@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.FacebookSdk;
@@ -73,7 +74,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                                 game.lastQuestionId = Integer.parseInt(jsonObjectBody.getString("id"));
                                 String question = jsonObjectBody.getString("content");
                                 conversation.append(question + "\n");
-                                game.isMyTurn = true;
+                                game.typeOfTurn = Game.TypeOfTurn.TurnToAnswerQuestion;
                                 updateTurnTextViews();
                             } else {
                                 // You just received an answer,
@@ -81,19 +82,19 @@ public class MiddleOfGameController extends SlideNavigationController implements
                                 int intAnswer = Integer.parseInt(jsonObjectBody.getString("answer"));
                                 String answer = NetworkRequestHelper.intAnswerToString(intAnswer);
                                 conversation.append(answer + "\n");
-                                game.isMyTurn = true;
+                                game.typeOfTurn = Game.TypeOfTurn.TurnToGuess;
                                 updateTurnTextViews();
                             }
                         }else if(title.equals("It is your turn")){
                             // The other user just passed on their guess
-                            game.isMyTurn = true;
+                            game.typeOfTurn = Game.TypeOfTurn.TurnToAskQuestion;
                             updateTurnTextViews();
                         }else if(title.equals("Correct guess")){
                             game.setStateOfGame(Game.END_OF_GAME);
                             //TODO: Go to EndOfGameController
                         }else if(title.equals("Incorrect guess")) {
                             //User guessed incorrectly, you get two guesses
-                            game.isMyTurn = true;
+                            game.typeOfTurn = Game.TypeOfTurn.TurnToAskQuestion;
                             updateTurnTextViews();
                             //TODO: Handle letting them have two guesses
                         }
@@ -151,15 +152,36 @@ public class MiddleOfGameController extends SlideNavigationController implements
             public void run() {
                 TextView yourTurn = (TextView) findViewById(R.id.your_turn_text);
                 TextView theirTurn = (TextView) findViewById(R.id.their_turn_text);
-                if (game.getIsMyTurn())
+                LinearLayout buttonPanel = (LinearLayout) findViewById(R.id.button_panel);
+                LinearLayout passButtonPanel = (LinearLayout) findViewById(R.id.pass_button_panel);
+                EditText message = (EditText) findViewById(R.id.theMessage);
+                if (!(game.typeOfTurn == Game.TypeOfTurn.NotYourTurn))
                 {
                     yourTurn.setVisibility(View.VISIBLE);
                     theirTurn.setVisibility(View.GONE);
+
+                    if (game.typeOfTurn == Game.TypeOfTurn.TurnToAnswerQuestion) {
+                        buttonPanel.setVisibility(View.VISIBLE);
+                        passButtonPanel.setVisibility(View.GONE);
+                        message.setVisibility(View.GONE);
+                    } else if (game.typeOfTurn == Game.TypeOfTurn.TurnToAskQuestion) {
+                        buttonPanel.setVisibility(View.GONE);
+                        passButtonPanel.setVisibility(View.GONE);
+                        message.setVisibility(View.VISIBLE);
+                    } else if (game.typeOfTurn == Game.TypeOfTurn.TurnToGuess) {
+                        buttonPanel.setVisibility(View.GONE);
+                        passButtonPanel.setVisibility(View.VISIBLE);
+                        message.setVisibility(View.GONE);
+                    }
                 }
                 else
                 {
                     yourTurn.setVisibility(View.GONE);
                     theirTurn.setVisibility(View.VISIBLE);
+
+                    buttonPanel.setVisibility(View.GONE);
+                    passButtonPanel.setVisibility(View.GONE);
+                    message.setVisibility(View.GONE);
                 }
             }
         });
@@ -170,7 +192,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         String answer = NetworkRequestHelper.intAnswerToString(intAnswer);
         EditText conversation = (EditText) findViewById(R.id.conversation);
         conversation.append(answer + "\n");
-        game.isMyTurn = false;
+        game.typeOfTurn = Game.TypeOfTurn.NotYourTurn;
         updateTurnTextViews();
     }
 
@@ -194,7 +216,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     //TODO: Remove debug button
     public void passMyGuessButtonClicked(View view) {
         NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.ID, -1);
-        game.isMyTurn = false;
+        game.typeOfTurn = Game.TypeOfTurn.NotYourTurn;
         updateTurnTextViews();
     }
 
@@ -213,7 +235,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
-                    game.isMyTurn = false;
+                    game.typeOfTurn = Game.TypeOfTurn.NotYourTurn;
                     updateTurnTextViews();
                     return true;
                 }
@@ -298,7 +320,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                 AlertDialog.Builder adb = new AlertDialog.Builder(MiddleOfGameController.this);
 
                 //Show different dialogs based on whether or not it is the user's turn
-                if (game.isMyTurn) {
+                if (!(game.typeOfTurn == Game.TypeOfTurn.NotYourTurn)) {
                     //Let the user guess the mystery friend, gray out, or exit
                     adb.setTitle("Gray Out Or Select A Friend");
                     adb.setMessage("Would you like to gray out or guess " +

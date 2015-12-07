@@ -228,7 +228,7 @@ public class NetworkRequestHelper {
                     JSONArray outgoingFriendsList = friendsList.getJSONArray("outgoing_list");
                     JSONArray incomingFriendsList = friendsList.getJSONArray("incoming_list");
 
-                    gameResult.isMyTurn = resultObject.getBoolean("your_turn");
+                    gameResult.typeOfTurn = Game.TypeOfTurn.fromInt(Integer.parseInt(resultObject.getString("your_turn")));
 
                     if (!resultObject.isNull("mystery_friend")) {
                         JSONObject mysteryFriend = resultObject.getJSONObject("mystery_friend");
