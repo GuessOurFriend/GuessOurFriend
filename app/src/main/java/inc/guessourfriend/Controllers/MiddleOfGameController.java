@@ -187,7 +187,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
 
         // Get the image URL's from names in the opponentpool field in the game object
         for (int i = 0; i < 20; i++) {
-            MutualFriend currPoolFriend = game.opponentPool.mutualFriendList.get(i);
+            MutualFriend currPoolFriend = game.myPool.mutualFriendList.get(i);
             if (currPoolFriend.facebookID > 0) {
                 //It's a real id, find it in our facebook friends list
                 for (int j = 0; j < model.fbProfileModel.friendList.size(); j++) {
@@ -219,7 +219,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         final GridView gridView = (GridView) findViewById(R.id.middle_of_game_gridview);
 
         //Set up an adapter to hold all the profile pictures
-        ImageAdapter imageAdapter = new ImageAdapter(MiddleOfGameController.this, game.opponentPool.mutualFriendList);
+        ImageAdapter imageAdapter = new ImageAdapter(MiddleOfGameController.this, game.myPool.mutualFriendList);
         gridView.setAdapter(imageAdapter);
 
         //Set up the click handler for each of the images
@@ -231,7 +231,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                 selectedImage.setCropToPadding(true);
 
                 //TODO: Figure out if this is opponentPool or myPool that we want
-                final MutualFriend selectedFriend = game.opponentPool.mutualFriendList.get(position);
+                final MutualFriend selectedFriend = game.myPool.mutualFriendList.get(position);
 
                 //Create a dialog for the user to decide what to do
                 AlertDialog.Builder adb = new AlertDialog.Builder(MiddleOfGameController.this);
@@ -314,7 +314,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                 ImageView popUpImage = (ImageView) dialogLayout.findViewById(R.id.mutual_friend_image);
                 popUpImage.setImageDrawable(selectedImage.getDrawable());
                 TextView popUpName = (TextView) dialogLayout.findViewById(R.id.mutual_friend_name);
-                MutualFriend popUpFriend = game.opponentPool.mutualFriendList.get(position);
+                MutualFriend popUpFriend = game.myPool.mutualFriendList.get(position);
                 popUpName.setText(popUpFriend.getFullName());
                 builder.setView(dialogLayout);
 
