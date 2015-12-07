@@ -74,7 +74,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                                 // You need to answer this question
                                 game.lastQuestionId = Integer.parseInt(jsonObjectBody.getString("id"));
                                 String question = jsonObjectBody.getString("content");
-                                conversation.append(question + "\n");
+                                conversation.append("Them: " + question + "\n");
                                 game.typeOfTurn = Game.TypeOfTurn.TurnToAnswerQuestion;
                                 updateTurnTextViews();
                             } else {
@@ -82,7 +82,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                                 // You need to guess a mystery friend or pass the guess
                                 int intAnswer = Integer.parseInt(jsonObjectBody.getString("answer"));
                                 String answer = NetworkRequestHelper.intAnswerToString(intAnswer);
-                                conversation.append(answer + "\n");
+                                conversation.append("Them: " + answer + "\n");
                                 game.typeOfTurn = Game.TypeOfTurn.TurnToGuess;
                                 updateTurnTextViews();
                             }
@@ -191,7 +191,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         NetworkRequestHelper.answerQuestion(MiddleOfGameController.this, game.ID, game.lastQuestionId, intAnswer);
         String answer = NetworkRequestHelper.intAnswerToString(intAnswer);
         TextView conversation = (TextView) findViewById(R.id.conversation);
-        conversation.append(answer + "\n");
+        conversation.append("You: " + answer + "\n");
         game.typeOfTurn = Game.TypeOfTurn.NotYourTurn;
         updateTurnTextViews();
     }
@@ -486,7 +486,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         } else if(taskName.equalsIgnoreCase("questionSent")){
             EditText theMessage = (EditText) findViewById(R.id.theMessage);
             TextView conversation = (TextView) findViewById(R.id.conversation);
-            conversation.append(theMessage.getText() + "\n");
+            conversation.append("You: " + theMessage.getText() + "\n");
             theMessage.setText("");
         } else if (taskName.equalsIgnoreCase("questionAnswered")) {
 

@@ -153,10 +153,11 @@
         android:id="@+id/sendMessage"
         android:visibility="invisible"
         android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/button_panel"
         android:orientation="horizontal">
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:inputType="text"
             android:id="@+id/theMessage"
             android:hint="Type your message here"

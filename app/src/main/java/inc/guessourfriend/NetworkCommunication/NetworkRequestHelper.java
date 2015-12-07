@@ -440,7 +440,7 @@ public class NetworkRequestHelper {
                     theListener.onTaskCompleted("passedUpMyGuess", null);
                 } else if (theMessage.equals(guessWasWrongMessage)) {
                     theListener.onTaskCompleted("myGuessWasWrong", null);
-                } else {
+                } else if (theMessage.equals(wonMessage)){
                     theListener.onTaskCompleted("iWon", null);
                 }
             }
