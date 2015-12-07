@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import inc.guessourfriend.Controllers.MiddleOfGameController;
@@ -35,7 +36,6 @@ public class GuessOurFriendGcmListenerService extends GcmListenerService {
         Bundle theData = data;
         String body = data.getString("body");
         Log.v("The bundle", theData.toString());
-
         // TODO: add the game ID to intentReceivedKey in order to differentiate each game's messages
         // TODO: the Bundle of data that return is a JSON Object which we don't know the key for
         // TODO:        figure out what format this is in by asking Brian

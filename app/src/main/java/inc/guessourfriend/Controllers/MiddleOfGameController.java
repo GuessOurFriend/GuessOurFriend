@@ -50,6 +50,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            EditText conversation = (EditText) findViewById(R.id.conversation);
             String body = intent.getStringExtra(intentReceivedKey);
             System.out.println("Body: " + body);
 
@@ -57,20 +58,38 @@ public class MiddleOfGameController extends SlideNavigationController implements
             try {
                 jsonObjectBody = new JSONObject(body);
 
-                //Check that this is question/answer response
-                if(jsonObjectBody.has("game_id") && jsonObjectBody.has("id")) {
+                // Check that this is a response sent to us from the gcm telling us that someone
+                //      just sent us a question
+                if(jsonObjectBody.has("game_id")) {
                     long gameId = Long.parseLong(jsonObjectBody.getString("game_id"));
                     if (gameId == game.ID) {
-                        game.lastQuestionId = Integer.parseInt(jsonObjectBody.getString("id"));
+                        // Questions/Answers
+                        if(jsonObjectBody.has("id")) {
+                            if (Integer.parseInt(jsonObjectBody.getString("answer")) == -1) {
+                                // You need to answer this question
+                                game.lastQuestionId = Integer.parseInt(jsonObjectBody.getString("id"));
+                                String question = jsonObjectBody.getString("content");
+                                conversation.append(question + "\n");
+                            } else {
+                                // You need to ask the next question
+                                int intAnswer = Integer.parseInt(jsonObjectBody.getString("answer"));
+                                String answer = NetworkRequestHelper.intAnswerToString(intAnswer);
+                                conversation.append(answer + "\n");
+                            }
+                        }else if(jsonObjectBody.has("pass_message")){
+                            // The other user just passed on their guess
+                        }else if(jsonObjectBody.has("guess_message")){
+                            // The other user just guessed and failed, you now get two questions
+                            //      to ask
+                        }
                     }
+                    // Format:
+                    // {"id":21,"content":"zddd","answer":-1,"game_id":127,"user_id":37}
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            EditText conversation = (EditText) findViewById(R.id.conversation);
-            conversation.append(body + "\n");
         }
     };
     private IntentFilter mIntentFilter;

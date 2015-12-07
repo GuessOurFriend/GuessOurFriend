@@ -189,7 +189,7 @@ public class NetworkRequestHelper {
         }.execute();
     }
 
-    private static String intAnswerToString(int answer) {
+    public static String intAnswerToString(int answer) {
         switch (answer) {
             case 0:
                 return "No";
