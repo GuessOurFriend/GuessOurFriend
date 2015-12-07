@@ -162,16 +162,16 @@ public class MiddleOfGameController extends SlideNavigationController implements
 
                     if (game.typeOfTurn == Game.TypeOfTurn.TurnToAnswerQuestion) {
                         buttonPanel.setVisibility(View.VISIBLE);
-                        passButtonPanel.setVisibility(View.GONE);
-                        message.setVisibility(View.GONE);
+                        passButtonPanel.setVisibility(View.INVISIBLE);
+                        message.setVisibility(View.INVISIBLE);
                     } else if (game.typeOfTurn == Game.TypeOfTurn.TurnToAskQuestion) {
-                        buttonPanel.setVisibility(View.GONE);
-                        passButtonPanel.setVisibility(View.GONE);
+                        buttonPanel.setVisibility(View.INVISIBLE);
+                        passButtonPanel.setVisibility(View.INVISIBLE);
                         message.setVisibility(View.VISIBLE);
                     } else if (game.typeOfTurn == Game.TypeOfTurn.TurnToGuess) {
-                        buttonPanel.setVisibility(View.GONE);
+                        buttonPanel.setVisibility(View.INVISIBLE);
                         passButtonPanel.setVisibility(View.VISIBLE);
-                        message.setVisibility(View.GONE);
+                        message.setVisibility(View.INVISIBLE);
                     }
                 }
                 else
@@ -179,9 +179,9 @@ public class MiddleOfGameController extends SlideNavigationController implements
                     yourTurn.setVisibility(View.GONE);
                     theirTurn.setVisibility(View.VISIBLE);
 
-                    buttonPanel.setVisibility(View.GONE);
-                    passButtonPanel.setVisibility(View.GONE);
-                    message.setVisibility(View.GONE);
+                    buttonPanel.setVisibility(View.INVISIBLE);
+                    passButtonPanel.setVisibility(View.INVISIBLE);
+                    message.setVisibility(View.INVISIBLE);
                 }
             }
         });
