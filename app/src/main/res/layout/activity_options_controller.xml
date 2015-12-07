@@ -10,26 +10,22 @@
         android:layout_width="204dp"
         android:layout_height="wrap_content"
         android:text="Blacklist Friends"
-        android:layout_marginBottom="5sp"
-        android:layout_marginLeft="0sp"
-        android:layout_marginRight="2sp"
-        android:layout_marginTop="0sp" />
+        android:layout_marginBottom="5sp" />
     <Button
         android:id="@+id/inviteafriendbutton"
         android:layout_width="204dp"
         android:layout_height="wrap_content"
         android:text="Invite Friends"
-        android:layout_marginBottom="5sp"
-        android:layout_marginLeft="0sp"
-        android:layout_marginRight="2sp"
-        android:layout_marginTop="0sp"/>
+        android:layout_marginBottom="5sp"/>
     <Button
         android:id="@+id/reportabugbutton"
         android:layout_width="204dp"
         android:layout_height="wrap_content"
         android:text="Report a Bug"
-        android:layout_marginBottom="5sp"
-        android:layout_marginLeft="0sp"
-        android:layout_marginRight="2sp"
-        android:layout_marginTop="0sp"/>
+        android:layout_marginBottom="5sp"/>
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="198dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5sp"/>
 </LinearLayout>
