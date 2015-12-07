@@ -83,7 +83,7 @@ public class LoginController extends FragmentActivity {
                                         } else {
                                             System.out.println("Success");
                                             takeCareOfInitialDatabaseSetupUponFBLogin(response);
-                                            //reGetGcmId();
+                                            reGetGcmId();
                                             Intent myIntent = new Intent(LoginController.this, ChallengeAFriendController.class);
                                             startActivity(myIntent);
                                         }

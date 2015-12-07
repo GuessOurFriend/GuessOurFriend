@@ -301,6 +301,11 @@ public class NetworkRequestHelper {
     public static void answerQuestion(OnTaskCompleted listener, long gameId, int questionId, int answer) {
         final OnTaskCompleted theListener = listener;
         JSONObject data = new JSONObject();
+        Long id = gameId;
+        int questionID = questionId;
+        int answerNumber = answer;
+        String mes = "";
+        Log.v("blah", "" + id + questionID + answerNumber);
         try {
             data.put("game_id", gameId);
             data.put("question_id", questionId);
@@ -312,6 +317,8 @@ public class NetworkRequestHelper {
         new NetworkRequestRunner("POST", ROOT_URL + "/question/answer", getAuthToken()){
             @Override
             protected void onPostExecute(JSONObject result) {
+                JSONObject result2 = result;
+                Log.v("result", result2.toString());
                 String success = "Successfully answered the question";
                 String actualResult = "";
                 try{
@@ -339,7 +346,7 @@ public class NetworkRequestHelper {
         JSONObject data = new JSONObject();
         try {
             data.put("game_id", gameId);
-            data.put("guess_id", guessedFacebookID);
+            data.put("guess_fb_id", guessedFacebookID);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -23,6 +23,9 @@ import android.widget.TextView;
 import com.facebook.login.widget.ProfilePictureView;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -44,7 +47,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     private GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
     private Game game = new Game();
-    private int lastQuestionId = 7;
+    private int lastQuestionId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,8 +162,17 @@ public class MiddleOfGameController extends SlideNavigationController implements
         registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+
                 EditText conversation = (EditText) findViewById(R.id.conversation);
-                conversation.append(intent.getStringExtra("body") + "\n");
+                String body = intent.getStringExtra(intentReceivedKey);
+                JSONObject jsonObjectBody = new JSONObject();
+                try {
+                    jsonObjectBody = new JSONObject(body);
+                } catch (JSONException e){
+                    e.printStackTrace();
+                }
+                Log.v("body", jsonObjectBody.toString());
+                conversation.append("" + "\n");
             }
         }, new IntentFilter(intentReceivedKey));
     }
@@ -350,7 +362,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     }
 
     public void onTaskCompleted(String taskName, Object resultModel){
-        if(taskName.equals("getGameBoard")) {
+        if (taskName.equals("getGameBoard")) {
             Game fullGame = (Game) resultModel;
             fullGame.ID = game.ID;
             fullGame.opponentID = game.opponentID;
