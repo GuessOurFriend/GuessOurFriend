@@ -81,24 +81,41 @@ public class MiddleOfGameController extends SlideNavigationController implements
             ProfilePictureView opponent = (ProfilePictureView) findViewById(R.id.opponent_mystery_friend);
             opponent.setProfileId(Long.toString(game.opponentID));
 
-            TextView textView = (TextView) findViewById(R.id.your_turn_text);
-            TextView textView1= (TextView) findViewById(R.id.their_turn_text);
-            Game game = new Game();
-            game.setIsMyTurn(false);
-            boolean turn = game.getIsMyTurn();
-            if (turn == false) {
-                textView.setVisibility(View.GONE);
-                textView1.setVisibility(View.VISIBLE);
-            } else {
-                textView.setVisibility(View.VISIBLE);
-                textView1.setVisibility(View.GONE);}
-
         }
+        yourTurn();
     }
     public void yourTurn() {
+        TextView textView = (TextView) findViewById(R.id.your_turn_text);
+        TextView textView1= (TextView) findViewById(R.id.their_turn_text);
+        Game game = new Game();
+        game.setIsMyTurn(true);
+        boolean turn = game.getIsMyTurn();
+        if (turn == false) {
+            textView.setVisibility(View.GONE);
+            textView1.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.VISIBLE);
+            textView1.setVisibility(View.GONE);}
+
         }
+    public void theirTurn() {
+        TextView textView = (TextView) findViewById(R.id.your_turn_text);
+        TextView textView1= (TextView) findViewById(R.id.their_turn_text);
+        Game game = new Game();
+        game.setIsMyTurn(false);
+        boolean turn = game.getIsMyTurn();
+        if (turn == false) {
+            textView.setVisibility(View.GONE);
+            textView1.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.VISIBLE);
+            textView1.setVisibility(View.GONE);}
+
+    }
+
     private void answerQuestion(int answer) {
         NetworkRequestHelper.answerQuestion(MiddleOfGameController.this, game.ID, lastQuestionId, answer);
+        theirTurn();
     }
 
     public void yesButtonClick(View view) {
@@ -121,6 +138,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     //TODO: Remove debug button
     public void passMyGuessButtonClicked(View view) {
         NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.ID, -1);
+        theirTurn();
     }
 
 
@@ -143,6 +161,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                 return false;
             }
         });
+        theirTurn();
     }
 
     //Set up the recieving of GCM messages to add to the conversation
