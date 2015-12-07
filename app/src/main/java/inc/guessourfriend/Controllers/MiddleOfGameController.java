@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.facebook.FacebookSdk;
@@ -53,7 +54,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            EditText conversation = (EditText) findViewById(R.id.conversation);
+            TextView conversation = (TextView) findViewById(R.id.conversation);
             String title = intent.getStringExtra("title");
             String body = intent.getStringExtra(intentReceivedKey);
             System.out.println("Body: " + body);
@@ -190,7 +191,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     private void answerQuestion(int intAnswer) {
         NetworkRequestHelper.answerQuestion(MiddleOfGameController.this, game.ID, game.lastQuestionId, intAnswer);
         String answer = NetworkRequestHelper.intAnswerToString(intAnswer);
-        EditText conversation = (EditText) findViewById(R.id.conversation);
+        TextView conversation = (TextView) findViewById(R.id.conversation);
         conversation.append(answer + "\n");
         game.typeOfTurn = Game.TypeOfTurn.NotYourTurn;
         updateTurnTextViews();
@@ -311,75 +312,20 @@ public class MiddleOfGameController extends SlideNavigationController implements
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 //Get the ImageView
                 final ImageView selectedImage = (ImageView) v;
-                selectedImage.setCropToPadding(true);
 
                 //TODO: Figure out if this is opponentPool or myPool that we want
                 final MutualFriend selectedFriend = game.myPool.mutualFriendList.get(position);
 
-                //Create a dialog for the user to decide what to do
-                AlertDialog.Builder adb = new AlertDialog.Builder(MiddleOfGameController.this);
-
-                //Show different dialogs based on whether or not it is the user's turn
-                if (!(game.typeOfTurn == Game.TypeOfTurn.NotYourTurn)) {
-                    //Let the user guess the mystery friend, gray out, or exit
-                    adb.setTitle("Gray Out Or Select A Friend");
-                    adb.setMessage("Would you like to gray out or guess " +
-                            selectedFriend.getFullName() + "?");
-                    //Keep Gray Out as the "positive" so it is always in the same position
-                    adb.setPositiveButton("Gray Out", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //Highlight/Unhighlight the friend that was clicked
-                            if (selectedFriend.isGrayedOut) {
-                                selectedImage.setColorFilter(Color.parseColor("#00000000"));
-                                selectedFriend.isGrayedOut = false;
-                                NetworkRequestHelper.ungreyFriend(game.ID, selectedFriend.facebookID);
-                            } else {
-                                selectedImage.setColorFilter(Color.parseColor("#88000000"));
-                                selectedFriend.isGrayedOut = true;
-                                NetworkRequestHelper.greyFriend(game.ID, selectedFriend.facebookID);
-                            }
-                        }
-                    });
-                    adb.setNegativeButton("Guess", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.ID, selectedFriend.facebookID);
-                        }
-                    });
-                    adb.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //Do Nothing
-                        }
-                    });
-
+                //Highlight/Unhighlight the friend that was clicked
+                if (selectedFriend.isGrayedOut) {
+                    selectedImage.setColorFilter(Color.parseColor("#00000000"));
+                    selectedFriend.isGrayedOut = false;
+                    NetworkRequestHelper.ungreyFriend(game.ID, selectedFriend.facebookID);
                 } else {
-                    //Let the user gray out or exit (they can't guess a friend if it's not their turn)
-                    adb.setTitle("Gray Out A Friend");
-                    adb.setMessage("Would you like to gray out " +
-                            selectedFriend.getFullName() + "?");
-                    adb.setPositiveButton("Gray Out", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //Highlight/Unhighlight the friend that was clicked
-                            if (selectedFriend.isGrayedOut) {
-                                selectedImage.setColorFilter(Color.parseColor("#00000000"));
-                                selectedFriend.isGrayedOut = false;
-                                NetworkRequestHelper.ungreyFriend(game.ID, selectedFriend.facebookID);
-                            } else {
-                                selectedImage.setColorFilter(Color.parseColor("#88000000"));
-                                selectedFriend.isGrayedOut = true;
-                                NetworkRequestHelper.greyFriend(game.ID, selectedFriend.facebookID);
-                            }
-                        }
-                    });
-                    adb.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //Do Nothing
-                        }
-                    });
+                    selectedImage.setColorFilter(Color.parseColor("#88000000"));
+                    selectedFriend.isGrayedOut = true;
+                    NetworkRequestHelper.greyFriend(game.ID, selectedFriend.facebookID);
                 }
-
-                //Display the dialog
-                AlertDialog alertDialog = adb.create();
-                alertDialog.show();
             }
         });
 
@@ -401,20 +347,29 @@ public class MiddleOfGameController extends SlideNavigationController implements
                 popUpName.setText(popUpFriend.getFullName());
                 builder.setView(dialogLayout);
 
-                builder.setTitle("Guess " + popUpName.getText() + "?")
-                        .setCancelable(true)
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        })
-                        .setPositiveButton("Guess This Friend", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this,game.ID,popUpFriend.facebookID);
+                if (game.typeOfTurn == Game.TypeOfTurn.TurnToGuess) {
+                    builder.setTitle("Guess " + popUpName.getText() + "?")
+                            .setCancelable(true)
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .setPositiveButton("Guess This Friend", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.ID, popUpFriend.facebookID);
 
-                            }
-                        });
+                                }
+                            });
+                } else {
+                    builder.setCancelable(true)
+                            .setNegativeButton("Okay", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                }
 
                 AlertDialog alert = builder.create();
                 alert.show();
@@ -424,10 +379,12 @@ public class MiddleOfGameController extends SlideNavigationController implements
     }
 
     private void loadConversationHistory() {
-        EditText conversation = (EditText) findViewById(R.id.conversation);
+        TextView conversation = (TextView) findViewById(R.id.conversation);
         for (String message : game.conversation) {
             conversation.append(message + "\n");
         }
+        ScrollView conversationScrollView = (ScrollView) findViewById(R.id.conversationScollView);
+        conversationScrollView.fullScroll(ScrollView.FOCUS_DOWN);
     }
 
     public static List<MutualFriend> getFamousPeopleList() {
@@ -529,7 +486,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
 
         } else if(taskName.equalsIgnoreCase("questionSent")){
             EditText theMessage = (EditText) findViewById(R.id.theMessage);
-            EditText conversation = (EditText) findViewById(R.id.conversation);
+            TextView conversation = (TextView) findViewById(R.id.conversation);
             conversation.append(theMessage.getText() + "\n");
             theMessage.setText("");
         } else if (taskName.equalsIgnoreCase("questionAnswered")) {

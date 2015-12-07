@@ -65,6 +65,7 @@ public class ImageAdapter extends BaseAdapter {
             imageView.setLayoutParams(new GridView.LayoutParams(width/5 - 10, width/5 - 10));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
+            imageView.setCropToPadding(true);
             imageView.setBackgroundColor(Color.parseColor("#80ffffff"));
             if (poolFriends != null && poolFriends.get(position).isGrayedOut) {
                 imageView.setColorFilter(Color.parseColor("#88000000"));

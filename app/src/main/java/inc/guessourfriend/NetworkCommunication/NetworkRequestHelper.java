@@ -253,7 +253,7 @@ public class NetworkRequestHelper {
                         int incomingQuestionAnswer = Integer.parseInt(incomingQuestion.getString("answer"));
 
                         sortedConvo.put(incomingQuestionId,
-                                incomingQuestionContent + ((incomingQuestionAnswer != -1) ? "\n" : "") +
+                                "Them: " + incomingQuestionContent + ((incomingQuestionAnswer != -1) ? "\nYou: " : "") +
                                         intAnswerToString(incomingQuestionAnswer));
                     }
 
@@ -264,7 +264,7 @@ public class NetworkRequestHelper {
                         int outgoingQuestionAnswer = Integer.parseInt(outgoingQuestion.getString("answer"));
 
                         sortedConvo.put(outgoingQuestionId,
-                                outgoingQuestionContent + ((outgoingQuestionAnswer != -1) ? "\n" : "") +
+                                "You: " + outgoingQuestionContent + ((outgoingQuestionAnswer != -1) ? "\nThem: " : "") +
                                         intAnswerToString(outgoingQuestionAnswer));
                     }
 

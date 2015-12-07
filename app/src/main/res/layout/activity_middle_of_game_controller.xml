@@ -55,6 +55,7 @@
             android:text="Their Turn"
             android:textSize="12dp"
             android:id="@+id/their_turn_text"
+            android:visibility="invisible"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
@@ -66,6 +67,7 @@
             android:text="Your Turn"
             android:textSize="12dp"
             android:id="@+id/your_turn_text"
+            android:visibility="invisible"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
@@ -81,27 +83,31 @@
         android:verticalSpacing="5dp"
         android:horizontalSpacing="5dp"
         android:stretchMode="columnWidth"
-        android:layout_above="@+id/conversation"
-        android:layout_below="@+id/top_panel" />
+        android:layout_below="@+id/top_panel"/>
 
-    <EditText
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/conversation"
-        android:hint="This is your conversation history"
         android:layout_above="@+id/sendMessage"
-        android:minLines="5"
-        android:maxLines="5"
-        android:scrollbars="vertical"
-        android:enabled="false"
-        android:layout_centerVertical="true" />
+        android:layout_below="@+id/middle_of_game_gridview"
+        android:id="@+id/conversationScollView"
+        android:layout_centerVertical="true">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/conversation"
+            android:hint="This is your conversation history"
+            android:minLines="1"
+            android:padding="5dp"
+            android:scrollbars="vertical"
+            android:gravity="bottom"/>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button_panel"
+        android:visibility="invisible"
         android:layout_alignParentBottom="true">
         <Button
             android:layout_width="0dp"
@@ -130,6 +136,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/pass_button_panel"
+        android:visibility="invisible"
         android:layout_alignParentBottom="true">
         <Button
             android:layout_width="0dp"
@@ -144,6 +151,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/sendMessage"
+        android:visibility="invisible"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
         <EditText
