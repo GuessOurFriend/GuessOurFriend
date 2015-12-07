@@ -46,6 +46,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     private String intentReceivedKey = "messageReceived";
     AtomicInteger msgId = new AtomicInteger();
     private Game game = new Game();
+    private String mysteryFriendImageUrl;
 
     //For GCM Messages
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -138,7 +139,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
             game.opponentPool.mutualFriendList = new ArrayList<MutualFriend>();
             NetworkRequestHelper.getGameBoard(MiddleOfGameController.this, game.ID);
 
-            ProfilePictureView opponent = (ProfilePictureView) findViewById(R.id.opponent_mystery_friend);
+            ProfilePictureView opponent = (ProfilePictureView) findViewById(R.id.opponent_picture);
             opponent.setProfileId(Long.toString(game.opponentID));
         }
     }
@@ -212,16 +213,16 @@ public class MiddleOfGameController extends SlideNavigationController implements
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
+                    game.isMyTurn = false;
+                    updateTurnTextViews();
                     return true;
                 }
                 return false;
             }
         });
-        game.isMyTurn = false;
-        updateTurnTextViews();
     }
 
-    private void createprofilePictureUrls() {
+    private void loadProfilePictureUrls() {
         //Also account for famous people URLs
         getFamousPeopleList();
 
@@ -248,6 +249,26 @@ public class MiddleOfGameController extends SlideNavigationController implements
                         currPoolFriend.lastName = famousPeople.get(j).lastName;
                         break;
                     }
+                }
+            }
+        }
+
+        //Also create the url for the mystery friend
+        if (game.mysteryFriendId > 0) {
+            //It's a real id, find it in our facebook friends list
+            for (int j = 0; j < model.fbProfileModel.friendList.size(); j++) {
+                Friend currFriend = model.fbProfileModel.friendList.get(j);
+                if (currFriend.facebookID == game.mysteryFriendId) {
+                    mysteryFriendImageUrl = currFriend.profilePicture;
+                    break;
+                }
+            }
+        } else {
+            //It's a famous person id, find it in the famous people list
+            for (int j = 0; j < famousPeople.size(); j++) {
+                if (famousPeople.get(j).facebookID == game.mysteryFriendId) {
+                    mysteryFriendImageUrl = famousPeople.get(j).profilePicture;
+                    break;
                 }
             }
         }
@@ -466,10 +487,18 @@ public class MiddleOfGameController extends SlideNavigationController implements
             fullGame.opponentFirstName = game.opponentFirstName;
             fullGame.opponentLastName = game.opponentLastName;
             game = fullGame;
-            createprofilePictureUrls();
+            loadProfilePictureUrls();
             setUpMutualFriendsList();
             loadConversationHistory();
             updateTurnTextViews();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ImageView mysteryFriend = (ImageView) findViewById(R.id.your_mystery_friend_picture);
+                    new ImageAdapter.DownloadImageTask(mysteryFriend).execute(mysteryFriendImageUrl);
+                }
+            });
         } else if (taskName.equals("getQuestions")) {
 
             //TODO: Load previous questions

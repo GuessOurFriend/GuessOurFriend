@@ -14,16 +14,11 @@
         android:id="@+id/top_panel"
         android:layout_alignParentTop="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Your Turn"
-            android:textSize="12dp"
-            android:id="@+id/your_turn_text"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="5dp" />
+        <ImageView
+            android:id="@+id/your_mystery_friend_picture"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -34,10 +29,10 @@
             android:id="@+id/report_bug_button"
             android:onClick="reportBug"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/opponent_mystery_friend" />
+            android:layout_toLeftOf="@+id/opponent_picture" />
 
         <com.facebook.login.widget.ProfilePictureView
-            android:id="@+id/opponent_mystery_friend"
+            android:id="@+id/opponent_picture"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
@@ -52,7 +47,7 @@
             android:id="@+id/leave_game_button"
             android:onClick="leaveGame"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/opponent_mystery_friend" />
+            android:layout_toRightOf="@+id/opponent_picture" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,6 +55,17 @@
             android:text="Their Turn"
             android:textSize="12dp"
             android:id="@+id/their_turn_text"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Turn"
+            android:textSize="12dp"
+            android:id="@+id/your_turn_text"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
@@ -120,10 +126,8 @@
             android:layout_weight="1"/>
 
         <Button
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="12dp"
+            android:layout_height="fill_parent"
             android:id="@+id/passMyGuessButton"
             android:onClick="passMyGuessButtonClicked"
             android:text="Pass Guess"
