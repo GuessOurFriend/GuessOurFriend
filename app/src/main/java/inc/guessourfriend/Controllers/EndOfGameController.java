@@ -1,13 +1,17 @@
 package inc.guessourfriend.Controllers;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.login.widget.ProfilePictureView;
 
@@ -196,6 +200,14 @@ public class EndOfGameController extends SlideNavigationController implements On
         game = (Game) intent.getParcelableExtra("game");
         NetworkRequestHelper.getOpponentMysteryId(EndOfGameController.this, game.ID);
 
+        //////////////////// Done button functionality /////////////
+
+        Button button = (Button) findViewById(R.id.done_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                NetworkRequestHelper.sendDone(game.ID);
+            }
+        });
 
         // Simulating a loss
         //winner = fbProfile.getFriendList().get(1).getFacebookID();

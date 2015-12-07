@@ -54,10 +54,10 @@ public class NetworkRequestHelper {
                 //Parse the auth token in the response so we can update this user in the future
                 String authToken = null;
                 try {
-                    if(result != null){
+                    if (result != null) {
                         authToken = result.getString("token");
                         String token = authToken;
-                    }else{
+                    } else {
                         Log.v("Can't get auth token: ", "User already exists");
                     }
                 } catch (JSONException e) {
@@ -118,6 +118,7 @@ public class NetworkRequestHelper {
             }
         }.execute();
     }
+
     //DELETE /user
     public static void deleteUser() {
         new NetworkRequestRunner("DELETE", ROOT_URL + "/user", getAuthToken()).execute();
@@ -151,13 +152,13 @@ public class NetworkRequestHelper {
             protected void onPostExecute(JSONObject jsonResult) {
                 ArrayList<Game> result = new ArrayList<Game>();
                 System.out.println(jsonResult);
-                try{
+                try {
                     JSONObject jsonResults = jsonResult.getJSONObject("results");
                     JSONArray incomingGames = jsonResults.getJSONArray("incoming_games");
                     JSONArray outgoingGames = jsonResults.getJSONArray("outgoing_games");
 
                     //Loop through all the games
-                    for (int i=0; i < incomingGames.length(); i++) {
+                    for (int i = 0; i < incomingGames.length(); i++) {
                         JSONObject curr = incomingGames.getJSONObject(i);
                         Game temp = new Game();
                         temp.ID = Long.parseLong(curr.getString("game_id"));
@@ -168,7 +169,7 @@ public class NetworkRequestHelper {
                         result.add(temp);
                     }
 
-                    for (int i=0; i < outgoingGames.length(); i++) {
+                    for (int i = 0; i < outgoingGames.length(); i++) {
                         JSONObject curr = outgoingGames.getJSONObject(i);
                         Game temp = new Game();
                         temp.ID = Long.parseLong(curr.getString("game_id"));
@@ -245,7 +246,7 @@ public class NetworkRequestHelper {
                     //Create a TreeMap to sort by the question ids for us
                     TreeMap<Integer, String> sortedConvo = new TreeMap<>();
 
-                    for (int i=0; i < incomingQuestionLength; i++) {
+                    for (int i = 0; i < incomingQuestionLength; i++) {
                         JSONObject incomingQuestion = incomingQuestions.getJSONObject(incomingQuestionIndex++);
                         int incomingQuestionId = Integer.parseInt(incomingQuestion.getString("id"));
                         String incomingQuestionContent = incomingQuestion.getString("content");
@@ -256,7 +257,7 @@ public class NetworkRequestHelper {
                                         intAnswerToString(incomingQuestionAnswer));
                     }
 
-                    for (int i=0; i < outgoingQuestionLength; i++) {
+                    for (int i = 0; i < outgoingQuestionLength; i++) {
                         JSONObject outgoingQuestion = outgoingQuestions.getJSONObject(outgoingQuestionIndex++);
                         int outgoingQuestionId = Integer.parseInt(outgoingQuestion.getString("id"));
                         String outgoingQuestionContent = outgoingQuestion.getString("content");
@@ -272,7 +273,7 @@ public class NetworkRequestHelper {
                         gameResult.lastQuestionId = convoEntry.getKey();
                     }
 
-                    for (int i=0; i < incomingFriendsList.length(); i++) {
+                    for (int i = 0; i < incomingFriendsList.length(); i++) {
                         JSONObject curr = incomingFriendsList.getJSONObject(i);
                         Long fbId = Long.parseLong(curr.getString("fb_id"));
                         boolean isGrayedOut = curr.getBoolean("grey");
@@ -283,7 +284,7 @@ public class NetworkRequestHelper {
                         gameResult.myPool.mutualFriendList.add(temp);
                     }
 
-                    for (int i=0; i < outgoingFriendsList.length(); i++) {
+                    for (int i = 0; i < outgoingFriendsList.length(); i++) {
                         JSONObject curr = outgoingFriendsList.getJSONObject(i);
                         Long fbId = Long.parseLong(curr.getString("fb_id"));
                         boolean isGrayedOut = curr.getBoolean("grey");
@@ -344,17 +345,17 @@ public class NetworkRequestHelper {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("POST", ROOT_URL + "/questions", getAuthToken()){
+        new NetworkRequestRunner("POST", ROOT_URL + "/questions", getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
                 String success = "Successfully sent the question";
                 String actualResult = "";
-                try{
+                try {
                     actualResult = result.getString("message");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if(actualResult.equals(success)){
+                if (actualResult.equals(success)) {
                     theListener.onTaskCompleted("questionSent", null);
                 } else {
                     Log.v("questionSent error: ", actualResult);
@@ -380,14 +381,14 @@ public class NetworkRequestHelper {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("POST", ROOT_URL + "/question/answer", getAuthToken()){
+        new NetworkRequestRunner("POST", ROOT_URL + "/question/answer", getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
                 JSONObject result2 = result;
                 Log.v("result", result2.toString());
                 String success = "Successfully answered the question";
                 String actualResult = "";
-                try{
+                try {
                     System.out.println(result);
                     if (result.has("errors")) {
                         System.err.println(result.getString("errors"));
@@ -397,9 +398,9 @@ public class NetworkRequestHelper {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if(actualResult.equals(success)){
+                if (actualResult.equals(success)) {
                     theListener.onTaskCompleted("questionAnswered", null);
-                }else{
+                } else {
                     Log.v("qAnswered error: ", actualResult);
                 }
             }
@@ -417,7 +418,7 @@ public class NetworkRequestHelper {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("POST", ROOT_URL + "/game/guess", getAuthToken()){
+        new NetworkRequestRunner("POST", ROOT_URL + "/game/guess", getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
                 String passedMessage = "Player has given up the guess opportunity";
@@ -425,7 +426,7 @@ public class NetworkRequestHelper {
                 String guessWasWrongMessage = "Your guess is wrong. Your opponent will be rewarded with two questions";
                 String theMessage = "";
                 String theError = "";
-                try{
+                try {
                     System.out.println(result);
                     if (result.has("errors")) {
                         System.err.println(result.getString("errors"));
@@ -435,11 +436,11 @@ public class NetworkRequestHelper {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if(theMessage.equals(passedMessage)){
+                if (theMessage.equals(passedMessage)) {
                     theListener.onTaskCompleted("passedUpMyGuess", null);
-                }else if(theMessage.equals(guessWasWrongMessage)){
+                } else if (theMessage.equals(guessWasWrongMessage)) {
                     theListener.onTaskCompleted("myGuessWasWrong", null);
-                }else{
+                } else {
                     theListener.onTaskCompleted("iWon", null);
                 }
             }
@@ -498,7 +499,7 @@ public class NetworkRequestHelper {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("POST", ROOT_URL + "/challenges", getAuthToken()){
+        new NetworkRequestRunner("POST", ROOT_URL + "/challenges", getAuthToken()) {
             /*@Override
             protected void onPostExecute(JSONObject jsonResult) {
                 Long challengeid = 1L;
@@ -514,7 +515,6 @@ public class NetworkRequestHelper {
                 a= challengeid.toString();
                 theListener.onTaskCompleted(a, null);
             }*/
-
 
 
         }.execute(data);
@@ -533,10 +533,10 @@ public class NetworkRequestHelper {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("DELETE", ROOT_URL + "/challenge/respond_as_challengee", getAuthToken()){
+        new NetworkRequestRunner("DELETE", ROOT_URL + "/challenge/respond_as_challengee", getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
-                if(acceptedTheChallenge) {
+                if (acceptedTheChallenge) {
                     HashMap<String, Long> gameData = new HashMap<String, Long>();
                     try {
                         Long gameID = Long.parseLong(result.getString("id"));
@@ -553,7 +553,7 @@ public class NetworkRequestHelper {
     }
 
     //DELETE challenge/respond_as_challenger
-    public static void deleteChallengeFromChallenger( long challengeeId) {
+    public static void deleteChallengeFromChallenger(long challengeeId) {
         JSONObject data = new JSONObject();
         try {
             data.put("challengee_fb_id", challengeeId);
@@ -578,7 +578,7 @@ public class NetworkRequestHelper {
                     JSONArray jsonArray = jsonResult.getJSONArray("results");
 
                     //Loop through all the challenges
-                    for (int i=0; i < jsonArray.length(); i++) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         //Parse this challenge's properties
                         JSONObject challenge = jsonArray.getJSONObject(i);
                         long challengeId = Long.parseLong(challenge.getString("challenge_id"));
@@ -592,7 +592,7 @@ public class NetworkRequestHelper {
                         result.IncomingChallengeList.add(curr);
                     }
 
-                }catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 theListener.onTaskCompleted("getIncomingChallenges", result);
@@ -614,7 +614,7 @@ public class NetworkRequestHelper {
                     JSONArray jsonArray = jsonResult.getJSONArray("results");
 
                     //Loop through all the challenges
-                    for (int i=0; i < jsonArray.length(); i++) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         //Parse this challenge's properties
 
                         JSONObject challenge = jsonArray.getJSONObject(i);
@@ -631,7 +631,7 @@ public class NetworkRequestHelper {
                         result.outgoingChallengeList.add(curr);
                     }
 
-                }catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 theListener.onTaskCompleted("getOutgoingChallenges", result);
@@ -640,7 +640,7 @@ public class NetworkRequestHelper {
     }
 
     //POST /game/match_making
-    public static void enterMatchmaking(OnTaskCompleted listener){
+    public static void enterMatchmaking(OnTaskCompleted listener) {
         final OnTaskCompleted theListener = listener;
         // Friend list needs to be sent to the server in order for the server to tell us if any
         //      of our friends are currently in matchmaking. If any of our friends are found in
@@ -655,14 +655,14 @@ public class NetworkRequestHelper {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("POST", ROOT_URL + "/game/match_making", getAuthToken()){
+        new NetworkRequestRunner("POST", ROOT_URL + "/game/match_making", getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
                 String message = "";
                 String noFriendAvailableMessage = "There are no available friends in the " +
                         "matchmaking pool. You have been placed in the pool.";
                 String alreadyInMatchmaking = "You are already in the matchmaking pool.";
-                try{
+                try {
                     if (result.has("errors")) {
                         Log.v("Matchmaking error: ", result.getString("errors"));
                         return;
@@ -672,14 +672,14 @@ public class NetworkRequestHelper {
                     e.printStackTrace();
                 }
 
-                if(message.equals(noFriendAvailableMessage)){
+                if (message.equals(noFriendAvailableMessage)) {
                     theListener.onTaskCompleted("entered matchmaking queue", null);
-                }else if(message.equals(alreadyInMatchmaking)){
+                } else if (message.equals(alreadyInMatchmaking)) {
                     theListener.onTaskCompleted("already in matchmaking", null);
-                }else{
+                } else {
                     JSONObject gameJSONObject = null;
                     Game game = new Game();
-                    try{
+                    try {
                         gameJSONObject = result.getJSONObject("game");
                         game.ID = Long.parseLong(gameJSONObject.getString("id"));
                         game.opponentID = Long.parseLong(gameJSONObject.getString("player1id"));
@@ -693,19 +693,19 @@ public class NetworkRequestHelper {
     }
 
     // PUT /game/remove_from_match_making
-    public static void leaveMatchmaking(OnTaskCompleted listener){
+    public static void leaveMatchmaking(OnTaskCompleted listener) {
         final OnTaskCompleted theListener = listener;
-        new NetworkRequestRunner("PUT", ROOT_URL + "/game/remove_from_match_making", getAuthToken()){
+        new NetworkRequestRunner("PUT", ROOT_URL + "/game/remove_from_match_making", getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
                 JSONObject result2 = result;
                 String success = "Successfully removed yourself from the matchmaking pool.";
-                try{
+                try {
                     if (result.has("errors")) {
                         Log.v("Matchmaking error: ", result.getString("errors"));
                         return;
                     }
-                    if(result.getString("message").equals(success)){
+                    if (result.getString("message").equals(success)) {
                         theListener.onTaskCompleted("left the matchmaking queue", null);
                     }
                 } catch (JSONException e) {
@@ -716,21 +716,21 @@ public class NetworkRequestHelper {
     }
 
     // GET /game/check_match_making
-    public static void checkIfAlreadyInMatchmaking(OnTaskCompleted listener){
+    public static void checkIfAlreadyInMatchmaking(OnTaskCompleted listener) {
         final OnTaskCompleted theListener = listener;
-        new NetworkRequestRunner("GET", ROOT_URL + "/game/check_match_making", getAuthToken()){
+        new NetworkRequestRunner("GET", ROOT_URL + "/game/check_match_making", getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
                 JSONObject result2 = result;
                 String alreadyInMatchmaking = "true";
-                try{
+                try {
                     if (result.has("errors")) {
                         Log.v("inMatchmaking error: ", result.getString("errors"));
                         return;
                     }
-                    if(result.getString("results").equals(alreadyInMatchmaking)){
+                    if (result.getString("results").equals(alreadyInMatchmaking)) {
                         theListener.onTaskCompleted("already in matchmaking", null);
-                    }else{
+                    } else {
                         theListener.onTaskCompleted("not in matchmaking", null);
                     }
                 } catch (JSONException e) {
@@ -741,7 +741,7 @@ public class NetworkRequestHelper {
     }
 
     //POST /friend_pools
-    public static void postFriendPools(long gameId, long[] friendIds){
+    public static void postFriendPools(long gameId, long[] friendIds) {
         JSONObject data = new JSONObject();
         try {
             data.put("game_id", gameId);
@@ -760,7 +760,7 @@ public class NetworkRequestHelper {
     }
 
     //POST /friend_pools/set_mystery_friend
-    public static void setMysteryFriend(OnTaskCompleted listener, long gameId, long mysteryFriendId){
+    public static void setMysteryFriend(OnTaskCompleted listener, long gameId, long mysteryFriendId) {
         final OnTaskCompleted theListener = listener;
         JSONObject data = new JSONObject();
         try {
@@ -770,12 +770,12 @@ public class NetworkRequestHelper {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("POST", ROOT_URL + "/friend_pools/set_mystery_friend", getAuthToken()){
+        new NetworkRequestRunner("POST", ROOT_URL + "/friend_pools/set_mystery_friend", getAuthToken()) {
             @Override
             protected void onPostExecute(JSONObject result) {
                 JSONObject result2 = result;
                 String alreadyInMatchmaking = "true";
-                try{
+                try {
                     if (result.has("errors")) {
                         Log.v("Error_setmysteryfriend ", result.getString("errors"));
                         return;
@@ -783,9 +783,9 @@ public class NetworkRequestHelper {
                     JSONObject game = result.getJSONObject("game");
                     Long mysteryFriend1 = Long.parseLong(game.getString("mystery_friend1"));
                     Long mysteryFriend2 = Long.parseLong(game.getString("mystery_friend2"));
-                    if(mysteryFriend1 == -1 || mysteryFriend2 == -1){
+                    if (mysteryFriend1 == -1 || mysteryFriend2 == -1) {
                         theListener.onTaskCompleted("waiting for other player to choose mystery friend", null);
-                    }else{
+                    } else {
                         theListener.onTaskCompleted("both players have chosen a friend mystery friend", null);
                     }
                 } catch (JSONException e) {
@@ -793,6 +793,23 @@ public class NetworkRequestHelper {
                 }
             }
         }.execute(data);
+
     }
+
+
+    //PUT game/set_done
+    public static void sendDone(long gameId) {
+
+        JSONObject data = new JSONObject();
+        try {
+            data.put("game_id", gameId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        new NetworkRequestRunner("PUT", ROOT_URL + "/game/set_done", getAuthToken()).execute(data);
+    }
+
+
+
 
 }
