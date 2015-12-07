@@ -20,6 +20,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.FacebookSdk;
 import com.facebook.login.widget.ProfilePictureView;
 
 import org.json.JSONException;
@@ -41,7 +42,7 @@ import inc.guessourfriend.SupportingClasses.MutualFriendList;
 
 public class MiddleOfGameController extends SlideNavigationController implements OnTaskCompleted {
     private Model model;
-    private List<MutualFriend> famousPeople;
+    public static List<MutualFriend> famousPeople;
     private String intentReceivedKey = "messageReceived";
     AtomicInteger msgId = new AtomicInteger();
     private Game game = new Game();
@@ -109,6 +110,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         super.onCreate(savedInstanceState);
         // get the models
         model = (Model) getApplicationContext();
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
         // set up slide navigation
         getLayoutInflater().inflate(R.layout.activity_middle_of_game_controller, frameLayout);
         mDrawerList.setItemChecked(position, true);
@@ -380,7 +382,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         }
     }
 
-    private void getFamousPeopleList() {
+    public static List<MutualFriend> getFamousPeopleList() {
         if (famousPeople == null) {
             famousPeople = new ArrayList<MutualFriend>();
             famousPeople.add(new MutualFriend(-2, "Kim", "Kardashian", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Kim_Kardashian_West%2C_Parramatta_Westfield_Sydney_Australia.jpg/200px-Kim_Kardashian_West%2C_Parramatta_Westfield_Sydney_Australia.jpg", false));
@@ -404,6 +406,40 @@ public class MiddleOfGameController extends SlideNavigationController implements
             famousPeople.add(new MutualFriend(-20, "Will", "Smith", "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Will_Smith_2012.jpg/220px-Will_Smith_2012.jpg", false));
             famousPeople.add(new MutualFriend(-21, "Britney", "Spears", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Britney_Spears_2013_%28Straighten_Crop%29.jpg/220px-Britney_Spears_2013_%28Straighten_Crop%29.jpg", false));
         }
+        return famousPeople;
+    }
+
+    public void reportBug(View view) {
+        Intent intent = new Intent(MiddleOfGameController.this, ReportABugController.class);
+        intent.putExtra("intentFrom", "MiddleOfGameController");
+        intent.putExtra("game", game);
+        startActivity(intent);
+    }
+
+    public void leaveGame(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MiddleOfGameController.this);
+
+        builder.setTitle("Leave Game?")
+                .setCancelable(true)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .setPositiveButton("Leave Game", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        NetworkRequestHelper.quitGame(game.ID);
+                        Intent intent = new Intent(MiddleOfGameController.this, EndOfGameController.class);
+                        intent.putExtra("game", game);
+                        intent.putExtra("howGameEnded", "left");
+                        startActivity(intent);
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+
     }
 
     @Override

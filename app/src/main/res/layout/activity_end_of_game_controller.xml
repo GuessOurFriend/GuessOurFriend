@@ -86,7 +86,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/mystery_text2"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/unguessed_profile_picture_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/unguessed_profile_picture"
+        android:layout_alignBottom="@+id/unguessed_profile_picture"
+        android:layout_alignRight="@+id/unguessed_profile_picture"
+        android:layout_alignLeft="@+id/unguessed_profile_picture"
+        android:src="@drawable/mr_ic_audio_vol"
+        android:visibility="gone"/>
 
     <com.facebook.login.widget.ProfilePictureView
         android:id="@+id/guessed_profile_picture"
@@ -94,7 +106,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/win_lose_text"
         android:layout_alignLeft="@+id/unguessed_profile_picture"
-        android:layout_alignStart="@+id/unguessed_profile_picture" />
+        android:layout_alignStart="@+id/unguessed_profile_picture"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/guessed_profile_picture_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/guessed_profile_picture"
+        android:layout_alignBottom="@+id/guessed_profile_picture"
+        android:layout_alignRight="@+id/guessed_profile_picture"
+        android:layout_alignLeft="@+id/guessed_profile_picture"
+        android:src="@drawable/mr_ic_audio_vol"
+        android:visibility="gone"/>
 
     <TextView
         android:layout_width="wrap_content"
