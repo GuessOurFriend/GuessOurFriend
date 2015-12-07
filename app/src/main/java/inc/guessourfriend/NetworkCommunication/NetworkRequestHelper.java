@@ -252,7 +252,7 @@ public class NetworkRequestHelper {
                         int incomingQuestionAnswer = Integer.parseInt(incomingQuestion.getString("answer"));
 
                         sortedConvo.put(incomingQuestionId,
-                                incomingQuestionContent + "\n" +
+                                incomingQuestionContent + ((incomingQuestionAnswer != -1) ? "\n" : "") +
                                         intAnswerToString(incomingQuestionAnswer));
                     }
 
@@ -263,12 +263,13 @@ public class NetworkRequestHelper {
                         int outgoingQuestionAnswer = Integer.parseInt(outgoingQuestion.getString("answer"));
 
                         sortedConvo.put(outgoingQuestionId,
-                                outgoingQuestionContent + "\n" +
+                                outgoingQuestionContent + ((outgoingQuestionAnswer != -1) ? "\n" : "") +
                                         intAnswerToString(outgoingQuestionAnswer));
                     }
 
                     for (Map.Entry<Integer, String> convoEntry : sortedConvo.entrySet()) {
                         gameResult.conversation.add(convoEntry.getValue());
+                        gameResult.lastQuestionId = convoEntry.getKey();
                     }
 
                     for (int i=0; i < incomingFriendsList.length(); i++) {
