@@ -42,7 +42,7 @@ public class SlideNavigationController extends AppCompatActivity {
     /**
      * List item array for navigation drawer items.
      * */
-    protected String[] listArray = { "Challenge A Friend", "Matchmaking", "Challenges", "Current Games", "Leaderboard", "Options", "Test"};
+    protected String[] listArray = { "Challenge A Friend", "Matchmaking", "Challenges", "Current Games", "Leaderboard", "Options"};
 
     /**
      * Static variable for selected item position. Which can be used in child activity to know which item is selected from the list.
@@ -185,9 +185,6 @@ public class SlideNavigationController extends AppCompatActivity {
                 break;
             case 5:
                 startActivity(new Intent(this, OptionsController.class));
-                break;
-            case 6:
-                startActivity(new Intent(this, TestController.class));
                 break;
             default:
                 startActivity(new Intent(this, ChallengeAFriendController.class));
