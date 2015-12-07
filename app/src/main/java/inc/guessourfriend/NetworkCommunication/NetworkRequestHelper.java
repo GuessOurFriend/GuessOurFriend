@@ -422,7 +422,7 @@ public class NetworkRequestHelper {
             @Override
             protected void onPostExecute(JSONObject result) {
                 String passedMessage = "Player has given up the guess opportunity";
-                String wonMessage = "You have won the game";
+                String wonMessage = "You have won the game.";
                 String guessWasWrongMessage = "Your guess is wrong. Your opponent will be rewarded with two questions";
                 String theMessage = "";
                 String theError = "";
