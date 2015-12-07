@@ -75,10 +75,13 @@ public class MiddleOfGameController extends SlideNavigationController implements
                                 game.isMyTurn = true;
                                 updateTurnTextViews();
                             } else {
-                                // You need to ask the next question
+                                // You just received an answer,
+                                // You need to guess a mystery friend or pass the guess
                                 int intAnswer = Integer.parseInt(jsonObjectBody.getString("answer"));
                                 String answer = NetworkRequestHelper.intAnswerToString(intAnswer);
                                 conversation.append(answer + "\n");
+                                game.isMyTurn = true;
+                                updateTurnTextViews();
                             }
                         }else if(title.equals("It is your turn")){
                             // The other user just passed on their guess
