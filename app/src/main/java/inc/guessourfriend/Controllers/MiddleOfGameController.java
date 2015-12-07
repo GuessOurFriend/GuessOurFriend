@@ -47,6 +47,19 @@ public class MiddleOfGameController extends SlideNavigationController implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        TextView textView = (TextView) findViewById(R.id.your_turn_text);
+        TextView textView1= (TextView) findViewById(R.id.their_turn_text);
+        Game game = new Game();
+        game.setIsMyTurn(false);
+        boolean turn = game.getIsMyTurn();
+        if (turn == false) {
+            textView.setVisibility(View.GONE);
+            textView1.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.VISIBLE);
+            textView1.setVisibility(View.GONE);}
+        
         super.onCreate(savedInstanceState);
         // get the models
         model = (Model) getApplicationContext();
@@ -81,18 +94,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         }
     }
     public void yourTurn() {
-        TextView textView = (TextView) findViewById(R.id.your_turn_text);
-        TextView textView1= (TextView) findViewById(R.id.their_turn_text);
-        Game game = new Game();
-        game.setIsMyTurn(false);
-        boolean turn = game.getIsMyTurn();
-        if (turn == false) {
-            textView.setVisibility(View.GONE);
-            textView1.setVisibility(View.VISIBLE);
-        } else {
-            textView.setVisibility(View.VISIBLE);
-            textView1.setVisibility(View.GONE);
-        }}
+        }
     private void answerQuestion(int answer) {
         NetworkRequestHelper.answerQuestion(MiddleOfGameController.this, game.ID, lastQuestionId, answer);
     }
