@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -251,6 +252,44 @@ public class MiddleOfGameController extends SlideNavigationController implements
                 //Display the dialog
                 AlertDialog alertDialog = adb.create();
                 alertDialog.show();
+            }
+        });
+
+        //Long click listener - guess friend
+        //Set up the long click handler for each of the images
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
+                ImageView selectedImage = (ImageView) v;
+                selectedImage.setCropToPadding(true);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MiddleOfGameController.this);
+
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogLayout = inflater.inflate(R.layout.customlayout_mutual_friend_pop_up, null);
+                ImageView popUpImage = (ImageView) dialogLayout.findViewById(R.id.mutual_friend_image);
+                popUpImage.setImageDrawable(selectedImage.getDrawable());
+                TextView popUpName = (TextView) dialogLayout.findViewById(R.id.mutual_friend_name);
+                MutualFriend popUpFriend = game.opponentPool.mutualFriendList.get(position);
+                popUpName.setText(popUpFriend.fullName);
+                builder.setView(dialogLayout);
+
+                builder.setTitle("Guess " + popUpName.getText() + "?")
+                        .setCancelable(true)
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setPositiveButton("Guess This Friend", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                //do stuff
+                            }
+                        });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+                return true;
             }
         });
     }
