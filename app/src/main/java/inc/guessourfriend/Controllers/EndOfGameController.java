@@ -209,19 +209,13 @@ public class EndOfGameController extends SlideNavigationController implements On
             }
         });
 
-        // Simulating a loss
-        //winner = fbProfile.getFriendList().get(1).getFacebookID();
-        //loser = fbProfile.getFacebookID();
-        // Simulating a win
+        Button button2 = (Button) findViewById(R.id.rematch_button);
+        button2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                NetworkRequestHelper.sendRematch(game.ID);
+            }
+        });
 
-//        winner = model.fbProfileModel.facebookID;
-//        loser = model.fbProfileModel.friendList.get(1).facebookID;
-//        if(winner == model.fbProfileModel.facebookID){
-//            // this user is the winner
-//            displayForWinner();
-//        }else{
-//            displayForLoser();
-//        }
     }
 
     @Override
