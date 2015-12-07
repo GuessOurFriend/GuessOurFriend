@@ -155,13 +155,12 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
         <EditText
-            android:layout_width="0dp"
-            android:layout_weight="80"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:ems="10"
             android:id="@+id/theMessage"
             android:hint="Type your message here"
+            android:minLines="1"
             android:background="?android:colorBackground"
             android:imeOptions="actionSend"
             android:singleLine="true"

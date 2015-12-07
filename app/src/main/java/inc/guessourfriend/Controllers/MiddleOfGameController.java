@@ -496,11 +496,10 @@ public class MiddleOfGameController extends SlideNavigationController implements
             Log.v("Your guess was wrong: ", "Guess wrong");
 
         } else if(taskName.equalsIgnoreCase("iWon")) {
-
             Intent intent = new Intent(MiddleOfGameController.this, EndOfGameController.class);
             intent.putExtra("game", game);
             intent.putExtra("howGameEnded", "Won");
-
+            startActivity(intent);
         } else{
 
         }
