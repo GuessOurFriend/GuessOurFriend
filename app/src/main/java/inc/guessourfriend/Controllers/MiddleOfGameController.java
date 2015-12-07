@@ -89,12 +89,16 @@ public class MiddleOfGameController extends SlideNavigationController implements
         TextView textView1= (TextView) findViewById(R.id.their_turn_text);
         Game game = new Game();
         boolean turn = game.getIsMyTurn();
-        if (turn == false) {
+        if (turn == false)
+        {
             textView.setVisibility(View.GONE);
             textView1.setVisibility(View.VISIBLE);
-        } else {
+        }
+        else
+        {
             textView.setVisibility(View.VISIBLE);
-            textView1.setVisibility(View.GONE);}
+            textView1.setVisibility(View.GONE);
+        }
 
         }
 
