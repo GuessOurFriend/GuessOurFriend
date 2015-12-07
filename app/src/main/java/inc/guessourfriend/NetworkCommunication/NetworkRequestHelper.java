@@ -256,6 +256,17 @@ public class NetworkRequestHelper {
         }.execute();
     }
 
+    //GET /game_board
+    public static void getGameObject(final OnTaskCompleted theListener, final long gameId) {
+        new NetworkRequestRunner("GET", ROOT_URL + "/game_board?game_id=" + gameId, getAuthToken()) {
+            @Override
+            protected void onPostExecute(JSONObject jsonResult) {
+                JSONObject json = jsonResult;
+                Log.v("Game object: ", jsonResult.toString());
+            }
+        }.execute();
+    }
+
     //POST /questions
     public static void sendQuestion(OnTaskCompleted listener, long gameId, String question) {
         final OnTaskCompleted theListener = listener;
