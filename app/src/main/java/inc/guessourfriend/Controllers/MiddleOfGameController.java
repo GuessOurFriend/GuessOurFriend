@@ -48,7 +48,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-   
+
 
         super.onCreate(savedInstanceState);
         // get the models
@@ -80,6 +80,18 @@ public class MiddleOfGameController extends SlideNavigationController implements
 
             ProfilePictureView opponent = (ProfilePictureView) findViewById(R.id.opponent_mystery_friend);
             opponent.setProfileId(Long.toString(game.opponentID));
+
+            TextView textView = (TextView) findViewById(R.id.your_turn_text);
+            TextView textView1= (TextView) findViewById(R.id.their_turn_text);
+            Game game = new Game();
+            game.setIsMyTurn(false);
+            boolean turn = game.getIsMyTurn();
+            if (turn == false) {
+                textView.setVisibility(View.GONE);
+                textView1.setVisibility(View.VISIBLE);
+            } else {
+                textView.setVisibility(View.VISIBLE);
+                textView1.setVisibility(View.GONE);}
 
         }
     }
