@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -296,6 +297,41 @@ public class StartOfGameController extends SlideNavigationController implements 
         //Set up an adapter to hold all the profile pictures
         ImageAdapter imageAdapter = new ImageAdapter(StartOfGameController.this, getImageURLs());
         gridView.setAdapter(imageAdapter);
+
+
+        //Set up the long click handler for each of the images
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
+                ImageView selectedImage = (ImageView) v;
+                selectedImage.setCropToPadding(true);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(StartOfGameController.this);
+
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogLayout = inflater.inflate(R.layout.customlayout_mutual_friend_pop_up, null);
+                ImageView popUpImage = (ImageView) dialogLayout.findViewById(R.id.mutual_friend_image);
+                if (highlightedFriendPos == position) {
+                    popUpImage.setColorFilter(Color.parseColor("#00000000"));
+                }
+                popUpImage.setImageDrawable(selectedImage.getDrawable());
+                TextView popUpName = (TextView) dialogLayout.findViewById(R.id.mutual_friend_name);
+                MutualFriend popUpFriend = game.opponentPool.mutualFriendList.get(position);
+                popUpName.setText(popUpFriend.fullName);
+                builder.setView(dialogLayout);
+
+                builder.setTitle(popUpName.getText())
+                        .setCancelable(true)
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+                return true;
+            }
+        });
 
         //Set up the click handler for each of the images
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
