@@ -105,7 +105,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         NetworkRequestHelper.guessMysteryFriend(MiddleOfGameController.this, game.ID, -1);
     }
 
-}
+
     //Make clicking send on the keyboard send the message
     private void setUpEnterAndSendTheMessage(){
         final EditText theMessage = (EditText) findViewById(R.id.theMessage);

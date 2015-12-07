@@ -47,15 +47,7 @@ public class StartOfGameController extends SlideNavigationController implements 
     private int highlightedFriendPos = -1;
     private MutualFriend highlightedFriend = null;
     private MutualFriend currentlySelected = null;
-    public void yourTurn() {
-        TextView textView = (TextView) findViewById(R.id.choose_mystery_friend_textview);
-        Game game = new Game();
-        boolean turn = game.getIsMyTurn();
-        if (turn == true) {
-            textView.setVisibility(View.VISIBLE);
-        } else {
-            textView.setVisibility(View.GONE);
-        }}
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
