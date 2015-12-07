@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import inc.guessourfriend.Application.Model;
 import inc.guessourfriend.Models.IncomingChallengeListModel;
@@ -187,6 +189,19 @@ public class NetworkRequestHelper {
         }.execute();
     }
 
+    private static String intAnswerToString(int answer) {
+        switch (answer) {
+            case 0:
+                return "No";
+            case 1:
+                return "Yes";
+            case 2:
+                return "Not Sure";
+            default:
+                return "";
+        }
+    }
+
     //TODO: Check with Brian, if we can get the imageURLS along with friendlist in getGameBooard
     //TODO: Also the query currently returns a null object
     //GET /game_board
@@ -218,31 +233,40 @@ public class NetworkRequestHelper {
                         gameResult.mysteryFriendId = Long.parseLong(mysteryFriend.getString("fb_id"));
                     }
 
-                    //TODO: Set up the questions
-                    for (int i=0; i < incomingQuestions.length(); i++) {
+                    //Create the conversations (loop to the lower of the two lengths)
+                    gameResult.conversation = new ArrayList<>();
+                    int incomingQuestionIndex = 0;
+                    int incomingQuestionLength = incomingQuestions.length();
+                    int outgoingQuestionIndex = 0;
+                    int outgoingQuestionLength = outgoingQuestions.length();
 
+                    //Create a TreeMap to sort by the question ids for us
+                    TreeMap<Integer, String> sortedConvo = new TreeMap<>();
+
+                    for (int i=0; i < incomingQuestionLength; i++) {
+                        JSONObject incomingQuestion = incomingQuestions.getJSONObject(incomingQuestionIndex++);
+                        int incomingQuestionId = Integer.parseInt(incomingQuestion.getString("id"));
+                        String incomingQuestionContent = incomingQuestion.getString("content");
+                        int incomingQuestionAnswer = Integer.parseInt(incomingQuestion.getString("answer"));
+
+                        sortedConvo.put(incomingQuestionId,
+                                incomingQuestionContent + "\n" +
+                                        intAnswerToString(incomingQuestionAnswer));
                     }
 
-                    for (int i=0; i < incomingFriendsList.length(); i++) {
-                        JSONObject curr = incomingFriendsList.getJSONObject(i);
-                        Long fbId = Long.parseLong(curr.getString("fb_id"));
-                        boolean isGrayedOut = curr.getBoolean("grey");
+                    for (int i=0; i < outgoingQuestionLength; i++) {
+                        JSONObject outgoingQuestion = outgoingQuestions.getJSONObject(outgoingQuestionIndex++);
+                        int outgoingQuestionId = Integer.parseInt(outgoingQuestion.getString("id"));
+                        String outgoingQuestionContent = outgoingQuestion.getString("content");
+                        int outgoingQuestionAnswer = Integer.parseInt(outgoingQuestion.getString("answer"));
 
-                        MutualFriend temp = new MutualFriend();
-                        temp.facebookID = fbId;
-                        temp.isGrayedOut = isGrayedOut;
-                        gameResult.myPool.mutualFriendList.add(temp);
+                        sortedConvo.put(outgoingQuestionId,
+                                outgoingQuestionContent + "\n" +
+                                        intAnswerToString(outgoingQuestionAnswer));
                     }
 
-                    for (int i=0; i < outgoingFriendsList.length(); i++) {
-                        JSONObject curr = outgoingFriendsList.getJSONObject(i);
-                        Long fbId = Long.parseLong(curr.getString("fb_id"));
-                        boolean isGrayedOut = curr.getBoolean("grey");
-
-                        MutualFriend temp = new MutualFriend();
-                        temp.facebookID = fbId;
-                        temp.isGrayedOut = isGrayedOut;
-                        gameResult.opponentPool.mutualFriendList.add(temp);
+                    for (Map.Entry<Integer, String> convoEntry : sortedConvo.entrySet()) {
+                        gameResult.conversation.add(convoEntry.getValue());
                     }
 
                 } catch (JSONException e) {

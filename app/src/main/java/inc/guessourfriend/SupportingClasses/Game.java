@@ -1,5 +1,7 @@
 package inc.guessourfriend.SupportingClasses;
 
+import java.util.ArrayList;
+
 /**
  * Created by Laura on 11/1/2015.
  */
@@ -14,6 +16,8 @@ public class Game {
     public boolean isMyTurn;
     public int stateOfGame;
     public int numberOfQuestions;
+    public ArrayList<String> conversation;
+    public int lastQuestionId;
     public static final int START_OF_GAME = 0;
     public static final int MIDDLE_OF_GAME = 1;
     public static final int END_OF_GAME = 2;

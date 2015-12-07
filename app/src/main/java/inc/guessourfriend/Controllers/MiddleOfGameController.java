@@ -45,7 +45,6 @@ public class MiddleOfGameController extends SlideNavigationController implements
     private String intentReceivedKey = "messageReceived";
     AtomicInteger msgId = new AtomicInteger();
     private Game game = new Game();
-    private int lastQuestionId;
 
     //For GCM Messages
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -62,7 +61,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
                 if(jsonObjectBody.has("game_id") && jsonObjectBody.has("id")) {
                     long gameId = Long.parseLong(jsonObjectBody.getString("game_id"));
                     if (gameId == game.ID) {
-                        lastQuestionId = Integer.parseInt(jsonObjectBody.getString("id"));
+                        game.lastQuestionId = Integer.parseInt(jsonObjectBody.getString("id"));
                     }
                 }
 
@@ -131,7 +130,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         }
 
     private void answerQuestion(int answer) {
-        NetworkRequestHelper.answerQuestion(MiddleOfGameController.this, game.ID, lastQuestionId, answer);
+        NetworkRequestHelper.answerQuestion(MiddleOfGameController.this, game.ID, game.lastQuestionId, answer);
         yourTurn();
     }
 
@@ -186,7 +185,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
         getFamousPeopleList();
 
         // Get the image URL's from names in the opponentpool field in the game object
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < game.myPool.mutualFriendList.size(); i++) {
             MutualFriend currPoolFriend = game.myPool.mutualFriendList.get(i);
             if (currPoolFriend.facebookID > 0) {
                 //It's a real id, find it in our facebook friends list
@@ -339,6 +338,13 @@ public class MiddleOfGameController extends SlideNavigationController implements
         });
     }
 
+    private void loadConversationHistory() {
+        EditText conversation = (EditText) findViewById(R.id.conversation);
+        for (String message : game.conversation) {
+            conversation.append(message + "\n");
+        }
+    }
+
     private void getFamousPeopleList() {
         if (famousPeople == null) {
             famousPeople = new ArrayList<MutualFriend>();
@@ -387,6 +393,7 @@ public class MiddleOfGameController extends SlideNavigationController implements
             game = fullGame;
             createprofilePictureUrls();
             setUpMutualFriendsList();
+            loadConversationHistory();
 
         } else if (taskName.equals("getQuestions")) {
 
