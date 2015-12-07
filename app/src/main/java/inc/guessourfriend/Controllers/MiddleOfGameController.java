@@ -84,7 +84,8 @@ public class MiddleOfGameController extends SlideNavigationController implements
         }
         yourTurn();
     }
-    public void yourTurn() {
+    public void yourTurn()
+    {
         TextView textView = (TextView) findViewById(R.id.your_turn_text);
         TextView textView1= (TextView) findViewById(R.id.their_turn_text);
         Game game = new Game();
