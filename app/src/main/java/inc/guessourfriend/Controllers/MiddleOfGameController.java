@@ -202,11 +202,11 @@ public class MiddleOfGameController extends SlideNavigationController implements
                             if (selectedFriend.isGrayedOut) {
                                 selectedImage.setColorFilter(Color.parseColor("#00000000"));
                                 selectedFriend.isGrayedOut = false;
-                                NetworkRequestHelper.ungreyFriend(selectedFriend.facebookID);
+                                NetworkRequestHelper.ungreyFriend(game.ID, selectedFriend.facebookID);
                             } else {
                                 selectedImage.setColorFilter(Color.parseColor("#88000000"));
                                 selectedFriend.isGrayedOut = true;
-                                NetworkRequestHelper.greyFriend(selectedFriend.facebookID);
+                                NetworkRequestHelper.greyFriend(game.ID, selectedFriend.facebookID);
                             }
                         }
                     });
@@ -233,11 +233,11 @@ public class MiddleOfGameController extends SlideNavigationController implements
                             if (selectedFriend.isGrayedOut) {
                                 selectedImage.setColorFilter(Color.parseColor("#00000000"));
                                 selectedFriend.isGrayedOut = false;
-                                NetworkRequestHelper.ungreyFriend(selectedFriend.facebookID);
+                                NetworkRequestHelper.ungreyFriend(game.ID, selectedFriend.facebookID);
                             } else {
                                 selectedImage.setColorFilter(Color.parseColor("#88000000"));
                                 selectedFriend.isGrayedOut = true;
-                                NetworkRequestHelper.greyFriend(selectedFriend.facebookID);
+                                NetworkRequestHelper.greyFriend(game.ID, selectedFriend.facebookID);
                             }
                         }
                     });

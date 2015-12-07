@@ -358,26 +358,30 @@ public class NetworkRequestHelper {
         }.execute(data);
     }
 
-    public static void greyFriend(long fbId) {
+    //PUT /friend_pool/grey
+    public static void greyFriend(long gameId, long fbId) {
         JSONObject data = new JSONObject();
         try {
+            data.put("game_id", gameId);
             data.put("fb_id", fbId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("POST", ROOT_URL + "/friend_pool/grey", getAuthToken()).execute(data);
+        new NetworkRequestRunner("PUT", ROOT_URL + "/friend_pool/grey", getAuthToken()).execute(data);
     }
 
-    public static void ungreyFriend(long fbId) {
+    //PUT /friend_pool/ungrey
+    public static void ungreyFriend(long gameId, long fbId) {
         JSONObject data = new JSONObject();
         try {
+            data.put("game_id", gameId);
             data.put("fb_id", fbId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        new NetworkRequestRunner("POST", ROOT_URL + "/friend_pool/ungrey", getAuthToken()).execute(data);
+        new NetworkRequestRunner("PUT", ROOT_URL + "/friend_pool/ungrey", getAuthToken()).execute(data);
     }
 
     //////////////////////////////////////////////////
